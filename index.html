@@ -48,6 +48,44 @@
             margin-bottom: 20px;
         }
 
+        .player-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .player-bar h2 {
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .player-bar button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        .now-playing-container {
+            display: none;
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-top: -10px;
+        }
+
+        .now-playing-container.show {
+            display: block;
+        }
+
         .track-info {
             text-align: center;
             margin: 15px 0;
@@ -107,8 +145,9 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             padding: 20px;
-            max-height: 300px;
-            overflow-y: auto;
+            min-height: 50px;
+            overflow-y: hidden;
+            transition: height 0.3s ease;
         }
 
         .playlist-item {
@@ -217,30 +256,36 @@
         <!-- Left side - Player and Playlist -->
         <div class="player-container">
             <div class="music-player">
-                <h2>Now Playing</h2>
-                <div class="track-info">
-                    <h3 id="current-track">No track selected</h3>
-                    <div class="time-display" id="time-display">0:00 / 0:00</div>
-                </div>
-                <audio id="audio-player"></audio>
-                <progress id="progress-bar" value="0" max="100"></progress>
-                
-                <div class="loop-controls">
-                    <button id="loop-none" class="active">No Loop</button>
-                    <button id="loop-one">Loop Track</button>
-                    <button id="loop-all">Loop Playlist</button>
+                <div class="player-bar" id="now-playing-bar">
+                    <h2>Now Playing</h2>
+                    <button id="now-playing-toggle">▼</button>
                 </div>
                 
-                <div class="player-controls">
-                    <button id="prev-btn">Previous</button>
-                    <button id="play-btn">Play</button>
-                    <button id="pause-btn">Pause</button>
-                    <button id="next-btn">Next</button>
-                    <button id="clear-btn">Clear</button>
+                <div class="now-playing-container" id="now-playing-container">
+                    <div class="track-info">
+                        <h3 id="current-track">No track selected</h3>
+                        <div class="time-display" id="time-display">0:00 / 0:00</div>
+                    </div>
+                    <audio id="audio-player"></audio>
+                    <progress id="progress-bar" value="0" max="100"></progress>
+                    
+                    <div class="loop-controls">
+                        <button id="loop-none" class="active">No Loop</button>
+                        <button id="loop-one">Loop Track</button>
+                        <button id="loop-all">Loop Playlist</button>
+                    </div>
+                    
+                    <div class="player-controls">
+                        <button id="prev-btn">Previous</button>
+                        <button id="play-btn">Play</button>
+                        <button id="pause-btn">Pause</button>
+                        <button id="next-btn">Next</button>
+                        <button id="clear-btn">Clear</button>
+                    </div>
                 </div>
             </div>
             
-            <div class="playlist">
+            <div class="playlist" id="playlist-container">
                 <h2>Playlist</h2>
                 <div id="playlist-items">
                     <div class="empty-playlist">Your playlist is empty</div>
@@ -270,10 +315,14 @@
             const currentTrackDisplay = document.getElementById('current-track');
             const timeDisplay = document.getElementById('time-display');
             const playlistElement = document.getElementById('playlist-items');
+            const playlistContainer = document.getElementById('playlist-container');
             const libraryElement = document.getElementById('library');
             const loopNoneBtn = document.getElementById('loop-none');
             const loopOneBtn = document.getElementById('loop-one');
             const loopAllBtn = document.getElementById('loop-all');
+            const nowPlayingToggle = document.getElementById('now-playing-toggle');
+            const nowPlayingContainer = document.getElementById('now-playing-container');
+            const nowPlayingBar = document.getElementById('now-playing-bar');
             
             let currentTrackIndex = -1;
             let isPlaying = false;
@@ -476,6 +525,12 @@
                 ]
             };
 
+            // Toggle now playing container
+            nowPlayingBar.addEventListener('click', function() {
+                nowPlayingContainer.classList.toggle('show');
+                nowPlayingToggle.textContent = nowPlayingContainer.classList.contains('show') ? '▲' : '▼';
+            });
+
             // Initialize the library
             function initializeLibrary() {
                 libraryElement.innerHTML = '';
@@ -550,6 +605,7 @@
             function updatePlaylistDisplay() {
                 if (playlist.length === 0) {
                     playlistElement.innerHTML = '<div class="empty-playlist">Your playlist is empty</div>';
+                    playlistContainer.style.height = 'auto';
                     return;
                 }
                 
@@ -606,6 +662,11 @@
                     
                     playlistElement.appendChild(item);
                 });
+                
+                // Adjust playlist container height based on content
+                const itemHeight = 50; // Approximate height of each playlist item
+                const newHeight = Math.min(playlist.length * itemHeight + 100, 500); // Max height of 500px
+                playlistContainer.style.height = `${newHeight}px`;
             }
 
             function loadTrack(index) {
