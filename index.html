@@ -145,9 +145,28 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             padding: 20px;
-            min-height: 50px;
             overflow-y: hidden;
-            transition: height 0.3s ease;
+            transition: all 0.3s ease;
+            max-height: 500px;
+        }
+
+        .playlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .playlist-items {
+            overflow-y: auto;
+            max-height: 400px;
+            transition: max-height 0.3s ease;
+        }
+
+        .playlist.collapsed .playlist-items {
+            max-height: 0;
+            overflow: hidden;
         }
 
         .playlist-item {
@@ -286,8 +305,11 @@
             </div>
             
             <div class="playlist" id="playlist-container">
-                <h2>Playlist</h2>
-                <div id="playlist-items">
+                <div class="playlist-header">
+                    <h2>Playlist</h2>
+                    <button class="toggle-btn" id="playlist-toggle">▼</button>
+                </div>
+                <div class="playlist-items" id="playlist-items">
                     <div class="empty-playlist">Your playlist is empty</div>
                 </div>
             </div>
@@ -314,7 +336,7 @@
             const progressBar = document.getElementById('progress-bar');
             const currentTrackDisplay = document.getElementById('current-track');
             const timeDisplay = document.getElementById('time-display');
-            const playlistElement = document.getElementById('playlist-items');
+            const playlistItems = document.getElementById('playlist-items');
             const playlistContainer = document.getElementById('playlist-container');
             const libraryElement = document.getElementById('library');
             const loopNoneBtn = document.getElementById('loop-none');
@@ -323,6 +345,7 @@
             const nowPlayingToggle = document.getElementById('now-playing-toggle');
             const nowPlayingContainer = document.getElementById('now-playing-container');
             const nowPlayingBar = document.getElementById('now-playing-bar');
+            const playlistToggle = document.getElementById('playlist-toggle');
             
             let currentTrackIndex = -1;
             let isPlaying = false;
@@ -531,6 +554,12 @@
                 nowPlayingToggle.textContent = nowPlayingContainer.classList.contains('show') ? '▲' : '▼';
             });
 
+            // Toggle playlist container
+            playlistToggle.addEventListener('click', function() {
+                playlistContainer.classList.toggle('collapsed');
+                playlistToggle.textContent = playlistContainer.classList.contains('collapsed') ? '►' : '▼';
+            });
+
             // Initialize the library
             function initializeLibrary() {
                 libraryElement.innerHTML = '';
@@ -594,6 +623,11 @@
                 playlist.push(track);
                 updatePlaylistDisplay();
                 
+                // Auto-scroll to the newly added item if playlist is long
+                if (playlistItems.scrollHeight > playlistItems.clientHeight) {
+                    playlistItems.scrollTop = playlistItems.scrollHeight;
+                }
+                
                 // If this is the first track added, play it
                 if (playlist.length === 1) {
                     currentTrackIndex = 0;
@@ -604,12 +638,11 @@
             // Update playlist display
             function updatePlaylistDisplay() {
                 if (playlist.length === 0) {
-                    playlistElement.innerHTML = '<div class="empty-playlist">Your playlist is empty</div>';
-                    playlistContainer.style.height = 'auto';
+                    playlistItems.innerHTML = '<div class="empty-playlist">Your playlist is empty</div>';
                     return;
                 }
                 
-                playlistElement.innerHTML = '';
+                playlistItems.innerHTML = '';
                 
                 playlist.forEach((track, index) => {
                     const item = document.createElement('div');
@@ -660,13 +693,8 @@
                         }
                     });
                     
-                    playlistElement.appendChild(item);
+                    playlistItems.appendChild(item);
                 });
-                
-                // Adjust playlist container height based on content
-                const itemHeight = 50; // Approximate height of each playlist item
-                const newHeight = Math.min(playlist.length * itemHeight + 100, 500); // Max height of 500px
-                playlistContainer.style.height = `${newHeight}px`;
             }
 
             function loadTrack(index) {
