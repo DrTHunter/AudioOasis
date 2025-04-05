@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lo-Fi Vibes</title>
+    <title>Enhanced Media Player</title>
     <style>
         /* CSS Styles */
         body {
@@ -12,6 +12,9 @@
             padding: 0;
             background-color: #f5f5f5;
             color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         header {
@@ -21,53 +24,33 @@
             text-align: center;
         }
 
-        .dropdown {
-            position: relative;
-            display: inline-block;
+        .main-container {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
         }
 
-        .dropdown-btn {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 4px;
+        .player-container {
+            flex: 1;
+            max-width: 400px;
         }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            border-radius: 4px;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
+        .library-container {
+            flex: 2;
         }
 
         .music-player {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 20px;
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .track-info {
+            text-align: center;
+            margin: 15px 0;
         }
 
         .player-controls {
@@ -76,6 +59,7 @@
             align-items: center;
             margin-top: 15px;
             flex-wrap: wrap;
+            gap: 10px;
         }
 
         .player-controls button {
@@ -83,7 +67,6 @@
             color: white;
             border: none;
             padding: 8px 15px;
-            margin: 5px;
             border-radius: 4px;
             cursor: pointer;
             min-width: 80px;
@@ -91,43 +74,6 @@
 
         .player-controls button:hover {
             background-color: #2980b9;
-        }
-
-        .track-info {
-            text-align: center;
-            margin: 15px 0;
-        }
-
-        .playlist {
-            margin-top: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #eee;
-            border-radius: 4px;
-        }
-
-        .playlist-item {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            user-select: none;
-        }
-
-        .playlist-item:hover {
-            background-color: #f5f5f5;
-        }
-
-        .playlist-item.active {
-            background-color: #e1f5fe;
-            font-weight: bold;
-        }
-
-        .playlist-item .drag-handle {
-            cursor: move;
-            margin-right: 10px;
-            color: #777;
         }
 
         progress {
@@ -140,6 +86,7 @@
             display: flex;
             justify-content: center;
             margin: 15px 0;
+            gap: 10px;
         }
 
         .loop-controls button {
@@ -147,13 +94,38 @@
             color: white;
             border: none;
             padding: 8px 15px;
-            margin: 0 5px;
             border-radius: 4px;
             cursor: pointer;
         }
 
         .loop-controls button.active {
             background-color: #2ecc71;
+        }
+
+        .playlist {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .playlist-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .playlist-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .playlist-item.active {
+            background-color: #e1f5fe;
+            font-weight: bold;
         }
 
         .track-number {
@@ -163,52 +135,104 @@
             text-align: right;
         }
 
-        .track-info-container {
-            display: flex;
-            flex-grow: 1;
-            align-items: center;
+        .library {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .category {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 15px;
+        }
+
+        .category h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .category-item {
+            padding: 8px 0;
+            cursor: pointer;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .category-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .category-item:last-child {
+            border-bottom: none;
+        }
+
+        .time-display {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .drag-handle {
+            cursor: move;
+            margin-right: 10px;
+            color: #777;
+        }
+
+        .empty-playlist {
+            color: #777;
+            text-align: center;
+            padding: 20px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Lo-Fi Vibes</h1>
-        <div class="dropdown">
-            <button class="dropdown-btn">Menu</button>
-            <div class="dropdown-content">
-                <a href="#">Home</a>
-                <a href="#music-player">Music Player</a>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
-            </div>
-        </div>
+        <h1>Enhanced Media Player</h1>
     </header>
 
-    <div class="music-player" id="music-player">
-        <h2>Music Player</h2>
-        <div class="track-info">
-            <h3 id="current-track">Select a track</h3>
-            <div id="time-display">0:00 / 0:00</div>
+    <div class="main-container">
+        <!-- Left side - Player and Playlist -->
+        <div class="player-container">
+            <div class="music-player">
+                <h2>Now Playing</h2>
+                <div class="track-info">
+                    <h3 id="current-track">No track selected</h3>
+                    <div class="time-display" id="time-display">0:00 / 0:00</div>
+                </div>
+                <audio id="audio-player"></audio>
+                <progress id="progress-bar" value="0" max="100"></progress>
+                
+                <div class="loop-controls">
+                    <button id="loop-none" class="active">No Loop</button>
+                    <button id="loop-one">Loop Track</button>
+                    <button id="loop-all">Loop Playlist</button>
+                </div>
+                
+                <div class="player-controls">
+                    <button id="prev-btn">Previous</button>
+                    <button id="play-btn">Play</button>
+                    <button id="pause-btn">Pause</button>
+                    <button id="next-btn">Next</button>
+                    <button id="clear-btn">Clear</button>
+                </div>
+            </div>
+            
+            <div class="playlist">
+                <h2>Playlist</h2>
+                <div id="playlist-items">
+                    <div class="empty-playlist">Your playlist is empty</div>
+                </div>
+            </div>
         </div>
-        <audio id="audio-player"></audio>
-        <progress id="progress-bar" value="0" max="100"></progress>
         
-        <div class="loop-controls">
-            <button id="loop-none" class="active">No Loop</button>
-            <button id="loop-one">Loop Track</button>
-            <button id="loop-all">Loop Playlist</button>
-        </div>
-        
-        <div class="player-controls">
-            <button id="prev-btn">Previous</button>
-            <button id="play-btn">Play</button>
-            <button id="pause-btn">Pause</button>
-            <button id="next-btn">Next</button>
-            <button id="shuffle-btn">Shuffle</button>
-        </div>
-        
-        <div class="playlist" id="playlist">
-            <!-- Playlist items will be generated by JavaScript -->
+        <!-- Right side - Track Library -->
+        <div class="library-container">
+            <h2>Music Library</h2>
+            <div class="library" id="library">
+                <!-- Categories will be populated by JavaScript -->
+            </div>
         </div>
     </div>
 
@@ -220,47 +244,153 @@
             const pauseBtn = document.getElementById('pause-btn');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
-            const shuffleBtn = document.getElementById('shuffle-btn');
+            const clearBtn = document.getElementById('clear-btn');
             const progressBar = document.getElementById('progress-bar');
             const currentTrackDisplay = document.getElementById('current-track');
             const timeDisplay = document.getElementById('time-display');
-            const playlistElement = document.getElementById('playlist');
+            const playlistElement = document.getElementById('playlist-items');
+            const libraryElement = document.getElementById('library');
             const loopNoneBtn = document.getElementById('loop-none');
             const loopOneBtn = document.getElementById('loop-one');
             const loopAllBtn = document.getElementById('loop-all');
             
-            let currentTrackIndex = 0;
+            let currentTrackIndex = -1;
             let isPlaying = false;
             let loopMode = 'none'; // 'none', 'one', 'all'
-            let isDragging = false;
-            let draggedItem = null;
-            let originalPlaylistOrder = [];
+            let playlist = [];
+            
+            // Organized track library by categories
+            const trackLibrary = {
+                "LoFi": [
+                    { title: "Chill LoFi Beat", src: "tracks/lofi/chill.mp3", duration: "2:45" },
+                    { title: "Rainy Day LoFi", src: "tracks/lofi/rainy.mp3", duration: "3:12" },
+                    { title: "Coffee Shop Vibes", src: "tracks/lofi/coffee.wav", duration: "2:58" }
+                ],
+                "Meditation": [
+                    { title: "Morning Meditation", src: "tracks/meditation/morning.mp3", duration: "10:00" },
+                    { title: "Deep Relaxation", src: "tracks/meditation/relax.mp3", duration: "15:30" },
+                    { title: "Zen Garden", src: "tracks/meditation/zen.wav", duration: "8:45" }
+                ],
+                "Vocals": [
+                    { title: "Ethereal Vocals", src: "tracks/vocals/ethereal.mp3", duration: "4:20" },
+                    { title: "Choral Harmony", src: "tracks/vocals/choral.wav", duration: "3:55" },
+                    { title: "Soulful Singer", src: "tracks/vocals/soul.mp3", duration: "5:10" }
+                ],
+                "Choir": [
+                    { title: "Heavenly Choir", src: "tracks/choir/heavenly.mp3", duration: "6:15" },
+                    { title: "Gregorian Chant", src: "tracks/choir/gregorian.wav", duration: "7:40" },
+                    { title: "Gospel Choir", src: "tracks/choir/gospel.mp3", duration: "4:50" }
+                ],
+                "Fantasy": [
+                    { title: "Dragon's Lair", src: "tracks/fantasy/dragon.mp3", duration: "3:30" },
+                    { title: "Elven Forest", src: "tracks/fantasy/elven.wav", duration: "4:15" },
+                    { title: "Magical Kingdom", src: "tracks/fantasy/magic.mp3", duration: "5:20" }
+                ],
+                "Flutes": [
+                    { title: "Bamboo Flute", src: "tracks/flutes/bamboo.mp3", duration: "3:45" },
+                    { title: "Pan Flute Melody", src: "tracks/flutes/pan.wav", duration: "4:10" },
+                    { title: "Native American Flute", src: "tracks/flutes/native.mp3", duration: "5:55" }
+                ],
+                "Classical": [
+                    { title: "Mozart Symphony", src: "tracks/classical/mozart.mp3", duration: "7:25" },
+                    { title: "Beethoven Sonata", src: "tracks/classical/beethoven.wav", duration: "6:40" },
+                    { title: "Bach Fugue", src: "tracks/classical/bach.mp3", duration: "4:15" }
+                ],
+                "Orchestra": [
+                    { title: "Epic Orchestral", src: "tracks/orchestra/epic.mp3", duration: "8:30" },
+                    { title: "Cinematic Strings", src: "tracks/orchestra/cinematic.wav", duration: "5:45" },
+                    { title: "Dramatic Crescendo", src: "tracks/orchestra/crescendo.mp3", duration: "6:20" }
+                ],
+                "Piano": [
+                    { title: "Gentle Piano", src: "tracks/piano/gentle.mp3", duration: "3:15" },
+                    { title: "Jazz Piano", src: "tracks/piano/jazz.wav", duration: "4:50" },
+                    { title: "Classical Piano", src: "tracks/piano/classical.mp3", duration: "5:25" }
+                ],
+                "Violin": [
+                    { title: "Emotional Violin", src: "tracks/violin/emotional.mp3", duration: "4:40" },
+                    { title: "Fast Violin", src: "tracks/violin/fast.wav", duration: "3:20" },
+                    { title: "Romantic Violin", src: "tracks/violin/romantic.mp3", duration: "5:10" }
+                ],
+                "Synthesizers": [
+                    { title: "80s Synth", src: "tracks/synthesizers/80s.mp3", duration: "4:15" },
+                    { title: "Ambient Pad", src: "tracks/synthesizers/ambient.wav", duration: "6:30" },
+                    { title: "Bass Synth", src: "tracks/synthesizers/bass.mp3", duration: "3:45" }
+                ],
+                "Accordion": [
+                    { title: "Parisian Accordion", src: "tracks/accordion/paris.mp3", duration: "3:20" },
+                    { title: "Folk Accordion", src: "tracks/accordion/folk.wav", duration: "4:05" },
+                    { title: "Tango Accordion", src: "tracks/accordion/tango.mp3", duration: "5:15" }
+                ],
+                "Islamic": [
+                    { title: "Quran Recitation", src: "tracks/islamic/quran.mp3", duration: "10:45" },
+                    { title: "Nasheed", src: "tracks/islamic/nasheed.wav", duration: "5:30" },
+                    { title: "Islamic Chant", src: "tracks/islamic/chant.mp3", duration: "7:15" }
+                ]
+            };
 
-            // Sample tracks - replace with your actual tracks
-            const tracks = [];
-            for (let i = 1; i <= 35; i++) {
-                tracks.push({
-                    title: `Lo-Fi Track ${i}`,
-                    src: `lofi${i % 4 + 1}.${i % 2 === 0 ? 'wav' : 'mp3'}`,
-                    duration: `${Math.floor(Math.random() * 3) + 2}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`
-                });
+            // Initialize the library
+            function initializeLibrary() {
+                libraryElement.innerHTML = '';
+                
+                for (const [category, tracks] of Object.entries(trackLibrary)) {
+                    const categoryElement = document.createElement('div');
+                    categoryElement.className = 'category';
+                    
+                    let categoryHTML = `<h3>${category}</h3>`;
+                    
+                    tracks.forEach(track => {
+                        categoryHTML += `
+                            <div class="category-item" data-src="${track.src}" data-title="${track.title}" data-duration="${track.duration}">
+                                ${track.title} <span style="float: right; color: #777;">${track.duration}</span>
+                            </div>
+                        `;
+                    });
+                    
+                    categoryElement.innerHTML = categoryHTML;
+                    libraryElement.appendChild(categoryElement);
+                    
+                    // Add click event to each track
+                    categoryElement.querySelectorAll('.category-item').forEach(item => {
+                        item.addEventListener('click', function() {
+                            addToPlaylist({
+                                title: this.getAttribute('data-title'),
+                                src: this.getAttribute('data-src'),
+                                duration: this.getAttribute('data-duration')
+                            });
+                        });
+                    });
+                }
             }
 
-            // Initialize playlist
-            function initializePlaylist() {
+            // Add track to playlist
+            function addToPlaylist(track) {
+                playlist.push(track);
+                updatePlaylistDisplay();
+                
+                // If this is the first track added, play it
+                if (playlist.length === 1) {
+                    currentTrackIndex = 0;
+                    loadTrack(currentTrackIndex);
+                }
+            }
+
+            // Update playlist display
+            function updatePlaylistDisplay() {
+                if (playlist.length === 0) {
+                    playlistElement.innerHTML = '<div class="empty-playlist">Your playlist is empty</div>';
+                    return;
+                }
+                
                 playlistElement.innerHTML = '';
-                tracks.forEach((track, index) => {
+                
+                playlist.forEach((track, index) => {
                     const item = document.createElement('div');
-                    item.className = 'playlist-item';
-                    item.setAttribute('data-index', index);
-                    item.setAttribute('draggable', 'true');
-                    
+                    item.className = `playlist-item ${index === currentTrackIndex ? 'active' : ''}`;
                     item.innerHTML = `
                         <div class="track-number">${index + 1}</div>
                         <span class="drag-handle">☰</span>
-                        <div class="track-info-container">
-                            <span>${track.title}</span>
-                            <span style="margin-left: auto; color: #777;">${track.duration}</span>
+                        <div style="flex-grow: 1;">
+                            ${track.title} <span style="float: right; color: #777;">${track.duration}</span>
                         </div>
                     `;
                     
@@ -270,83 +400,66 @@
                         playTrack();
                     });
                     
-                    // Drag and drop events
+                    // Drag and drop functionality
+                    item.setAttribute('draggable', 'true');
                     item.addEventListener('dragstart', function(e) {
-                        draggedItem = item;
-                        e.dataTransfer.effectAllowed = 'move';
-                        e.dataTransfer.setData('text/html', item.innerHTML);
-                        item.style.opacity = '0.4';
+                        e.dataTransfer.setData('text/plain', index);
                     });
                     
                     item.addEventListener('dragover', function(e) {
                         e.preventDefault();
-                        e.dataTransfer.dropEffect = 'move';
-                        const target = e.target.closest('.playlist-item');
-                        if (target && target !== draggedItem) {
-                            const rect = target.getBoundingClientRect();
-                            const midpoint = rect.top + rect.height / 2;
-                            if (e.clientY < midpoint) {
-                                playlistElement.insertBefore(draggedItem, target);
-                            } else {
-                                playlistElement.insertBefore(draggedItem, target.nextSibling);
-                            }
-                        }
                     });
                     
-                    item.addEventListener('dragend', function() {
-                        item.style.opacity = '1';
-                        updateTrackOrder();
+                    item.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                        const toIndex = index;
+                        
+                        if (fromIndex !== toIndex) {
+                            const [movedItem] = playlist.splice(fromIndex, 1);
+                            playlist.splice(toIndex, 0, movedItem);
+                            
+                            // Update current track index if needed
+                            if (currentTrackIndex === fromIndex) {
+                                currentTrackIndex = toIndex;
+                            } else if (fromIndex < currentTrackIndex && toIndex >= currentTrackIndex) {
+                                currentTrackIndex--;
+                            } else if (fromIndex > currentTrackIndex && toIndex <= currentTrackIndex) {
+                                currentTrackIndex++;
+                            }
+                            
+                            updatePlaylistDisplay();
+                        }
                     });
                     
                     playlistElement.appendChild(item);
                 });
-                originalPlaylistOrder = [...tracks];
-            }
-
-            function updateTrackOrder() {
-                const items = playlistElement.querySelectorAll('.playlist-item');
-                items.forEach((item, index) => {
-                    const originalIndex = parseInt(item.getAttribute('data-index'));
-                    item.querySelector('.track-number').textContent = index + 1;
-                    
-                    // Update the track order in the tracks array
-                    if (originalIndex !== index) {
-                        const [movedTrack] = tracks.splice(originalIndex, 1);
-                        tracks.splice(index, 0, movedTrack);
-                        
-                        // Update all data-index attributes
-                        playlistElement.querySelectorAll('.playlist-item').forEach((el, i) => {
-                            el.setAttribute('data-index', i);
-                        });
-                        
-                        // If the current track was moved, update its index
-                        if (currentTrackIndex === originalIndex) {
-                            currentTrackIndex = index;
-                        } else if (currentTrackIndex > originalIndex && currentTrackIndex <= index) {
-                            currentTrackIndex--;
-                        } else if (currentTrackIndex < originalIndex && currentTrackIndex >= index) {
-                            currentTrackIndex++;
-                        }
-                    }
-                });
             }
 
             function loadTrack(index) {
-                if (index < 0 || index >= tracks.length) return;
+                if (index < 0 || index >= playlist.length) return;
                 
-                audioPlayer.src = tracks[index].src;
-                currentTrackDisplay.textContent = tracks[index].title;
+                currentTrackIndex = index;
+                audioPlayer.src = playlist[index].src;
+                currentTrackDisplay.textContent = playlist[index].title;
                 
-                // Update active playlist item
-                const items = playlistElement.querySelectorAll('.playlist-item');
-                items.forEach(item => item.classList.remove('active'));
-                items[index].classList.add('active');
+                updatePlaylistDisplay();
                 
-                // Scroll to the active item
-                items[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                if (isPlaying) {
+                    audioPlayer.play().catch(error => {
+                        console.error("Playback failed:", error);
+                    });
+                }
             }
 
             function playTrack() {
+                if (playlist.length === 0) return;
+                
+                if (currentTrackIndex === -1) {
+                    currentTrackIndex = 0;
+                    loadTrack(currentTrackIndex);
+                }
+                
                 audioPlayer.play()
                     .then(() => {
                         isPlaying = true;
@@ -370,7 +483,7 @@
                     return;
                 }
                 
-                if (currentTrackIndex < tracks.length - 1) {
+                if (currentTrackIndex < playlist.length - 1) {
                     currentTrackIndex++;
                 } else {
                     if (loopMode === 'all') {
@@ -394,7 +507,7 @@
                         currentTrackIndex--;
                     } else {
                         if (loopMode === 'all') {
-                            currentTrackIndex = tracks.length - 1;
+                            currentTrackIndex = playlist.length - 1;
                         } else {
                             currentTrackIndex = 0;
                         }
@@ -404,22 +517,15 @@
                 if (isPlaying) playTrack();
             }
 
-            function shufflePlaylist() {
-                // Save the current track
-                const currentTrack = tracks[currentTrackIndex];
-                
-                // Shuffle the array (Fisher-Yates algorithm)
-                for (let i = tracks.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
-                }
-                
-                // Find the new position of the current track
-                currentTrackIndex = tracks.indexOf(currentTrack);
-                
-                // Rebuild the playlist
-                initializePlaylist();
-                loadTrack(currentTrackIndex);
+            function clearPlaylist() {
+                playlist = [];
+                currentTrackIndex = -1;
+                audioPlayer.src = '';
+                currentTrackDisplay.textContent = 'No track selected';
+                timeDisplay.textContent = '0:00 / 0:00';
+                progressBar.value = 0;
+                pauseTrack();
+                updatePlaylistDisplay();
             }
 
             function formatTime(seconds) {
@@ -433,21 +539,22 @@
             pauseBtn.addEventListener('click', pauseTrack);
             nextBtn.addEventListener('click', nextTrack);
             prevBtn.addEventListener('click', prevTrack);
-            shuffleBtn.addEventListener('click', shufflePlaylist);
+            clearBtn.addEventListener('click', clearPlaylist);
 
             audioPlayer.addEventListener('timeupdate', function() {
                 const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
                 progressBar.value = isNaN(progress) ? 0 : progress;
                 
-                // Update time display
                 if (audioPlayer.duration) {
                     timeDisplay.textContent = `${formatTime(audioPlayer.currentTime)} / ${formatTime(audioPlayer.duration)}`;
                 }
             });
 
             progressBar.addEventListener('click', function(e) {
-                const percent = e.offsetX / this.offsetWidth;
-                audioPlayer.currentTime = percent * audioPlayer.duration;
+                if (!isNaN(audioPlayer.duration)) {
+                    const percent = e.offsetX / this.offsetWidth;
+                    audioPlayer.currentTime = percent * audioPlayer.duration;
+                }
             });
 
             audioPlayer.addEventListener('ended', function() {
@@ -485,8 +592,7 @@
             });
 
             // Initialize the player
-            initializePlaylist();
-            loadTrack(0);
+            initializeLibrary();
         });
     </script>
 </body>
