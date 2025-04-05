@@ -264,6 +264,19 @@
             cursor: pointer;
             color: #777;
         }
+
+        .remove-track {
+            margin-left: 10px;
+            color: #777;
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .remove-track:hover {
+            background-color: #ffebee;
+            color: #f44336;
+        }
     </style>
 </head>
 <body>
@@ -642,6 +655,40 @@
                 }
             }
 
+            // Remove track from playlist
+            function removeTrack(index) {
+                if (index < 0 || index >= playlist.length) return;
+                
+                // If we're removing the currently playing track
+                if (index === currentTrackIndex) {
+                    if (isPlaying) {
+                        pauseTrack();
+                    }
+                    
+                    // If it's the last track in the playlist
+                    if (playlist.length === 1) {
+                        clearPlaylist();
+                        return;
+                    }
+                    
+                    // If it's the last track but there are others
+                    if (currentTrackIndex === playlist.length - 1) {
+                        currentTrackIndex--;
+                    }
+                    
+                    loadTrack(currentTrackIndex);
+                    if (isPlaying) playTrack();
+                } 
+                // If we're removing a track before the current one
+                else if (index < currentTrackIndex) {
+                    currentTrackIndex--;
+                }
+                
+                // Remove the track from the playlist
+                playlist.splice(index, 1);
+                updatePlaylistDisplay();
+            }
+
             // Update playlist display
             function updatePlaylistDisplay() {
                 if (playlist.length === 0) {
@@ -660,12 +707,23 @@
                         <div style="flex-grow: 1;">
                             ${track.title} <span style="float: right; color: #777;">${track.duration}</span>
                         </div>
+                        <span class="remove-track" data-index="${index}">✕</span>
                     `;
                     
-                    item.addEventListener('click', function() {
-                        currentTrackIndex = index;
-                        loadTrack(currentTrackIndex);
-                        playTrack();
+                    item.addEventListener('click', function(e) {
+                        // Don't trigger if clicking on the remove button
+                        if (!e.target.classList.contains('remove-track')) {
+                            currentTrackIndex = index;
+                            loadTrack(currentTrackIndex);
+                            playTrack();
+                        }
+                    });
+                    
+                    // Add click event to remove button
+                    const removeBtn = item.querySelector('.remove-track');
+                    removeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation(); // Prevent triggering the item click event
+                        removeTrack(index);
                     });
                     
                     // Drag and drop functionality
