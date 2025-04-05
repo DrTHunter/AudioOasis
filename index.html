@@ -162,6 +162,7 @@
         }
 
         .category-items {
+            max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
         }
@@ -518,8 +519,8 @@
                     const toggleBtn = categoryElement.querySelector('.toggle-btn');
                     
                     header.addEventListener('click', function() {
-                        if (items.style.maxHeight) {
-                            items.style.maxHeight = null;
+                        if (items.style.maxHeight && items.style.maxHeight !== '0px') {
+                            items.style.maxHeight = '0px';
                             toggleBtn.textContent = '+';
                         } else {
                             items.style.maxHeight = items.scrollHeight + 'px';
@@ -528,7 +529,7 @@
                     });
                     
                     // Initially collapse all categories
-                    items.style.maxHeight = null;
+                    items.style.maxHeight = '0px';
                     toggleBtn.textContent = '+';
                 }
             }
