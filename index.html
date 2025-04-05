@@ -148,10 +148,22 @@
             padding: 15px;
         }
 
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
         .category h3 {
-            margin-top: 0;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .category-items {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
         }
 
         .category-item {
@@ -184,6 +196,14 @@
             color: #777;
             text-align: center;
             padding: 20px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #777;
         }
     </style>
 </head>
@@ -264,67 +284,194 @@
                 "LoFi": [
                     { title: "Chill LoFi Beat", src: "tracks/lofi/chill.mp3", duration: "2:45" },
                     { title: "Rainy Day LoFi", src: "tracks/lofi/rainy.mp3", duration: "3:12" },
-                    { title: "Coffee Shop Vibes", src: "tracks/lofi/coffee.wav", duration: "2:58" }
+                    { title: "Coffee Shop Vibes", src: "tracks/lofi/coffee.wav", duration: "2:58" },
+                    { title: "Nighttime Study", src: "tracks/lofi/night.mp3", duration: "3:30" },
+                    { title: "Urban Dreams", src: "tracks/lofi/urban.wav", duration: "4:15" },
+                    { title: "Jazz LoFi", src: "tracks/lofi/jazz.mp3", duration: "3:50" },
+                    { title: "Piano LoFi", src: "tracks/lofi/piano.wav", duration: "4:05" },
+                    { title: "Guitar LoFi", src: "tracks/lofi/guitar.mp3", duration: "3:20" },
+                    { title: "Synth LoFi", src: "tracks/lofi/synth.wav", duration: "4:30" },
+                    { title: "Ambient LoFi", src: "tracks/lofi/ambient.mp3", duration: "5:00" }
                 ],
                 "Meditation": [
                     { title: "Morning Meditation", src: "tracks/meditation/morning.mp3", duration: "10:00" },
                     { title: "Deep Relaxation", src: "tracks/meditation/relax.mp3", duration: "15:30" },
-                    { title: "Zen Garden", src: "tracks/meditation/zen.wav", duration: "8:45" }
+                    { title: "Zen Garden", src: "tracks/meditation/zen.wav", duration: "8:45" },
+                    { title: "Mindful Breathing", src: "tracks/meditation/breath.mp3", duration: "12:20" },
+                    { title: "Body Scan", src: "tracks/meditation/body.wav", duration: "18:00" },
+                    { title: "Loving Kindness", src: "tracks/meditation/love.mp3", duration: "14:15" },
+                    { title: "Sleep Meditation", src: "tracks/meditation/sleep.wav", duration: "20:00" },
+                    { title: "Anxiety Relief", src: "tracks/meditation/anxiety.mp3", duration: "11:30" },
+                    { title: "Mountain Visualization", src: "tracks/meditation/mountain.wav", duration: "9:45" },
+                    { title: "Ocean Waves", src: "tracks/meditation/ocean.mp3", duration: "30:00" }
                 ],
                 "Vocals": [
                     { title: "Ethereal Vocals", src: "tracks/vocals/ethereal.mp3", duration: "4:20" },
                     { title: "Choral Harmony", src: "tracks/vocals/choral.wav", duration: "3:55" },
-                    { title: "Soulful Singer", src: "tracks/vocals/soul.mp3", duration: "5:10" }
+                    { title: "Soulful Singer", src: "tracks/vocals/soul.mp3", duration: "5:10" },
+                    { title: "Operatic Voice", src: "tracks/vocals/opera.wav", duration: "6:45" },
+                    { title: "Jazz Vocals", src: "tracks/vocals/jazz.mp3", duration: "4:30" },
+                    { title: "Gospel Singer", src: "tracks/vocals/gospel.wav", duration: "5:15" },
+                    { title: "Folk Singer", src: "tracks/vocals/folk.mp3", duration: "3:40" },
+                    { title: "Chanting Vocals", src: "tracks/vocals/chant.wav", duration: "7:20" },
+                    { title: "Whispered Vocals", src: "tracks/vocals/whisper.mp3", duration: "4:50" },
+                    { title: "Layered Vocals", src: "tracks/vocals/layered.wav", duration: "6:10" }
                 ],
                 "Choir": [
                     { title: "Heavenly Choir", src: "tracks/choir/heavenly.mp3", duration: "6:15" },
                     { title: "Gregorian Chant", src: "tracks/choir/gregorian.wav", duration: "7:40" },
-                    { title: "Gospel Choir", src: "tracks/choir/gospel.mp3", duration: "4:50" }
+                    { title: "Gospel Choir", src: "tracks/choir/gospel.mp3", duration: "4:50" },
+                    { title: "Byzantine Chant", src: "tracks/choir/byzantine.wav", duration: "8:25" },
+                    { title: "Russian Orthodox", src: "tracks/choir/russian.mp3", duration: "5:35" },
+                    { title: "Celtic Choir", src: "tracks/choir/celtic.wav", duration: "4:20" },
+                    { title: "African Choir", src: "tracks/choir/african.mp3", duration: "6:50" },
+                    { title: "Children's Choir", src: "tracks/choir/children.wav", duration: "3:15" },
+                    { title: "Mongolian Throat", src: "tracks/choir/mongolian.mp3", duration: "7:10" },
+                    { title: "Tibetan Choir", src: "tracks/choir/tibetan.wav", duration: "9:30" }
                 ],
                 "Fantasy": [
                     { title: "Dragon's Lair", src: "tracks/fantasy/dragon.mp3", duration: "3:30" },
                     { title: "Elven Forest", src: "tracks/fantasy/elven.wav", duration: "4:15" },
-                    { title: "Magical Kingdom", src: "tracks/fantasy/magic.mp3", duration: "5:20" }
+                    { title: "Magical Kingdom", src: "tracks/fantasy/magic.mp3", duration: "5:20" },
+                    { title: "Wizard's Tower", src: "tracks/fantasy/wizard.wav", duration: "4:45" },
+                    { title: "Enchanted Lake", src: "tracks/fantasy/lake.mp3", duration: "6:10" },
+                    { title: "Dwarven Mines", src: "tracks/fantasy/dwarf.wav", duration: "3:50" },
+                    { title: "Fairy Dance", src: "tracks/fantasy/fairy.mp3", duration: "2:45" },
+                    { title: "Dark Castle", src: "tracks/fantasy/castle.wav", duration: "5:35" },
+                    { title: "Mystic Portal", src: "tracks/fantasy/portal.mp3", duration: "7:20" },
+                    { title: "Ancient Prophecy", src: "tracks/fantasy/prophecy.wav", duration: "8:15" }
                 ],
                 "Flutes": [
                     { title: "Bamboo Flute", src: "tracks/flutes/bamboo.mp3", duration: "3:45" },
                     { title: "Pan Flute Melody", src: "tracks/flutes/pan.wav", duration: "4:10" },
-                    { title: "Native American Flute", src: "tracks/flutes/native.mp3", duration: "5:55" }
+                    { title: "Native American Flute", src: "tracks/flutes/native.mp3", duration: "5:55" },
+                    { title: "Shakuhachi", src: "tracks/flutes/shakuhachi.wav", duration: "6:30" },
+                    { title: "Irish Flute", src: "tracks/flutes/irish.mp3", duration: "3:20" },
+                    { title: "Andean Flute", src: "tracks/flutes/andean.wav", duration: "4:45" },
+                    { title: "Chinese Dizi", src: "tracks/flutes/dizi.mp3", duration: "5:10" },
+                    { title: "Recorder", src: "tracks/flutes/recorder.wav", duration: "2:50" },
+                    { title: "Bansuri", src: "tracks/flutes/bansuri.mp3", duration: "7:15" },
+                    { title: "Ney Flute", src: "tracks/flutes/ney.wav", duration: "8:40" }
                 ],
                 "Classical": [
                     { title: "Mozart Symphony", src: "tracks/classical/mozart.mp3", duration: "7:25" },
                     { title: "Beethoven Sonata", src: "tracks/classical/beethoven.wav", duration: "6:40" },
-                    { title: "Bach Fugue", src: "tracks/classical/bach.mp3", duration: "4:15" }
+                    { title: "Bach Fugue", src: "tracks/classical/bach.mp3", duration: "4:15" },
+                    { title: "Chopin Nocturne", src: "tracks/classical/chopin.wav", duration: "5:50" },
+                    { title: "Vivaldi Spring", src: "tracks/classical/vivaldi.mp3", duration: "3:30" },
+                    { title: "Debussy Clair", src: "tracks/classical/debussy.wav", duration: "5:15" },
+                    { title: "Tchaikovsky Waltz", src: "tracks/classical/tchaikovsky.mp3", duration: "6:20" },
+                    { title: "Handel Messiah", src: "tracks/classical/handel.wav", duration: "4:45" },
+                    { title: "Schubert Ave", src: "tracks/classical/schubert.mp3", duration: "7:10" },
+                    { title: "Liszt Etude", src: "tracks/classical/liszt.wav", duration: "5:55" }
                 ],
                 "Orchestra": [
                     { title: "Epic Orchestral", src: "tracks/orchestra/epic.mp3", duration: "8:30" },
                     { title: "Cinematic Strings", src: "tracks/orchestra/cinematic.wav", duration: "5:45" },
-                    { title: "Dramatic Crescendo", src: "tracks/orchestra/crescendo.mp3", duration: "6:20" }
+                    { title: "Dramatic Crescendo", src: "tracks/orchestra/crescendo.mp3", duration: "6:20" },
+                    { title: "Heroic Theme", src: "tracks/orchestra/hero.wav", duration: "7:15" },
+                    { title: "Tragic Movement", src: "tracks/orchestra/tragic.mp3", duration: "9:10" },
+                    { title: "Romantic Symphony", src: "tracks/orchestra/romantic.wav", duration: "8:45" },
+                    { title: "Battle Music", src: "tracks/orchestra/battle.mp3", duration: "10:20" },
+                    { title: "Victory Fanfare", src: "tracks/orchestra/victory.wav", duration: "3:50" },
+                    { title: "Mystery Theme", src: "tracks/orchestra/mystery.mp3", duration: "6:35" },
+                    { title: "Space Odyssey", src: "tracks/orchestra/space.wav", duration: "12:00" }
                 ],
                 "Piano": [
                     { title: "Gentle Piano", src: "tracks/piano/gentle.mp3", duration: "3:15" },
                     { title: "Jazz Piano", src: "tracks/piano/jazz.wav", duration: "4:50" },
-                    { title: "Classical Piano", src: "tracks/piano/classical.mp3", duration: "5:25" }
+                    { title: "Classical Piano", src: "tracks/piano/classical.mp3", duration: "5:25" },
+                    { title: "Modern Piano", src: "tracks/piano/modern.wav", duration: "4:10" },
+                    { title: "Emotional Piano", src: "tracks/piano/emotional.mp3", duration: "6:20" },
+                    { title: "Ragtime Piano", src: "tracks/piano/ragtime.wav", duration: "3:45" },
+                    { title: "Minimalist Piano", src: "tracks/piano/minimal.mp3", duration: "7:15" },
+                    { title: "Boogie Piano", src: "tracks/piano/boogie.wav", duration: "4:30" },
+                    { title: "Cinematic Piano", src: "tracks/piano/cinematic.mp3", duration: "5:50" },
+                    { title: "Neo-Classical", src: "tracks/piano/neo.wav", duration: "6:40" }
                 ],
                 "Violin": [
                     { title: "Emotional Violin", src: "tracks/violin/emotional.mp3", duration: "4:40" },
                     { title: "Fast Violin", src: "tracks/violin/fast.wav", duration: "3:20" },
-                    { title: "Romantic Violin", src: "tracks/violin/romantic.mp3", duration: "5:10" }
+                    { title: "Romantic Violin", src: "tracks/violin/romantic.mp3", duration: "5:10" },
+                    { title: "Gypsy Violin", src: "tracks/violin/gypsy.wav", duration: "4:55" },
+                    { title: "Celtic Violin", src: "tracks/violin/celtic.mp3", duration: "3:45" },
+                    { title: "Classical Violin", src: "tracks/violin/classical.wav", duration: "6:20" },
+                    { title: "Fiddle Tune", src: "tracks/violin/fiddle.mp3", duration: "2:50" },
+                    { title: "Sad Violin", src: "tracks/violin/sad.wav", duration: "5:35" },
+                    { title: "Epic Violin", src: "tracks/violin/epic.mp3", duration: "7:10" },
+                    { title: "Eastern Violin", src: "tracks/violin/eastern.wav", duration: "6:45" }
                 ],
                 "Synthesizers": [
                     { title: "80s Synth", src: "tracks/synthesizers/80s.mp3", duration: "4:15" },
                     { title: "Ambient Pad", src: "tracks/synthesizers/ambient.wav", duration: "6:30" },
-                    { title: "Bass Synth", src: "tracks/synthesizers/bass.mp3", duration: "3:45" }
+                    { title: "Bass Synth", src: "tracks/synthesizers/bass.mp3", duration: "3:45" },
+                    { title: "Chiptune", src: "tracks/synthesizers/chiptune.wav", duration: "2:50" },
+                    { title: "Darksynth", src: "tracks/synthesizers/dark.mp3", duration: "5:20" },
+                    { title: "Retrowave", src: "tracks/synthesizers/retro.wav", duration: "4:35" },
+                    { title: "Space Synth", src: "tracks/synthesizers/space.mp3", duration: "7:15" },
+                    { title: "Vocal Synth", src: "tracks/synthesizers/vocal.wav", duration: "5:50" },
+                    { title: "Glitch Synth", src: "tracks/synthesizers/glitch.mp3", duration: "3:40" },
+                    { title: "Dream Synth", src: "tracks/synthesizers/dream.wav", duration: "8:20" }
                 ],
                 "Accordion": [
                     { title: "Parisian Accordion", src: "tracks/accordion/paris.mp3", duration: "3:20" },
                     { title: "Folk Accordion", src: "tracks/accordion/folk.wav", duration: "4:05" },
-                    { title: "Tango Accordion", src: "tracks/accordion/tango.mp3", duration: "5:15" }
+                    { title: "Tango Accordion", src: "tracks/accordion/tango.mp3", duration: "5:15" },
+                    { title: "Russian Accordion", src: "tracks/accordion/russian.wav", duration: "4:50" },
+                    { title: "Klezmer Accordion", src: "tracks/accordion/klezmer.mp3", duration: "6:10" },
+                    { title: "Cajun Accordion", src: "tracks/accordion/cajun.wav", duration: "3:45" },
+                    { title: "Zydeco Accordion", src: "tracks/accordion/zydeco.mp3", duration: "4:20" },
+                    { title: "Balkan Accordion", src: "tracks/accordion/balkan.wav", duration: "5:35" },
+                    { title: "Italian Accordion", src: "tracks/accordion/italian.mp3", duration: "3:50" },
+                    { title: "Polka Accordion", src: "tracks/accordion/polka.wav", duration: "2:45" }
                 ],
                 "Islamic": [
                     { title: "Quran Recitation", src: "tracks/islamic/quran.mp3", duration: "10:45" },
                     { title: "Nasheed", src: "tracks/islamic/nasheed.wav", duration: "5:30" },
-                    { title: "Islamic Chant", src: "tracks/islamic/chant.mp3", duration: "7:15" }
+                    { title: "Islamic Chant", src: "tracks/islamic/chant.mp3", duration: "7:15" },
+                    { title: "Duff Rhythm", src: "tracks/islamic/duff.wav", duration: "4:20" },
+                    { title: "Taraweeh Prayer", src: "tracks/islamic/taraweeh.mp3", duration: "15:30" },
+                    { title: "Adhan Call", src: "tracks/islamic/adhan.wav", duration: "3:45" },
+                    { title: "Sufi Music", src: "tracks/islamic/sufi.mp3", duration: "8:50" },
+                    { title: "Maqam Melody", src: "tracks/islamic/maqam.wav", duration: "6:25" },
+                    { title: "Dhikr Chant", src: "tracks/islamic/dhikr.mp3", duration: "12:15" },
+                    { title: "Islamic Lullaby", src: "tracks/islamic/lullaby.wav", duration: "4:40" }
+                ],
+                "Background": [
+                    { title: "Soft Background", src: "tracks/background/soft.mp3", duration: "5:00" },
+                    { title: "Corporate Background", src: "tracks/background/corporate.wav", duration: "4:30" },
+                    { title: "Restaurant Ambience", src: "tracks/background/restaurant.mp3", duration: "6:15" },
+                    { title: "Hotel Lobby", src: "tracks/background/hotel.wav", duration: "7:00" },
+                    { title: "Elevator Music", src: "tracks/background/elevator.mp3", duration: "3:45" },
+                    { title: "Waiting Room", src: "tracks/background/waiting.wav", duration: "5:20" },
+                    { title: "Spa Music", src: "tracks/background/spa.mp3", duration: "8:30" },
+                    { title: "Study Music", src: "tracks/background/study.wav", duration: "6:45" },
+                    { title: "Office Background", src: "tracks/background/office.mp3", duration: "5:15" },
+                    { title: "Relaxing Background", src: "tracks/background/relax.wav", duration: "9:00" }
+                ],
+                "Ambiance": [
+                    { title: "Forest Ambience", src: "tracks/ambiance/forest.mp3", duration: "15:00" },
+                    { title: "Ocean Waves", src: "tracks/ambiance/ocean.wav", duration: "20:00" },
+                    { title: "Rainfall", src: "tracks/ambiance/rain.mp3", duration: "18:30" },
+                    { title: "Coffee Shop", src: "tracks/ambiance/coffee.wav", duration: "12:45" },
+                    { title: "Fireplace", src: "tracks/ambiance/fire.mp3", duration: "10:00" },
+                    { title: "Birds Singing", src: "tracks/ambiance/birds.wav", duration: "8:15" },
+                    { title: "Wind Chimes", src: "tracks/ambiance/chimes.mp3", duration: "7:30" },
+                    { title: "City Park", src: "tracks/ambiance/city.wav", duration: "14:20" },
+                    { title: "Mountain Stream", src: "tracks/ambiance/stream.mp3", duration: "16:45" },
+                    { title: "Thunderstorm", src: "tracks/ambiance/thunder.wav", duration: "22:00" }
+                ],
+                "Ancient": [
+                    { title: "Egyptian Music", src: "tracks/ancient/egypt.mp3", duration: "5:30" },
+                    { title: "Greek Lyre", src: "tracks/ancient/greek.wav", duration: "4:45" },
+                    { title: "Roman Trumpet", src: "tracks/ancient/roman.mp3", duration: "3:50" },
+                    { title: "Mayan Flute", src: "tracks/ancient/mayan.wav", duration: "6:15" },
+                    { title: "Celtic Harp", src: "tracks/ancient/celtic.mp3", duration: "7:20" },
+                    { title: "Chinese Guqin", src: "tracks/ancient/chinese.wav", duration: "8:10" },
+                    { title: "Indian Sitar", src: "tracks/ancient/indian.mp3", duration: "9:45" },
+                    { title: "Japanese Koto", src: "tracks/ancient/japanese.wav", duration: "6:50" },
+                    { title: "Native American", src: "tracks/ancient/native.mp3", duration: "5:15" },
+                    { title: "Viking Horn", src: "tracks/ancient/viking.wav", duration: "4:30" }
                 ]
             };
 
@@ -336,17 +483,22 @@
                     const categoryElement = document.createElement('div');
                     categoryElement.className = 'category';
                     
-                    let categoryHTML = `<h3>${category}</h3>`;
+                    const categoryItemsHTML = tracks.map(track => `
+                        <div class="category-item" data-src="${track.src}" data-title="${track.title}" data-duration="${track.duration}">
+                            ${track.title} <span style="float: right; color: #777;">${track.duration}</span>
+                        </div>
+                    `).join('');
                     
-                    tracks.forEach(track => {
-                        categoryHTML += `
-                            <div class="category-item" data-src="${track.src}" data-title="${track.title}" data-duration="${track.duration}">
-                                ${track.title} <span style="float: right; color: #777;">${track.duration}</span>
-                            </div>
-                        `;
-                    });
+                    categoryElement.innerHTML = `
+                        <div class="category-header">
+                            <h3>${category}</h3>
+                            <button class="toggle-btn">+</button>
+                        </div>
+                        <div class="category-items">
+                            ${categoryItemsHTML}
+                        </div>
+                    `;
                     
-                    categoryElement.innerHTML = categoryHTML;
                     libraryElement.appendChild(categoryElement);
                     
                     // Add click event to each track
@@ -359,6 +511,25 @@
                             });
                         });
                     });
+                    
+                    // Add toggle functionality to category headers
+                    const header = categoryElement.querySelector('.category-header');
+                    const items = categoryElement.querySelector('.category-items');
+                    const toggleBtn = categoryElement.querySelector('.toggle-btn');
+                    
+                    header.addEventListener('click', function() {
+                        if (items.style.maxHeight) {
+                            items.style.maxHeight = null;
+                            toggleBtn.textContent = '+';
+                        } else {
+                            items.style.maxHeight = items.scrollHeight + 'px';
+                            toggleBtn.textContent = '-';
+                        }
+                    });
+                    
+                    // Initially collapse all categories
+                    items.style.maxHeight = null;
+                    toggleBtn.textContent = '+';
                 }
             }
 
