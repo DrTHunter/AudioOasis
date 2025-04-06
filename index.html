@@ -131,12 +131,12 @@
         .main-controls {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 15px; /* Increased gap for better spacing */
         }
 
         .secondary-controls {
             display: flex;
-            gap: 8px;
+            gap: 15px; /* Increased gap for better spacing */
         }
 
         .player-btn {
@@ -338,7 +338,6 @@
                             </div>
                             
                             <div class="secondary-controls">
-                                <button class="player-btn secondary" id="loop-none" title="No Loop">🔁</button>
                                 <button class="player-btn secondary" id="loop-one" title="Loop Track">🔂</button>
                                 <button class="player-btn secondary" id="clear-btn" title="Clear">🗑️</button>
                             </div>
@@ -384,7 +383,6 @@
             const playlistItems = document.getElementById('playlist-items');
             const playlistContainer = document.getElementById('playlist-container');
             const libraryElement = document.getElementById('library');
-            const loopNoneBtn = document.getElementById('loop-none');
             const loopOneBtn = document.getElementById('loop-one');
             const nowPlayingToggle = document.getElementById('now-playing-toggle');
             const nowPlayingContainer = document.getElementById('now-playing-container');
@@ -798,18 +796,16 @@
             });
 
             // Loop mode controls
-            loopNoneBtn.addEventListener('click', function() {
-                loopMode = 'none';
-                loopNoneBtn.classList.add('active');
-                loopOneBtn.classList.remove('active');
-                audioPlayer.loop = false;
-            });
-
             loopOneBtn.addEventListener('click', function() {
-                loopMode = 'one';
-                loopNoneBtn.classList.remove('active');
-                loopOneBtn.classList.add('active');
-                audioPlayer.loop = true;
+                if (loopMode === 'one') {
+                    loopMode = 'none';
+                    loopOneBtn.classList.remove('active');
+                    audioPlayer.loop = false;
+                } else {
+                    loopMode = 'one';
+                    loopOneBtn.classList.add('active');
+                    audioPlayer.loop = true;
+                }
             });
 
             // Initialize the player
