@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Player with Bar Controls</title>
+    <title>Enhanced Media Player</title>
     <style>
+        /* CSS Styles */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -47,48 +48,69 @@
             margin-bottom: 20px;
         }
 
-        .track-info {
-            text-align: center;
-            margin-bottom: 15px;
+        .player-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
         }
 
-        /* MEDIA PLAYER BAR STYLES */
+        .player-bar h2 {
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .player-bar button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        .now-playing-container {
+            display: none;
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-top: -10px;
+        }
+
+        .now-playing-container.show {
+            display: block;
+        }
+
+        .track-info {
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        /* MEDIA PLAYER BAR STYLE */
         .media-player-bar {
             display: flex;
             flex-direction: column;
-            background: #f8f9fa;
+            background: #f0f0f0;
             border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 10px;
+            margin-top: 15px;
         }
 
         .progress-container {
             width: 100%;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         #progress-bar {
             width: 100%;
             height: 6px;
             cursor: pointer;
-            background: #e0e0e0;
-            border-radius: 3px;
-            appearance: none;
-            -webkit-appearance: none;
-        }
-
-        #progress-bar::-webkit-progress-bar {
-            background: #e0e0e0;
-            border-radius: 3px;
-        }
-
-        #progress-bar::-webkit-progress-value {
-            background: #3498db;
-            border-radius: 3px;
-        }
-
-        #progress-bar::-moz-progress-bar {
-            background: #3498db;
+            background: #ddd;
             border-radius: 3px;
         }
 
@@ -97,7 +119,7 @@
             justify-content: space-between;
             font-size: 12px;
             color: #666;
-            margin-top: 5px;
+            margin-top: 3px;
         }
 
         .controls-container {
@@ -109,7 +131,7 @@
         .main-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .secondary-controls {
@@ -122,8 +144,8 @@
             color: white;
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             font-size: 16px;
             cursor: pointer;
             display: flex;
@@ -142,26 +164,18 @@
             color: #555;
         }
 
-        .player-btn.secondary:hover {
-            background: #d0d0d0;
-        }
-
         .player-btn.active {
             background: #2ecc71;
-            color: white;
         }
 
-        .player-btn.active:hover {
-            background: #27ae60;
-        }
-
-        /* PLAYLIST STYLES */
         .playlist {
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             padding: 20px;
-            margin-top: 20px;
+            overflow-y: hidden;
+            transition: all 0.3s ease;
+            max-height: 500px;
         }
 
         .playlist-header {
@@ -173,8 +187,8 @@
         }
 
         .playlist-items {
-            max-height: 400px;
             overflow-y: auto;
+            max-height: 400px;
             transition: max-height 0.3s ease;
         }
 
@@ -189,7 +203,6 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            transition: background-color 0.2s;
         }
 
         .playlist-item:hover {
@@ -208,32 +221,6 @@
             text-align: right;
         }
 
-        .drag-handle {
-            cursor: move;
-            margin-right: 10px;
-            color: #777;
-        }
-
-        .remove-track {
-            margin-left: auto;
-            color: #777;
-            cursor: pointer;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-
-        .remove-track:hover {
-            background-color: #ffebee;
-            color: #f44336;
-        }
-
-        .empty-playlist {
-            color: #777;
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* LIBRARY STYLES */
         .library {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -270,7 +257,6 @@
             padding: 8px 0;
             cursor: pointer;
             border-bottom: 1px solid #f5f5f5;
-            transition: background-color 0.2s;
         }
 
         .category-item:hover {
@@ -281,12 +267,37 @@
             border-bottom: none;
         }
 
+        .drag-handle {
+            cursor: move;
+            margin-right: 10px;
+            color: #777;
+        }
+
+        .empty-playlist {
+            color: #777;
+            text-align: center;
+            padding: 20px;
+        }
+
         .toggle-btn {
             background: none;
             border: none;
             font-size: 1.2em;
             cursor: pointer;
             color: #777;
+        }
+
+        .remove-track {
+            margin-left: 10px;
+            color: #777;
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .remove-track:hover {
+            background-color: #ffebee;
+            color: #f44336;
         }
     </style>
 </head>
@@ -296,37 +307,46 @@
     </header>
 
     <div class="main-container">
+        <!-- Left side - Player and Playlist -->
         <div class="player-container">
             <div class="music-player">
-                <div class="track-info">
-                    <h3 id="current-track">No track selected</h3>
+                <div class="player-bar" id="now-playing-bar">
+                    <h2>Now Playing</h2>
+                    <button id="now-playing-toggle">▼</button>
                 </div>
                 
-                <div class="media-player-bar">
-                    <div class="progress-container">
-                        <progress id="progress-bar" value="0" max="100"></progress>
-                        <div class="time-display">
-                            <span id="current-time">0:00</span>
-                            <span id="duration">0:00</span>
+                <div class="now-playing-container" id="now-playing-container">
+                    <div class="track-info">
+                        <h3 id="current-track">No track selected</h3>
+                    </div>
+                    
+                    <!-- MEDIA PLAYER BAR -->
+                    <div class="media-player-bar">
+                        <div class="progress-container">
+                            <progress id="progress-bar" value="0" max="100"></progress>
+                            <div class="time-display">
+                                <span id="current-time">0:00</span>
+                                <span id="duration">0:00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="controls-container">
+                            <div class="main-controls">
+                                <button class="player-btn" id="prev-btn" title="Previous">⏮️</button>
+                                <button class="player-btn" id="play-btn" title="Play">▶️</button>
+                                <button class="player-btn" id="next-btn" title="Next">⏭️</button>
+                            </div>
+                            
+                            <div class="secondary-controls">
+                                <button class="player-btn secondary" id="loop-none" title="No Loop">🔁</button>
+                                <button class="player-btn secondary" id="loop-one" title="Loop Track">🔂</button>
+                                <button class="player-btn secondary" id="clear-btn" title="Clear">🗑️</button>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="controls-container">
-                        <div class="main-controls">
-                            <button class="player-btn" id="prev-btn" title="Previous">⏮</button>
-                            <button class="player-btn" id="play-btn" title="Play">▶</button>
-                            <button class="player-btn" id="next-btn" title="Next">⏭</button>
-                        </div>
-                        
-                        <div class="secondary-controls">
-                            <button class="player-btn secondary" id="loop-none" title="No Loop">🔁</button>
-                            <button class="player-btn secondary" id="loop-one" title="Loop Track">🔂</button>
-                            <button class="player-btn secondary" id="clear-btn" title="Clear">🗑</button>
-                        </div>
-                    </div>
+                    <audio id="audio-player"></audio>
                 </div>
-                
-                <audio id="audio-player"></audio>
             </div>
             
             <div class="playlist" id="playlist-container">
@@ -340,13 +360,17 @@
             </div>
         </div>
         
+        <!-- Right side - Track Library -->
         <div class="library-container">
             <h2>Music Library</h2>
-            <div class="library" id="library"></div>
+            <div class="library" id="library">
+                <!-- Categories will be populated by JavaScript -->
+            </div>
         </div>
     </div>
 
     <script>
+        // JavaScript for the music player
         document.addEventListener('DOMContentLoaded', function() {
             const audioPlayer = document.getElementById('audio-player');
             const playBtn = document.getElementById('play-btn');
@@ -362,29 +386,90 @@
             const libraryElement = document.getElementById('library');
             const loopNoneBtn = document.getElementById('loop-none');
             const loopOneBtn = document.getElementById('loop-one');
+            const nowPlayingToggle = document.getElementById('now-playing-toggle');
+            const nowPlayingContainer = document.getElementById('now-playing-container');
+            const nowPlayingBar = document.getElementById('now-playing-bar');
             const playlistToggle = document.getElementById('playlist-toggle');
             
             let currentTrackIndex = -1;
             let isPlaying = false;
-            let loopMode = 'none';
+            let loopMode = 'none'; // 'none', 'one', 'all'
             let playlist = [];
             
+            // Organized track library by categories
             const trackLibrary = {
                 "Background Music": [
                     { title: "A Thousand Quiet Thoughts", src: "tracks/background/a_thousand_quiet_thoughts.mp3", duration: "3:45" },
-                    { title: "Bubbles in the Sunshine", src: "tracks/background/bubbles_in_the_sunshine.mp3", duration: "4:12" }
+                    { title: "Bubbles in the Sunshine", src: "tracks/background/bubbles_in_the_sunshine.mp3", duration: "4:12" },
+                    { title: "Dawn in the Misty Pines", src: "tracks/background/dawn_in_the_misty_pines.mp3", duration: "5:20" },
+                    { title: "Floating in the Stratosphere", src: "tracks/background/floating_in_the_stratosphere.mp3", duration: "6:15" },
+                    { title: "Midnight in the Neon Glow", src: "tracks/background/midnight_in_the_neon_glow.mp3", duration: "4:50" },
+                    { title: "Moon Milk Lullaby", src: "tracks/background/moon_milk_lullaby.mp3", duration: "5:30" },
+                    { title: "Moss-Covered Memories", src: "tracks/background/moss_covered_memories.mp3", duration: "4:45" },
+                    { title: "Nebula Lullaby", src: "tracks/background/nebula_lullaby.mp3", duration: "6:00" },
+                    { title: "Oblivion's Gentle Pull", src: "tracks/background/oblivions_gentle_pull.mp3", duration: "5:15" },
+                    { title: "Radio Waves from Andromeda", src: "tracks/background/radio_waves_from_andromeda.mp3", duration: "7:20" },
+                    { title: "Silent Echo Chamber (guitar)", src: "tracks/background/silent_echo_chamber_guitar.mp3", duration: "4:10" },
+                    { title: "Silent Echo Chamber", src: "tracks/background/silent_echo_chamber.mp3", duration: "4:25" },
+                    { title: "Sunny Side Upbeat", src: "tracks/background/sunny_side_upbeat.mp3", duration: "3:30" },
+                    { title: "The Library of Forgotten Sounds", src: "tracks/background/the_library_of_forgotten_sounds.mp3", duration: "8:15" },
+                    { title: "The Quiet Side of the Moon", src: "tracks/background/the_quiet_side_of_the_moon.mp3", duration: "6:45" },
+                    { title: "The Space Between Heartbeats", src: "tracks/background/the_space_between_heartbeats.mp3", duration: "5:50" },
+                    { title: "Time Dissolves in Water", src: "tracks/background/time_dissolves_in_water.mp3", duration: "7:10" },
+                    { title: "Whispers of the Aurora", src: "tracks/background/whispers_of_the_aurora.mp3", duration: "6:30" }
                 ],
                 "LoFi": [
                     { title: "1999 Bedroom Beats", src: "tracks/lofi/1999_bedroom_beats.mp3", duration: "2:45" },
-                    { title: "Cafe con Leche Beats", src: "tracks/lofi/cafe_con_leche_beats.mp3", duration: "3:12" }
+                    { title: "Cafe con Leche Beats", src: "tracks/lofi/cafe_con_leche_beats.mp3", duration: "3:12" },
+                    { title: "Cafe Window Rain", src: "tracks/lofi/cafe_window_rain.mp3", duration: "2:58" },
+                    { title: "Cat Cafe Boogie", src: "tracks/lofi/cat_cafe_boogie.wav", duration: "3:20" },
+                    { title: "Diner Booth Dreams", src: "tracks/lofi/diner_booth_dreams.WAV", duration: "3:45" },
+                    { title: "Fading Streetlights", src: "tracks/lofi/fading_streetlights.wav", duration: "4:10" },
+                    { title: "Falling Through Hourglasses", src: "tracks/lofi/falling_through_hourglasses.mp3", duration: "3:55" },
+                    { title: "Fingers on Dusty Keys", src: "tracks/lofi/fingers_on_dusty_keys.mp3", duration: "4:15" },
+                    { title: "Five A.M. Jazz Club", src: "tracks/lofi/five_am_jazz_club.mp3", duration: "5:30" },
+                    { title: "Fretboard Dreams", src: "tracks/lofi/fretboard_dreams.mp3", duration: "3:40" },
+                    { title: "Half-Speed Heartbeats", src: "tracks/lofi/half_speed_heartbeats.mp3", duration: "4:25" },
+                    { title: "Honey Drip Melodies", src: "tracks/lofi/honey_drip_melodies.mp3", duration: "3:50" },
+                    { title: "Ice Melting in Slow Motion", src: "tracks/lofi/ice_melting_in_slow_motion.mp3", duration: "5:15" },
+                    { title: "Koi Pond Calculus", src: "tracks/lofi/koi_pond_calculus.mp3", duration: "4:40" },
+                    { title: "Like Water in Dreams", src: "tracks/lofi/like_water_in_dreams.mp3", duration: "3:35" },
+                    { title: "Low-Key Hustle", src: "tracks/lofi/low_key_hustle.mp3", duration: "4:05" },
+                    { title: "Margin Notes at 2 AM", src: "tracks/lofi/margin_notes_at_2_am.wav", duration: "5:20" },
+                    { title: "Neon Bicycle", src: "tracks/lofi/neon_bicycle.mp3", duration: "3:30" },
+                    { title: "Nylon String Sunset", src: "tracks/lofi/nylon_string_sunset.wav", duration: "4:50" },
+                    { title: "Pencil Marks on Sheet Music", src: "tracks/lofi/pencil_marks_on_sheet_music.mp3", duration: "3:25" },
+                    { title: "Pixelated Picnic", src: "tracks/lofi/pixelated_picnic.mp3", duration: "4:15" },
+                    { title: "Popsicle Summer", src: "tracks/lofi/popsicle_summer.mp3", duration: "3:10" },
+                    { title: "Smoke Rings in B-Flat", src: "tracks/lofi/smoke_rings_in_b_flat.mp3", duration: "5:45" },
+                    { title: "Sneaker Scuff Symphony", src: "tracks/lofi/sneaker_scuff_symphony.mp3", duration: "4:30" },
+                    { title: "Subway Graffiti Heartbeat", src: "tracks/lofi/subway_graffiti_heartbeat.mp3", duration: "3:55" },
+                    { title: "Sunburn Serenade", src: "tracks/lofi/sunburn_serenade.mp3", duration: "4:20" },
+                    { title: "Taxi Window Views", src: "tracks/lofi/taxi_window_views.mp3", duration: "5:10" },
+                    { title: "The Art of Slowing Down", src: "tracks/lofi/the_art_of_slowing_down.wav", duration: "6:25" },
+                    { title: "The Lake at 4 AM", src: "tracks/lofi/the_lake_at_4_am.wav", duration: "7:15" },
+                    { title: "The Last Candle Burns", src: "tracks/lofi/the_last_candle_burns.mp3", duration: "5:50" },
+                    { title: "The Lofi Is", src: "tracks/lofi/the_lofi_is.mp3", duration: "4:05" },
+                    { title: "The Lofi", src: "tracks/lofi/the_lofi.mp3", duration: "3:30" },
+                    { title: "Tickets to Nowhere", src: "tracks/lofi/tickets_to_nowhere.mp3", duration: "4:40" },
+                    { title: "Vinyl Hustle", src: "tracks/lofi/vinyl_hustle.wav", duration: "3:55" },
+                    { title: "Warm Blanket Thoughts", src: "tracks/lofi/warm_blanket_thoughts.wav", duration: "6:10" }
                 ],
                 "Meditation": [
-                    { title: "Morning Meditation", src: "tracks/meditation/morning.mp3", duration: "10:00" }
+                    { title: "Morning Meditation", src: "tracks/meditation/morning.mp3", duration: "10:00" },
+                    { title: "Deep Relaxation", src: "tracks/meditation/relax.mp3", duration: "15:30" }
                 ],
                 "Nature Sounds": [
-                    { title: "Morning Birds", src: "tracks/nature/birds.mp3", duration: "8:00" }
+                    { title: "Morning Birds", src: "tracks/nature/birds.mp3", duration: "8:00" },
+                    { title: "Mountain River", src: "tracks/nature/river.wav", duration: "10:30" }
                 ]
             };
+
+            // Toggle now playing container
+            nowPlayingBar.addEventListener('click', function() {
+                nowPlayingContainer.classList.toggle('show');
+                nowPlayingToggle.textContent = nowPlayingContainer.classList.contains('show') ? '▲' : '▼';
+            });
 
             // Toggle playlist container
             playlistToggle.addEventListener('click', function() {
@@ -455,10 +540,12 @@
                 playlist.push(track);
                 updatePlaylistDisplay();
                 
+                // Auto-scroll to the newly added item if playlist is long
                 if (playlistItems.scrollHeight > playlistItems.clientHeight) {
                     playlistItems.scrollTop = playlistItems.scrollHeight;
                 }
                 
+                // If this is the first track added, play it
                 if (playlist.length === 1) {
                     currentTrackIndex = 0;
                     loadTrack(currentTrackIndex);
@@ -469,16 +556,19 @@
             function removeTrack(index) {
                 if (index < 0 || index >= playlist.length) return;
                 
+                // If we're removing the currently playing track
                 if (index === currentTrackIndex) {
                     if (isPlaying) {
                         pauseTrack();
                     }
                     
+                    // If it's the last track in the playlist
                     if (playlist.length === 1) {
                         clearPlaylist();
                         return;
                     }
                     
+                    // If it's the last track but there are others
                     if (currentTrackIndex === playlist.length - 1) {
                         currentTrackIndex--;
                     }
@@ -486,10 +576,12 @@
                     loadTrack(currentTrackIndex);
                     if (isPlaying) playTrack();
                 } 
+                // If we're removing a track before the current one
                 else if (index < currentTrackIndex) {
                     currentTrackIndex--;
                 }
                 
+                // Remove the track from the playlist
                 playlist.splice(index, 1);
                 updatePlaylistDisplay();
             }
@@ -516,6 +608,7 @@
                     `;
                     
                     item.addEventListener('click', function(e) {
+                        // Don't trigger if clicking on the remove button
                         if (!e.target.classList.contains('remove-track')) {
                             currentTrackIndex = index;
                             loadTrack(currentTrackIndex);
@@ -523,12 +616,14 @@
                         }
                     });
                     
+                    // Add click event to remove button
                     const removeBtn = item.querySelector('.remove-track');
                     removeBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
+                        e.stopPropagation(); // Prevent triggering the item click event
                         removeTrack(index);
                     });
                     
+                    // Drag and drop functionality
                     item.setAttribute('draggable', 'true');
                     item.addEventListener('dragstart', function(e) {
                         e.dataTransfer.setData('text/plain', index);
@@ -547,6 +642,7 @@
                             const [movedItem] = playlist.splice(fromIndex, 1);
                             playlist.splice(toIndex, 0, movedItem);
                             
+                            // Update current track index if needed
                             if (currentTrackIndex === fromIndex) {
                                 currentTrackIndex = toIndex;
                             } else if (fromIndex < currentTrackIndex && toIndex >= currentTrackIndex) {
@@ -590,7 +686,7 @@
                 audioPlayer.play()
                     .then(() => {
                         isPlaying = true;
-                        playBtn.textContent = "⏸";
+                        playBtn.textContent = "⏸️";
                     })
                     .catch(error => {
                         console.error("Playback failed:", error);
@@ -600,7 +696,7 @@
             function pauseTrack() {
                 audioPlayer.pause();
                 isPlaying = false;
-                playBtn.textContent = "▶";
+                playBtn.textContent = "▶️";
             }
 
             function nextTrack() {
@@ -626,8 +722,10 @@
 
             function prevTrack() {
                 if (audioPlayer.currentTime > 3) {
+                    // If more than 3 seconds into the track, restart it
                     audioPlayer.currentTime = 0;
                 } else {
+                    // Otherwise go to previous track
                     if (currentTrackIndex > 0) {
                         currentTrackIndex--;
                     } else {
@@ -661,9 +759,16 @@
             }
 
             // Event listeners
-            playBtn.addEventListener('click', playTrack);
-            prevBtn.addEventListener('click', prevTrack);
+            playBtn.addEventListener('click', function() {
+                if (isPlaying) {
+                    pauseTrack();
+                } else {
+                    playTrack();
+                }
+            });
+            
             nextBtn.addEventListener('click', nextTrack);
+            prevBtn.addEventListener('click', prevTrack);
             clearBtn.addEventListener('click', clearPlaylist);
 
             audioPlayer.addEventListener('timeupdate', function() {
