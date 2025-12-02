@@ -336,7 +336,10 @@
 </head>
 <body>
     <header>
-        <h1>Enhanced Media Player</h1>
+      <h1>AudioOasis</h1>
+      <p style="margin: 0.25rem 0 0; font-size: 0.9rem; opacity: 0.8;">
+        Build your own background mix: lofi, ambience, meditation, and more.
+      </p>
     </header>
 
     <div class="main-container">
@@ -386,8 +389,10 @@
                     <h2>Playlist</h2>
                     <button class="toggle-btn" id="playlist-toggle">▼</button>
                 </div>
-                <div class="playlist-items" id="playlist-items">
-                    <div class="empty-playlist">Your playlist is empty</div>
+                <div class="empty-playlist">
+                    Your playlist is empty.<br>
+                    <span style="font-size: 0.9rem;">Click any track from the Music Library on the right to add it here.</span>
+                  </div>
                 </div>
             </div>
         </div>
@@ -396,6 +401,10 @@
         <div class="library-container">
             <h2>Music Library</h2>
             <div class="library" id="library">
+              <div style="margin-bottom: 8px; font-size: 0.9rem; color: #555;">
+                Click a category, then click a track to add it to your playlist on the left.
+              </div>
+              <div class="library" id="library">
                 <!-- Categories will be populated by JavaScript -->
             </div>
         </div>
