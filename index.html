@@ -224,6 +224,14 @@
       margin-bottom: 8px;
       color: var(--dark);
     }
+    .track-category {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-left: 8px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background: #f1f3f5;
+    }
     .track-status {
       font-size: 0.9rem;
       color: var(--gray);
@@ -496,20 +504,46 @@
       color: var(--gray);
     }
     .track-details {
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 2fr 1.5fr auto; /* left / center / right */
+    align-items: center;
+    column-gap: 10px;
+    }
+
+    /* shared base for each column cell */
+    .track-cell {
+    display: flex;
+    align-items: center;
+    }
+    /* left column: title, align left */
+    .track-cell-left {
+    justify-content: flex-start;
+    }
+    /* center column: category, center it */
+    .track-cell-center {
+    justify-content: center;
+    }
+    /* right column: duration, align right */
+    .track-cell-right {
+    justify-content: flex-end;
     }
     .track-name {
-      font-size: 0.95rem;
+    font-size: 0.95rem;
+    }
+    .track-category {
+    font-size: 0.8rem;
+    color: var(--gray);
+    padding: 2px 6px;
+    border-radius: 10px;
+    background: #f1f3f5;
     }
     .track-duration {
-      font-size: 0.85rem;
-      color: var(--gray);
-      background: var(--light-gray);
-      padding: 3px 8px;
-      border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--gray);
+    background: var(--light-gray);
+    padding: 3px 8px;
+    border-radius: 10px;
     }
     .remove-track {
       opacity: 0;
@@ -760,6 +794,7 @@
             <div class="track-status">
               <i class="fas fa-music"></i>
               <span id="playlist-count">0 tracks in playlist</span>
+              <span id="current-category" style="margin-left:8px; color:#6c757d;"></span>
             </div>
           </div>
           <!-- Media Player -->
@@ -855,6 +890,7 @@
       const shuffleBtn = document.getElementById('shuffle-btn');
       const progressBar = document.getElementById('progress-bar');
       const currentTrackDisplay = document.getElementById('current-track');
+      const currentCategoryDisplay = document.getElementById('current-category');
       const currentTimeDisplay = document.getElementById('current-time');
       const durationDisplay = document.getElementById('duration');
       const playlistItems = document.getElementById('playlist-items');
@@ -1423,18 +1459,25 @@
           item.setAttribute('draggable', 'true');
           item.dataset.index = index;
           item.innerHTML = `
-            <div class="track-index">${index + 1}</div>
-            <div class="track-details">
+          <div class="track-index">${index + 1}</div>
+          <div class="track-details">
+              <div class="track-cell track-cell-left">
               <span class="track-name">${track.title}</span>
+              </div>
+              <div class="track-cell track-cell-center">
+              <span class="track-category">${track.category || ''}</span>
+              </div>
+              <div class="track-cell track-cell-right">
               <span class="track-duration">${track.duration}</span>
-            </div>
-            <div class="add-to-mixer-btn" title="Add to mixer">
-              <i class="fas fa-sliders-h"></i>
-            </div>
-            <div class="remove-track">
-              <i class="fas fa-times"></i>
-            </div>
-          `;
+           </div>
+        </div>
+        <div class="add-to-mixer-btn" title="Add to mixer">
+            <i class="fas fa-sliders-h"></i>
+        </div>
+        <div class="remove-track">
+            <i class="fas fa-times"></i>
+        </div>
+        `;
           
           // Play track on click
           item.addEventListener('click', function(e) {
@@ -1516,6 +1559,7 @@
           currentTrackIndex = -1;
           audioPlayer.src = '';
           currentTrackDisplay.textContent = 'No Track Selected';
+          currentCategoryDisplay.textContent = '';
           currentTimeDisplay.textContent = '0:00';
           durationDisplay.textContent = '0:00';
           progressBar.value = 0;
@@ -1527,16 +1571,24 @@
       // Load track
       function loadTrack(index) {
         if (index < 0 || index >= playlist.length) return;
-        
+
         currentTrackIndex = index;
         audioPlayer.src = playlist[index].src;
         currentTrackDisplay.textContent = playlist[index].title;
+
+        // Update current category display (if track provides category)
+        if (playlist[index].category) {
+          currentCategoryDisplay.textContent = `• ${playlist[index].category}`;
+        } else {
+          currentCategoryDisplay.textContent = '';
+        }
+
         updatePlaylistDisplay();
-        
-        // Update play button if needed
+
+        // If the player was already playing, continue playback
         if (isPlaying) {
           audioPlayer.play().catch(error => {
-            console.error("Playback failed:", error);
+            console.error('Playback failed:', error);
           });
         }
       }
