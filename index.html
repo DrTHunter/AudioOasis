@@ -224,7 +224,8 @@
       margin-bottom: 8px;
       color: var(--dark);
     }
-    .track-category {
+    /* For the small label under "Now Playing" */
+    .track-category-label {
     font-size: 0.8rem;
     color: var(--gray);
     margin-left: 8px;
@@ -506,7 +507,8 @@
     .track-details {
     flex: 1;
     display: grid;
-    grid-template-columns: 2fr 1.5fr auto; /* left / center / right */
+    /* left / center / right columns */
+    grid-template-columns: 2fr 1.4fr 0.8fr;
     align-items: center;
     column-gap: 10px;
     }
@@ -516,26 +518,37 @@
     display: flex;
     align-items: center;
     }
+
     /* left column: title, align left */
     .track-cell-left {
     justify-content: flex-start;
     }
-    /* center column: category, center it */
+
+    /* center column: category, truly centered */
     .track-cell-center {
     justify-content: center;
     }
+
     /* right column: duration, align right */
     .track-cell-right {
     justify-content: flex-end;
     }
+
     .track-name {
     font-size: 0.95rem;
     }
-    .track-category {
+
+    /* For the pill in the playlist rows */
+    .track-category-pill {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 80px;
+    text-align: center;
     font-size: 0.8rem;
     color: var(--gray);
-    padding: 2px 6px;
-    border-radius: 10px;
+    padding: 2px 10px;
+    border-radius: 999px;
     background: #f1f3f5;
     }
     .track-duration {
@@ -794,7 +807,7 @@
             <div class="track-status">
               <i class="fas fa-music"></i>
               <span id="playlist-count">0 tracks in playlist</span>
-              <span id="current-category" style="margin-left:8px; color:#6c757d;"></span>
+              <span id="current-category" class="track-category-label"></span>
             </div>
           </div>
           <!-- Media Player -->
@@ -1273,20 +1286,19 @@
       
       // Toggle sections - keep now playing open by default
       nowPlayingHeader.addEventListener('click', function() {
-        const content = document.querySelector('.player-tabs, .tab-content');
-        const isHidden = singlePlayerContent.classList.contains('hidden') && mixerContent.classList.contains('hidden');
-        
-        if (isHidden) {
+      const isHidden = singlePlayerContent.classList.contains('hidden') && mixerContent.classList.contains('hidden');
+      if (isHidden) {
+          // Show both tab contents (whichever tab is active will be visible)
           singlePlayerContent.classList.remove('hidden');
           mixerContent.classList.remove('hidden');
           nowPlayingToggle.querySelector('i').className = 'fas fa-chevron-up';
-        } else {
-          singlePlayerContent.classList.add('hidden');
-          mixerContent.classList.add('hidden');
-          nowPlayingToggle.querySelector('i').className = 'fas fa-chevron-down';
-        }
-      });
-      
+      } else {
+        // Hide both tab contents
+        singlePlayerContent.classList.add('hidden');
+        mixerContent.classList.add('hidden');
+        nowPlayingToggle.querySelector('i').className = 'fas fa-chevron-down';
+    }
+    });
       // Playlist toggle - default to open (no collapsed class)
       playlistHeader.addEventListener('click', function() {
         playlistElement.classList.toggle('collapsed');
@@ -1465,7 +1477,7 @@
               <span class="track-name">${track.title}</span>
               </div>
               <div class="track-cell track-cell-center">
-              <span class="track-category">${track.category || ''}</span>
+              <span class="track-category-pill">${track.category || ''}</span>
               </div>
               <div class="track-cell track-cell-right">
               <span class="track-duration">${track.duration}</span>
