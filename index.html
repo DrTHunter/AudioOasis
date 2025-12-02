@@ -6,20 +6,17 @@
   <meta http-equiv="Permissions-Policy" content="autoplay=(), fullscreen=()">
   <meta name="robots" content="index, follow">
   <meta name="author" content="Trent Hunter, AudioOasis by Orion AI">
-
   <!-- SEO Primary Meta Tags -->
   <title>AudioOasis | Free Studio-Quality Background Music for Work & Focus</title>
   <meta name="title" content="AudioOasis | Free Studio-Quality Background Music for Work & Focus" />
   <meta name="description" content="Stream high-quality .WAV music for deep work, focus, and flow. No ads. No distractions. Just curated background soundtracks for creators and thinkers." />
   <link rel="canonical" href="https://drthunter.github.io/AudioOasis/" />
-
   <!-- Open Graph Meta Tags -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://drthunter.github.io/AudioOasis/" />
   <meta property="og:title" content="AudioOasis | Free Studio-Quality Background Music for Work & Focus" />
   <meta property="og:description" content="Escape the noise. Discover a curated library of lofi and ambient .WAV tracks to help you focus, relax, and get things done." />
   <meta property="og:image" content="https://drthunter.github.io/AudioOasis/UI%20Picture.png" />
-
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="https://drthunter.github.io/AudioOasis/" />
@@ -33,1009 +30,1272 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-  
     gtag('config', 'G-55NPK2XL9R');
   </script>
-</head>
-    <style>
-        /* CSS Styles */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .main-container {
-            display: flex;
-            flex: 1;
-            padding: 20px;
-            gap: 20px;
-        }
-
-        .player-container {
-            flex: 1;
-            max-width: 400px;
-        }
-
-        .library-container {
-            flex: 2;
-        }
-
-        .music-player {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .player-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #3498db;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .player-bar h2 {
-            margin: 0;
-            font-size: 1.1em;
-        }
-
-        .player-bar button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2em;
-            cursor: pointer;
-        }
-
-        .now-playing-container {
-            display: none;
-            background-color: white;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 15px;
-            margin-top: -10px;
-        }
-
-        .now-playing-container.show {
-            display: block;
-        }
-
-        .track-info {
-            text-align: center;
-            margin: 15px 0;
-        }
-
-        /* MEDIA PLAYER BAR STYLE */
-        .media-player-bar {
-            display: flex;
-            flex-direction: column;
-            background: #f0f0f0;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 15px;
-        }
-
-        .progress-container {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        #progress-bar {
-            width: 100%;
-            height: 6px;
-            cursor: pointer;
-            background: #ddd;
-            border-radius: 3px;
-        }
-
-        .time-display {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #666;
-            margin-top: 3px;
-        }
-
-        .controls-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .main-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px; /* Increased gap for better spacing */
-        }
-
-        .secondary-controls {
-            display: flex;
-            gap: 15px; /* Increased gap for better spacing */
-        }
-
-        .player-btn {
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .player-btn:hover {
-            background: #2980b9;
-            transform: scale(1.1);
-        }
-
-        .player-btn.secondary {
-            background: #e0e0e0;
-            color: #555;
-        }
-
-        .player-btn.active {
-            background: #2ecc71;
-        }
-
-        .playlist {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            overflow-y: hidden;
-            transition: all 0.3s ease;
-            max-height: 500px;
-        }
-
-        .playlist-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .playlist-items {
-            overflow-y: auto;
-            max-height: 400px;
-            transition: max-height 0.3s ease;
-        }
-
-        .playlist.collapsed .playlist-items {
-            max-height: 0;
-            overflow: hidden;
-        }
-
-        .playlist-item {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-
-        .playlist-item:hover {
-            background-color: #f5f5f5;
-        }
-
-        .playlist-item.active {
-            background-color: #e1f5fe;
-            font-weight: bold;
-        }
-
-        .track-number {
-            margin-right: 10px;
-            color: #777;
-            width: 25px;
-            text-align: right;
-        }
-
-        .library {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .category {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 15px;
-        }
-
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .category h3 {
-            margin: 0;
-            padding: 0;
-        }
-
-        .category-items {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .category-item {
-            padding: 8px 0;
-            cursor: pointer;
-            border-bottom: 1px solid #f5f5f5;
-        }
-
-        .category-item:hover {
-            background-color: #f9f9f9;
-        }
-
-        .category-item:last-child {
-            border-bottom: none;
-        }
-
-        .drag-handle {
-            cursor: move;
-            margin-right: 10px;
-            color: #777;
-        }
-
-        .empty-playlist {
-            color: #777;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .toggle-btn {
-            background: none;
-            border: none;
-            font-size: 1.2em;
-            cursor: pointer;
-            color: #777;
-        }
-
-        .remove-track {
-            margin-left: 10px;
-            color: #777;
-            cursor: pointer;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-
-        .remove-track:hover {
-            background-color: #ffebee;
-            color: #f44336;
-        }
-    </style>
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary: #3498db;
+      --primary-dark: #2980b9;
+      --secondary: #2c3e50;
+      --accent: #2ecc71;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --border-radius: 12px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-hover: 0 6px 16px rgba(0,0,0,0.12);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--secondary) 0%, #1a252f 100%);
+      color: white;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .tagline {
+      margin: 0.5rem 0 0;
+      font-size: 1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    /* Main Layout */
+    .main-container {
+      display: flex;
+      flex: 1;
+      padding: 20px;
+      gap: 25px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* Player Container */
+    .player-container {
+      flex: 1;
+      max-width: 450px;
+      min-width: 350px;
+    }
+    
+    .library-container {
+      flex: 2;
+      min-width: 0; /* Prevent overflow */
+    }
+    
+    /* Player Card */
+    .music-player {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 0;
+      margin-bottom: 25px;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    
+    .music-player:hover {
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .player-header:hover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, #21618c 100%);
+    }
+    
+    .player-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .player-header i {
+      font-size: 1.2rem;
+    }
+    
+    .toggle-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .toggle-btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.05);
+    }
+    
+    /* Now Playing Content */
+    .now-playing-content {
+      padding: 25px;
+    }
+    
+    .track-info {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    
+    .track-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+    
+    .track-status {
+      font-size: 0.9rem;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    /* Media Player */
+    .media-player {
+      background: var(--light);
+      border-radius: var(--border-radius);
+      padding: 20px;
+    }
+    
+    .progress-container {
+      margin-bottom: 20px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #ddd;
+      border-radius: 4px;
+      outline: none;
+      overflow: hidden;
+    }
+    
+    .progress-bar::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
+    }
+    
+    .progress-bar::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: none;
+    }
+    
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-top: 8px;
+    }
+    
+    .player-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    
+    .primary-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .secondary-controls {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .control-btn {
+      background: white;
+      color: var(--dark);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    
+    .control-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+    }
+    
+    .control-btn.primary {
+      background: var(--primary);
+      color: white;
+      width: 60px;
+      height: 60px;
+      font-size: 1.4rem;
+    }
+    
+    .control-btn.secondary {
+      background: var(--light-gray);
+      color: var(--dark);
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+    
+    .control-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+    
+    /* Playlist */
+    .playlist {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 0;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    
+    .playlist:hover {
+      box-shadow: var(--shadow-hover);
+    }
+    
+    .playlist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      padding: 18px 20px;
+      cursor: pointer;
+    }
+    
+    .playlist-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .playlist-content {
+      padding: 20px;
+      max-height: 500px;
+      overflow-y: auto;
+      transition: max-height 0.3s ease;
+    }
+    
+    .playlist.collapsed .playlist-content {
+      max-height: 0;
+      padding: 0 20px;
+      overflow: hidden;
+    }
+    
+    .playlist-items {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .playlist-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+    
+    .playlist-item:hover {
+      background-color: #f0f7ff;
+      border-color: #cce5ff;
+      transform: translateX(5px);
+    }
+    
+    .playlist-item.active {
+      background-color: #e1f5fe;
+      border-color: #b3e5fc;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+    
+    .track-index {
+      width: 30px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--gray);
+    }
+    
+    .track-details {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .track-name {
+      font-size: 0.95rem;
+    }
+    
+    .track-duration {
+      font-size: 0.85rem;
+      color: var(--gray);
+      background: var(--light-gray);
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+    
+    .remove-track {
+      opacity: 0;
+      margin-left: 10px;
+      color: #e74c3c;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .playlist-item:hover .remove-track {
+      opacity: 1;
+    }
+    
+    .empty-playlist {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+    }
+    
+    .empty-playlist i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: #ddd;
+    }
+    
+    /* Library */
+    .library-container h2 {
+      margin-bottom: 20px;
+      color: var(--secondary);
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .instructions {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 15px 20px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+      font-size: 0.95rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .instructions i {
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+    
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .category {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 0;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    
+    .category:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-5px);
+    }
+    
+    .category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 18px 20px;
+      cursor: pointer;
+    }
+    
+    .category-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .category-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .category.expanded .category-content {
+      max-height: 500px;
+    }
+    
+    .category-tracks {
+      padding: 15px;
+    }
+    
+    .category-track {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .category-track:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .category-track .add-icon {
+      opacity: 0;
+      color: var(--primary);
+      transition: var(--transition);
+    }
+    
+    .category-track:hover .add-icon {
+      opacity: 1;
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: var(--secondary);
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+      margin-top: 30px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .main-container {
+        flex-direction: column;
+      }
+      
+      .player-container {
+        max-width: 100%;
+      }
+      
+      .library-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .library-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .player-controls {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .secondary-controls {
+        justify-content: center;
+      }
+      
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+    
+    /* Utility Classes */
+    .hidden {
+      display: none !important;
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+      }
+    }
+    
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+  </style>
 </head>
 <body>
-    <header>
-      <h1>AudioOasis</h1>
-      <p style="margin: 0.25rem 0 0; font-size: 0.9rem; opacity: 0.8;">
-        Build your own background mix: lofi, ambience, meditation, and more.
-      </p>
-    </header>
-
-    <div class="main-container">
-        <!-- Left side - Player and Playlist -->
-        <div class="player-container">
-            <div class="music-player">
-                <div class="player-bar" id="now-playing-bar">
-                    <h2>Now Playing</h2>
-                    <button id="now-playing-toggle">▼</button>
-                </div>
-                
-                <div class="now-playing-container" id="now-playing-container">
-                    <div class="track-info">
-                        <h3 id="current-track">No track selected</h3>
-                    </div>
-                    
-                    <!-- MEDIA PLAYER BAR -->
-                    <div class="media-player-bar">
-                        <div class="progress-container">
-                            <progress id="progress-bar" value="0" max="100"></progress>
-                            <div class="time-display">
-                                <span id="current-time">0:00</span>
-                                <span id="duration">0:00</span>
-                            </div>
-                        </div>
-                        
-                        <div class="controls-container">
-                            <div class="main-controls">
-                                <button class="player-btn" id="prev-btn" title="Previous">⏮️</button>
-                                <button class="player-btn" id="play-btn" title="Play">▶️</button>
-                                <button class="player-btn" id="next-btn" title="Next">⏭️</button>
-                            </div>
-                            
-                            <div class="secondary-controls">
-                                <button class="player-btn secondary" id="loop-one" title="Loop Track">🔂</button>
-                                <button class="player-btn secondary" id="clear-btn" title="Clear">🗑️</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <audio id="audio-player"></audio>
-                </div>
-            </div>
-            
-            <div class="playlist" id="playlist-container">
-                <div class="playlist-header">
-                    <h2>Playlist</h2>
-                    <button class="toggle-btn" id="playlist-toggle">▼</button>
-                </div>
-                <div class="empty-playlist">
-                    Your playlist is empty.<br>
-                    <span style="font-size: 0.9rem;">Click any track from the Music Library on the right to add it here.</span>
-                  </div>
-                </div>
-            </div>
+  <header>
+    <h1><i class="fas fa-headphones"></i> AudioOasis</h1>
+    <p class="tagline">Build your own background mix: lofi, ambience, meditation, and more. Click tracks to add them to your playlist.</p>
+  </header>
+  
+  <div class="main-container">
+    <!-- Left side - Player and Playlist -->
+    <div class="player-container">
+      <!-- Music Player -->
+      <div class="music-player">
+        <div class="player-header" id="now-playing-header">
+          <h2><i class="fas fa-play-circle"></i> Now Playing</h2>
+          <button class="toggle-btn" id="now-playing-toggle">
+            <i class="fas fa-chevron-down"></i>
+          </button>
         </div>
         
-        <!-- Right side - Track Library -->
-        <div class="library-container">
-            <h2>Music Library</h2>
-            <div class="library" id="library">
-              <div style="margin-bottom: 8px; font-size: 0.9rem; color: #555;">
-                Click a category, then click a track to add it to your playlist on the left.
-              </div>
-              <div class="library" id="library">
-                <!-- Categories will be populated by JavaScript -->
+        <div class="now-playing-content" id="now-playing-content">
+          <div class="track-info">
+            <div class="track-title" id="current-track">No Track Selected</div>
+            <div class="track-status">
+              <i class="fas fa-music"></i>
+              <span id="playlist-count">0 tracks in playlist</span>
             </div>
+          </div>
+          
+          <!-- Media Player -->
+          <div class="media-player">
+            <div class="progress-container">
+              <input type="range" id="progress-bar" class="progress-bar" value="0" max="100">
+              <div class="time-display">
+                <span id="current-time">0:00</span>
+                <span id="duration">0:00</span>
+              </div>
+            </div>
+            
+            <div class="player-controls">
+              <div class="primary-controls">
+                <button class="control-btn secondary" id="prev-btn" title="Previous Track">
+                  <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="control-btn primary" id="play-btn" title="Play/Pause">
+                  <i class="fas fa-play"></i>
+                </button>
+                <button class="control-btn secondary" id="next-btn" title="Next Track">
+                  <i class="fas fa-step-forward"></i>
+                </button>
+              </div>
+              
+              <div class="secondary-controls">
+                <button class="control-btn secondary" id="loop-btn" title="Loop Track">
+                  <i class="fas fa-redo"></i>
+                </button>
+                <button class="control-btn secondary" id="shuffle-btn" title="Shuffle Playlist">
+                  <i class="fas fa-random"></i>
+                </button>
+                <button class="control-btn secondary" id="clear-btn" title="Clear Playlist">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <audio id="audio-player"></audio>
         </div>
+      </div>
+      
+      <!-- Playlist -->
+      <div class="playlist" id="playlist">
+        <div class="playlist-header" id="playlist-header">
+          <h2><i class="fas fa-list"></i> Your Playlist</h2>
+          <button class="toggle-btn" id="playlist-toggle">
+            <i class="fas fa-chevron-down"></i>
+          </button>
+        </div>
+        
+        <div class="playlist-content" id="playlist-content">
+          <div class="empty-playlist" id="empty-playlist">
+            <i class="fas fa-music"></i>
+            <h3>Your playlist is empty</h3>
+            <p>Click any track from the Music Library to add it here</p>
+          </div>
+          <ul class="playlist-items" id="playlist-items"></ul>
+        </div>
+      </div>
     </div>
-
-    <script>
-        // JavaScript for the music player
-        document.addEventListener('DOMContentLoaded', function() {
-            const audioPlayer = document.getElementById('audio-player');
-            const playBtn = document.getElementById('play-btn');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-            const clearBtn = document.getElementById('clear-btn');
-            const progressBar = document.getElementById('progress-bar');
-            const currentTrackDisplay = document.getElementById('current-track');
-            const currentTimeDisplay = document.getElementById('current-time');
-            const durationDisplay = document.getElementById('duration');
-            const playlistItems = document.getElementById('playlist-items');
-            const playlistContainer = document.getElementById('playlist-container');
-            const libraryElement = document.getElementById('library');
-            const loopOneBtn = document.getElementById('loop-one');
-            const nowPlayingToggle = document.getElementById('now-playing-toggle');
-            const nowPlayingContainer = document.getElementById('now-playing-container');
-            const nowPlayingBar = document.getElementById('now-playing-bar');
-            const playlistToggle = document.getElementById('playlist-toggle');
-            
-            let currentTrackIndex = -1;
-            let isPlaying = false;
-            let loopMode = 'none'; // 'none', 'one', 'all'
-            let playlist = [];
-            
-            // Organized track library by categories
-            const trackLibrary = {
-                 "LoFi": [
-                    { title: "1999 Bedroom Beats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/1999_bedroom_beats.wav?raw=true", duration: "2:45" },
-                    { title: "Cafe con Leche Beats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/cafe_con_leche_beats.wav?raw=true", duration: "3:12" },
-                    { title: "Cafe Window Rain", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/cafe_window_rain.wav?raw=true", duration: "2:58" },
-                    { title: "Cat Cafe Boogie", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/cat_cafe_boogie.wav?raw=true", duration: "3:20" },
-                    { title: "Diner Booth Dreams", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/diner_booth_dreams.WAV?raw=true", duration: "3:45" },
-                    { title: "Fading Streetlights", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/fading_streetlights.wav?raw=true", duration: "4:10" },
-                    { title: "Falling Through Hourglasses", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/falling_through_hourglasses.wav?raw=true", duration: "3:55" },
-                    { title: "Fingers on Dusty Keys", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/fingers_on_dusty_keys.wav?raw=true", duration: "4:15" },
-                    { title: "Five A.M. Jazz Club", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/five_am_jazz_club.wav?raw=true", duration: "5:30" },
-                    { title: "Fretboard Dreams", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/fretboard_dreams.wav?raw=true", duration: "3:40" },
-                    { title: "Half-Speed Heartbeats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/half_speed_heartbeats.wav?raw=true", duration: "4:25" },
-                    { title: "Honey Drip Melodies", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/honey_drip_melodies.wav?raw=true", duration: "3:50" },
-                    { title: "Ice Melting in Slow Motion", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/ice_melting_in_slow_motion.wav?raw=true", duration: "5:15" },
-                    { title: "Koi Pond Calculus", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/koi_pond_calculus.wav?raw=true", duration: "4:40" },
-                    { title: "Like Water in Dreams", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/like_water_in_dreams.wav?raw=true", duration: "3:35" },
-                    { title: "Low-Key Hustle", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/low_key_hustle.wav?raw=true", duration: "4:05" },
-                    { title: "Margin Notes at 2 AM", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/margin_notes_at_2_am.wav?raw=true", duration: "5:20" },
-                    { title: "Neon Bicycle", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/neon_bicycle.wav?raw=true", duration: "3:30" },
-                    { title: "Nylon String Sunset", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/nylon_string_sunset.wav?raw=true", duration: "4:50" },
-                    { title: "Pencil Marks on Sheet Music", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/pencil_marks_on_sheet_music.wav?raw=true", duration: "3:25" },
-                    { title: "Pixelated Picnic", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/pixelated_picnic.wav?raw=true", duration: "4:15" },
-                    { title: "Popsicle Summer", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/popsicle_summer.wav?raw=true", duration: "3:10" },
-                    { title: "Smoke Rings in B-Flat", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/smoke_rings_in_b_flat.wav?raw=true", duration: "5:45" },
-                    { title: "Sneaker Scuff Symphony", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/sneaker_scuff_symphony.wav?raw=true", duration: "4:30" },
-                    { title: "Subway Graffiti Heartbeat", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/subway_graffiti_heartbeat.wav?raw=true", duration: "3:55" },
-                    { title: "Sunburn Serenade", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/sunburn_serenade.wav?raw=true", duration: "4:20" },
-                    { title: "Taxi Window Views", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/taxi_window_views.wav?raw=true", duration: "5:10" },
-                    { title: "The Art of Slowing Down", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/the_art_of_slowing_down.wav?raw=true", duration: "6:25" },
-                    { title: "The Lake at 4 AM", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/the_lake_at_4_am.wav?raw=true", duration: "7:15" },
-                    { title: "The Last Candle Burns", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/the_last_candle_burns.wav?raw=true", duration: "5:50" },
-                    { title: "Tickets to Nowhere", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/tickets_to_nowhere.wav?raw=true", duration: "4:40" },
-                    { title: "Vinyl Hustle", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/vinyl_hustle.wav?raw=true", duration: "3:55" },
-                    { title: "Warm Blanket Thoughts", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/warm_blanket_thoughts.wav?raw=true", duration: "6:10" }
-                ],
-                "Background Music": [
-                    { title: "A Thousand Quiet Thoughts", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/a_thousand_quiet_thoughts.wav?raw=true", duration: "3:45" },
-                    { title: "Bubbles in the Sunshine", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/bubbles_in_the_sunshine.wav?raw=true", duration: "4:12" },
-                    { title: "Dawn in the Misty Pines", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/dawn_in_the_misty_pines.wav?raw=true", duration: "5:20" },
-                    { title: "Floating in the Stratosphere", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/floating_in_the_stratosphere.wav?raw=true", duration: "6:15" },
-                    { title: "Midnight in the Neon Glow", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/midnight_in_the_neon_glow.wav?raw=true", duration: "4:50" },
-                    { title: "Moon Milk Lullaby", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/moon_milk_lullaby.wav?raw=true", duration: "5:30" },
-                    { title: "Moss-Covered Memories", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/moss_covered_memories.wav?raw=true", duration: "4:45" },
-                    { title: "Nebula Lullaby", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/nebula_lullaby.wav?raw=true", duration: "6:00" },
-                    { title: "Oblivion's Gentle Pull", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/oblivions_gentle_pull.wav?raw=true", duration: "5:15" },
-                    { title: "Radio Waves from Andromeda", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/radio_waves_from_andromeda.wav?raw=true", duration: "7:20" },
-                    { title: "Silent Echo Chamber (guitar)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/silent_echo_chamber_guitar.wav?raw=true", duration: "4:10" },
-                    { title: "Silent Echo Chamber", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/silent_echo_chamber.wav?raw=true", duration: "4:25" },
-                    { title: "Sunny Side Upbeat", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/sunny_side_upbeat.wav?raw=true", duration: "3:30" },
-                    { title: "The Library of Forgotten Sounds", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/the_library_of_forgotten_sounds.wav?raw=true", duration: "8:15" },
-                    { title: "The Quiet Side of the Moon", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/the_quiet_side_of_the_moon.wav?raw=true", duration: "6:45" },
-                    { title: "The Space Between Heartbeats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/the_space_between_heartbeats.wav?raw=true", duration: "5:50" },
-                    { title: "Time Dissolves in Water", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/time_dissolves_in_water.wav?raw=true", duration: "7:10" },
-                    { title: "Whispers of the Aurora", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/whispers_of_the_aurora.wav?raw=true", duration: "6:30" }
-                ],
-                "Meditation": [
-                    { title: "Mist Over the Lotus Pond", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/mist_over_the_lotus_pond.wav?raw=true", duration: "0:00" },
-                    { title: "Journey Through the Chakras", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/journey_through_the_chakras.wav?raw=true", duration: "0:00" },
-                    { title: "Moonlit Path to Inner Peace", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/moonlit_path_to_inner_peace.wav?raw=true", duration: "0:00" },
-                    { title: "Starlight Meditation", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/starlight_meditation.wav?raw=true", duration: "0:00" },
-                    { title: "Breath of Stillness", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/breath_of_stillness.wav?raw=true", duration: "0:00" },
-                    { title: "Shaman's Dreamcatcher", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/shaman's_dreamcatcher.wav?raw=true", duration: "0:00" },
-                    { title: "Zen Garden at Dusk", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/zen_garden_at_dusk.wav?raw=true", duration: "0:00" },
-                    { title: "Third Eye Awakens", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/third_eye_awakens.wav?raw=true", duration: "0:00" },
-                    { title: "Reiki Waves of Serenity", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/reiki_waves_of_serenity.wav?raw=true", duration: "0:00" },
-                    { title: "Floating Among the Clouds", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/floating_among_the_clouds.wav?raw=true", duration: "0:00" },
-                    { title: "The Universe Sings in Solitude", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/the_universe_sings_in_solitude.wav?raw=true", duration: "0:00" },
-                    { title: "Ashot Danielyan", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/ashot_danielyan.wav?raw=true", duration: "0:00" },
-                    { title: "The Sound of Silence", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/the_sound_of_silence.wav?raw=true", duration: "0:00" },
-                    { title: "Nebula's Embrace", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/nebulas_embrace.wav?raw=true", duration: "0:00" },
-                    { title: "Rainfall on Bamboo Leaves", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/rainfall_on_bamboo_leaves.wav?raw=true", duration: "0:00" },
-                    { title: "Glacial Winds of Tibet", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/glacial_winds_of_tibet.wav?raw=true", duration: "0:00" },
-                    { title: "Sacred Chant", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/sacred_chant.wav?raw=true", duration: "0:00" },
-                    { title: "Stardust Lullaby", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/stardust_lullaby.wav?raw=true", duration: "0:00" },
-                    { title: "Stardust Lullaby (No Acoustic Guitar)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/stardust_lullaby_no_acoustic_guitar.wav?raw=true", duration: "0:00" },
-                    { title: "Sunrise Over Rice Fields", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/sunrise_over_rice_fields.wav?raw=true", duration: "0:00" },
-                    { title: "The Monk's Prayer at Dawn", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/the_monks_prayer_at_dawn.wav?raw=true", duration: "0:00" },
-                    { title: "Beneath the Bodhi Tree", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/beneath_the_bodhi_tree.wav?raw=true", duration: "0:00" },
-                    { title: "Paradise - Vincent Vega", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/paradise_vincent_vega.wav?raw=true", duration: "0:00" }
-                ],
-                "Classical": [
-                    { title: "Bach", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/bach.wav?raw=true", duration: "3:45" },
-                    { title: "Canon in D", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/canon_in_d.wav?raw=true", duration: "4:12" },
-                    { title: "Mozart Nachtmusik Serenade", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/mozart_nachtmusik_serenade.wav?raw=true", duration: "5:20" },
-                    { title: "Mozart Requiem Lacrimos (No Vocals)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/mozart_requiem_lacrimos_no_vocals.wav?raw=true", duration: "6:15" },
-                    { title: "Mozart Requiem Lacrimosa", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/mozart_requiem_lacrimosa.wav?raw=true", duration: "4:50" },
-                    { title: "Mozart Sonata in C", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/mozart_sonata_in_c.wav?raw=true", duration: "5:30" }
-                ],
-                "Choir": [
-                    { title: "Cathedral", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/choir/cathedral.wav?raw=true", duration: "4:45" },
-                    { title: "Celestial Church Choir", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/choir/celestial_church-choir.wav?raw=true", duration: "6:00" },
-                    { title: "Choir", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/choir/choir.wav?raw=true", duration: "5:15" },
-                    { title: "Era of Majesty", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/choir/era_of_majesty.wav?raw=true", duration: "7:20" },
-                    { title: "Gregorian Chants", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/choir/gregorian_chants.wav?raw=true", duration: "4:10" },
-                    { title: "Medieval Female Choir", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/choir/medieval_female_choir.wav?raw=true", duration: "4:25" },
-                    { title: "Neoclassical Chorals, op. 3, Fading Voices", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/choir/neoclassical_chorals.wav?raw=true", duration: "3:30" }
-                ],
-                "Fantasy": [
-                    { title: "A Klezmer Melancholy", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/Fantasy/a_klezmer_melancholy.wav?raw=true", duration: "0:00" },
-                    { title: "Ancient Athens", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/Fantasy/ancient_athens.wav?raw=true", duration: "0:00" },
-                    { title: "Ancient Sumer", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/Fantasy/ancient_sumer.wav?raw=true", duration: "0:00" },
-                    { title: "Celtic Harp Fantasy", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/Fantasy/celtic_harp_fantasy.wav?raw=true", duration: "0:00" },
-                    { title: "Magic", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/Fantasy/magic.wav?raw=true", duration: "0:00" },
-                    { title: "The Blood-Stained Harp of Voran", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/Fantasy/the_blood-stained_harp_of_voran.wav?raw=true", duration: "0:00" },
-                    { title: "The Fairy King's Lament", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/Fantasy/the_fairy_kings_lament.wav?raw=true", duration: "0:00" },
-                    { title: "The Sorcerer's Nocturne", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/Fantasy/the_sorcere's_nocturne.wav?raw=true", duration: "0:00" }
-                ],
-                "Vocals": [
-                    { title: "Cinematic Beauty", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/cinematic_beauty.wav?raw=true", duration: "3:45" },
-                    { title: "Cinematic Beauty (No Percussion)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/cinematic_beauty_no_percussion.wav?raw=true", duration: "4:12" },
-                    { title: "Dies Irae Requiem (Female Vocal)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/dies_irae_requiem_female_vocal.wav?raw=true", duration: "3:45" },
-                    { title: "Dies Irae Requiem (Female Vocal Solo)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/dies_irae_requiem_female_vocal_solo.wav?raw=true", duration: "4:12" },
-                    { title: "African Female Vocals", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/african_female_vocals.wav?raw=true", duration: "3:45" },
-                    { title: "Ethereal Magic (Female Vocals)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/ethereal_magic_female_vocals_wav.wav?raw=true", duration: "4:12" },
-                    { title: "Female Opera Vocal", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/female_opera_vocal.wav?raw=true", duration: "3:45" },
-                    { title: "Morning Angels", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/morning_angels.wav?raw=true", duration: "4:12" },
-                    { title: "Sad A Capella (Female Vocals)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/sad_a_capella_female_vocals.wav?raw=true", duration: "3:45" },
-                    { title: "Uplifting Vocals", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/uplifting_vocals.wav?raw=true", duration: "4:12" }
-                ],
-                "Piano": [
-                    { title: "Bach Fugue No. 21", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/bach_fugue_no_21.wav?raw=true", duration: "3:45" },
-                    { title: "Blue Notes & Bourbon Jazz", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/blue_notes_&_bourbon_jazz.wav?raw=true", duration: "4:12" },
-                    { title: "Chopin Nocturne", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/chopin_nocturne.wav?raw=true", duration: "3:45" },
-                    { title: "Clair de Lune", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/clair_de_lune.wav?raw=true", duration: "4:12" },
-                    { title: "Classical Waltz", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/classical_waltz.wav?raw=true", duration: "3:45" },
-                    { title: "Fragments of a Forgotten Melody", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/fragments_of_a_forgotten_melody.wav?raw=true", duration: "4:12" },
-                    { title: "Für Elise", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/fur_elise.wav?raw=true", duration: "3:45" },
-                    { title: "Inspiring Piano", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/inspiring_piano.wav?raw=true", duration: "4:12" },
-                    { title: "Malirec Studio Sad Piano", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/malirec_studio_sad_piano.wav?raw=true", duration: "3:45" },
-                    { title: "Midnight in Montreux Jazz", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/midnight_in_montreux-jazz.wav?raw=true", duration: "4:12" },
-                    { title: "Nocturn in the Moon's Embrace", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/nocturn_in_the_moons_embrace.wav?raw=true", duration: "3:45" },
-                    { title: "Sad and Emotional Violin", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/sad_and_emotional_violin.wav?raw=true", duration: "4:12" },
-                    { title: "Sad Piano Distant", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/sad_piano_distant.wav?raw=true", duration: "3:45" },
-                    { title: "The Elegant Chill", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/the_elegant_chill.wav?raw=true", duration: "4:12" }
-                ],
-                "Violin and Cello": [
-                    { title: "Baroque Violin Concerto No 1", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/baroque_violin_concerto_no_1.wav?raw=true", duration: "8:15" },
-                    { title: "Bright Violin and Cello", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/bright_violin_and_cello.wav?raw=true", duration: "6:45" },
-                    { title: "Classical Violin", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/classical_violin.wav?raw=true", duration: "5:50" },
-                    { title: "Eitan EP Violin", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/eitan_ep_violin.wav?raw=true", duration: "7:10" },
-                    { title: "Elgar Cello Concerto", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/elgar_cello_concerto.wav?raw=true", duration: "6:30" },
-                    { title: "Emotional Violin", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/emotional_violin.wav?raw=true", duration: "2:45" },
-                    { title: "Happy Cello & Violins", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/happy-cello_&_violins.wav?raw=true", duration: "3:12" },
-                    { title: "Inspiring Cello Bach", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/inspiring_cello_bach.wav?raw=true", duration: "2:58" },
-                    { title: "Modern Military Cellos & Violins", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/modern_military_cellos_&_violins.wav?raw=true", duration: "3:20" },
-                    { title: "Positive Cello & Violin", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/positive_cello_&_violin.wav?raw=true", duration: "3:45" },
-                    { title: "Sad and Emotional Violin", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/sad_and_emotional_violin.wav?raw=true", duration: "4:10" },
-                    { title: "Sad Harp Violins", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/sad_harp_violins.wav?raw=true", duration: "3:55" },
-                    { title: "Sad Violin", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/sad_violin.wav?raw=true", duration: "4:15" },
-                    { title: "Sad Violin 2", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/sad_violin_2.wav?raw=true", duration: "5:30" },
-                    { title: "Schubert Sonata No 20", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/schubert_sonata_no_20.wav?raw=true", duration: "3:40" },
-                    { title: "Sibelius Etude", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/sibelius_etude.wav?raw=true", duration: "4:25" },
-                    { title: "Studio Kolomna", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/studio_kolomna.wav?raw=true", duration: "3:50" },
-                    { title: "Violin Partita No 2", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/violin_partita_no_2.wav?raw=true", duration: "5:15" },
-                    { title: "Violin Piano", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/violin_piano.wav?raw=true", duration: "4:40" },
-                    { title: "Virtuos Violin", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/virtuos_violin.wav?raw=true", duration: "3:35" }
-                ],
-                "Orchestra": [
-                    { title: "19th Century Overture", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/orchestra/19th_century_overture.wav?raw=true", duration: "0:00" },
-                    { title: "Classic Piano Concerto (Orchestral)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/orchestra/classic_piano_concerto_orchestral.wav?raw=true", duration: "0:00" },
-                    { title: "Edward Elgar Cello Concerto", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/orchestra/edward_elgar_cello_concerto.wav?raw=true", duration: "0:00" },
-                    { title: "Epic Background Music", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/orchestra/epic_background_music.wav?raw=true", duration: "0:00" },
-                    { title: "Inspirational Symphony", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/orchestra/inspirational_symphony.wav?raw=true", duration: "0:00" },
-                    { title: "Patriotic Orchestra", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/orchestra/patriotic_orchestra.wav?raw=true", duration: "0:00" }
-                ],
-                "Percussion": [
-                    { title: "Beat Down", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/drums/beat_down.wav?raw=true", duration: "2:30" },
-                    { title: "Champions Blood", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/drums/champions_blood.wav?raw=true", duration: "3:15" },
-                    { title: "Heart of the Ga...", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/drums/heart_of_the_game.wav?raw=true", duration: "2:45" },
-                    { title: "Rally Cry", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/drums/rally_cry.wav?raw=true", duration: "3:00" },
-                    { title: "Rhythm Rush", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/drums/rhythm_rush.wav?raw=true", duration: "2:50" },
-                    { title: "The Final Push", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/drums/the_final_push.wav?raw=true", duration: "3:20" },
-                    { title: "The Stampede", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/drums/the_stampede.wav?raw=true", duration: "3:10" },
-                    { title: "Titan's March", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/drums/titans_march.wav?raw=true", duration: "3:45" }
-                ],
-                "Flutes": [
-                    { title: "Baroque Adagio Flutes", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/flutes/baroque_adagio_flutes.wav?raw=true", duration: "0:00" },
-                    { title: "Duet of Dreams", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/flutes/duet_of_dreams.mp3?raw=true", duration: "0:00" },
-                    { title: "Song of the Sacred River", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/flutes/song_of_the_sacred_river.wav?raw=true", duration: "0:00" },
-                    { title: "Song of the Zen Garden", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/flutes/song_of_the_zen_garden.wav?raw=true", duration: "0:00" },
-                    { title: "The Fairy's Lullaby", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/flutes/the_fairys_lullaby.wav?raw=true", duration: "0:00" },
-                    { title: "Whispers of the Wind", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/flutes/whispers_of_the_wind.wav?raw=true", duration: "0:00" }
-                ],
-                "Japanese": [
-                    { title: "Autumn's Embrace", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/autumns_embrace.wav?raw=true", duration: "0:00" },
-                    { title: "Awakening of the Koi", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/awakening_of_the_koi.wav?raw=true", duration: "0:00" },
-                    { title: "Awakening of the Koi (Koto Only)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/awakening_of_the_koi_koto_only.wav?raw=true", duration: "0:00" },
-                    { title: "Echos of the Shimmering Moon", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/echos_of_the_shimmering_moon.wav?raw=true", duration: "0:00" },
-                    { title: "Honor Beyond Death", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/honor_beyond_death.wav?raw=true", duration: "0:00" },
-                    { title: "Honor Beyond Death (Koto Only)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/honor_beyond_death_koto_only.wav?raw=true", duration: "0:00" },
-                    { title: "Serenity of the Silent Temple", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/serenity_of_the_silent_temple.wav?raw=true", duration: "0:00" },
-                    { title: "Song of the Bamboo Grove", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/song_of_the_bamboo_grove.wav?raw=true", duration: "0:00" },
-                    { title: "Traditional Japan Koto (Fast)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/traditional_japan_koto_fast.wav?raw=true", duration: "0:00" },
-                    { title: "Traditional Japan Koto (Slow)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/traditional_japan_koto_slow.wav?raw=true", duration: "0:00" },
-                    { title: "Tranquil Waters of the East", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/tranquil_waters_of_the_east.wav?raw=true", duration: "0:00" }
-                ],
-                "Accordion": [
-                    { title: "Bella Notte in Montmartre", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/accordion/bella_notte_in_montmartre.wav?raw=true", duration: "4:05" },
-                    { title: "Bubbles and Baguettes", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/accordion/bubbles_and_baguettes.wav?raw=true", duration: "5:20" },
-                    { title: "Paris", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/accordion/Paris.wav?raw=true", duration: "3:30" },
-                    { title: "V1", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/accordion/v1.wav?raw=true", duration: "4:50" }
-                ],
-                "Oregon": [
-                    { title: "Dracula's Castle", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/oregon/draculas_castle.wav?raw=true", duration: "3:45" }
-                ],
-                "Arabic": [ 
-                    { title: "Islamic", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/arabic/islamic.wav?raw=true", duration: "3:25" },
-                    { title: "Mid East Flute", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/arabic/mid_east_flute.wav?raw=true", duration: "4:15" },
-                    { title: "Mid East Flute Solo", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/arabic/mid_east_flute_solo.wav?raw=true", duration: "3:10" },
-                    { title: "Ramadan", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/arabic/ramadan.wav?raw=true", duration: "5:45" },
-                    { title: "The Arabian", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/arabic/the_arabian.wav?raw=true", duration: "4:30" }
-                ],
-                "Background Ambiance": [
-                    { title: "Meditation Bowls", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/meditation-bowls.wav?raw=true", duration: "0:00" },
-                    { title: "Rain", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/rain.wav?raw=true", duration: "0:00" },
-                    { title: "Forest", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/forest.wav?raw=true", duration: "0:00" },
-                    { title: "Waves", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/wave.wav?raw=true", duration: "0:00" },
-                    { title: "Coffee Shop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/coffee-shop.wav?raw=true", duration: "0:00" },
-                    { title: "White Noise", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/white-noise.wav?raw=true", duration: "0:00" },
-                    { title: "Pink Noise", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/pink-noise.wav?raw=true", duration: "0:00" },
-                    { title: "Brown Noise", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/brown-noise.wav?raw=true", duration: "0:00" },
-                    { title: "Fan", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/fan.wav?raw=true", duration: "0:00" },
-                    { title: "Thunderstorm", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/thunderstorm.wav?raw=true", duration: "0:00" },
-                    { title: "River", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/river.wav?raw=true", duration: "0:00" },
-                    { title: "Birds", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/birds.wav?raw=true", duration: "0:00" },
-                    { title: "Fireplace", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/fireplace.wav?raw=true", duration: "0:00" },
-                    { title: "City", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/city.wav?raw=true", duration: "0:00" },
-                    { title: "Wind", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/wind.wav?raw=true", duration: "0:00" },
-                    { title: "Crickets", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/Crickets.wav?raw=true", duration: "0:00" },
-                    { title: "Waterfall", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/waterfall.wav?raw=true", duration: "0:00" },
-                    { title: "Library", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/library.wav?raw=true", duration: "0:00" },
-                    { title: "Rain on Roof", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/rain-roof.wav?raw=true", duration: "0:00" }
-                ],
-                "Loops": [
-                    { title: "Ancient Athens Loop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/ancient_athens_loop.wav?raw=true", duration: "0:00" },
-                    { title: "Ancient Summer Loop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/ancient_summer_loop.wav?raw=true", duration: "0:00" },
-                    { title: "Cafe Con Leche Beats Loop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/cafe_con_leche_beats_loop.wav?raw=true", duration: "0:00" },
-                    { title: "Dawn in the Misty Pines Loop 1", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/dawn_in_the_misty_pines_loop_1.wav?raw=true", duration: "0:00" },
-                    { title: "Dawn in the Misty Pines Loop 2", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/dawn_in_the_misty_pines_loop_2.wav?raw=true", duration: "0:00" },
-                    { title: "Honey Drip Melodies Loop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/honey_drip_melodies_loop.wav?raw=true", duration: "0:00" },
-                    { title: "Koi Pond Calculus Loop 1", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/koi_pond_calculus_loop_1.wav?raw=true", duration: "0:00" },
-                    { title: "Koi Pond Calculus Loop 2", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/koi_pond_calculus_loop_2.wav?raw=true", duration: "0:00" },
-                    { title: "Taxi Window Views Loop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/taxi_window_views_loop.wav?raw=true", duration: "0:00" },
-                    { title: "The Blood-Stained Harp of Voran Loop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/the_blood-stained_harp_of_voran_loop.wav?raw=true", duration: "0:00" },
-                    { title: "The Last Candle Burns Loop 1", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/the_last_candle_burns_loop_1.wav?raw=true", duration: "0:00" },
-                    { title: "The Last Candle Burns Loop 2", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/the_last_candle_burns_loop_2.wav?raw=true", duration: "0:00" }
-                ],
-            };
-
-            // Toggle now playing container
-            nowPlayingBar.addEventListener('click', function() {
-                nowPlayingContainer.classList.toggle('show');
-                nowPlayingToggle.textContent = nowPlayingContainer.classList.contains('show') ? '▲' : '▼';
-            });
-
-            // Toggle playlist container
-            playlistToggle.addEventListener('click', function() {
-                playlistContainer.classList.toggle('collapsed');
-                playlistToggle.textContent = playlistContainer.classList.contains('collapsed') ? '►' : '▼';
-            });
-
-            // Initialize the library
-            function initializeLibrary() {
-                libraryElement.innerHTML = '';
-                
-                for (const [category, tracks] of Object.entries(trackLibrary)) {
-                    const categoryElement = document.createElement('div');
-                    categoryElement.className = 'category';
-                    
-                    const categoryItemsHTML = tracks.map(track => `
-                        <div class="category-item" data-src="${track.src}" data-title="${track.title}" data-duration="${track.duration}">
-                            ${track.title} <span style="float: right; color: #777;">${track.duration}</span>
-                        </div>
-                    `).join('');
-                    
-                    categoryElement.innerHTML = `
-                        <div class="category-header">
-                            <h3>${category}</h3>
-                            <button class="toggle-btn">+</button>
-                        </div>
-                        <div class="category-items">
-                            ${categoryItemsHTML}
-                        </div>
-                    `;
-                    
-                    libraryElement.appendChild(categoryElement);
-                    
-                    // Add click event to each track
-                    categoryElement.querySelectorAll('.category-item').forEach(item => {
-                        item.addEventListener('click', function() {
-                            addToPlaylist({
-                                title: this.getAttribute('data-title'),
-                                src: this.getAttribute('data-src'),
-                                duration: this.getAttribute('data-duration')
-                            });
-                        });
-                    });
-                    
-                    // Add toggle functionality to category headers
-                    const header = categoryElement.querySelector('.category-header');
-                    const items = categoryElement.querySelector('.category-items');
-                    const toggleBtn = categoryElement.querySelector('.toggle-btn');
-                    
-                    header.addEventListener('click', function() {
-                        if (items.style.maxHeight && items.style.maxHeight !== '0px') {
-                            items.style.maxHeight = '0px';
-                            toggleBtn.textContent = '+';
-                        } else {
-                            items.style.maxHeight = items.scrollHeight + 'px';
-                            toggleBtn.textContent = '-';
-                        }
-                    });
-                    
-                    // Initially collapse all categories
-                    items.style.maxHeight = '0px';
-                    toggleBtn.textContent = '+';
-                }
-            }
-
-            // Add track to playlist
-            function addToPlaylist(track) {
-                playlist.push(track);
-                updatePlaylistDisplay();
-                
-                // Auto-scroll to the newly added item if playlist is long
-                if (playlistItems.scrollHeight > playlistItems.clientHeight) {
-                    playlistItems.scrollTop = playlistItems.scrollHeight;
-                }
-                
-                // If this is the first track added, play it
-                if (playlist.length === 1) {
-                    currentTrackIndex = 0;
-                    loadTrack(currentTrackIndex);
-                }
-            }
-
-            // Remove track from playlist
-            function removeTrack(index) {
-                if (index < 0 || index >= playlist.length) return;
-                
-                // If we're removing the currently playing track
-                if (index === currentTrackIndex) {
-                    if (isPlaying) {
-                        pauseTrack();
-                    }
-                    
-                    // If it's the last track in the playlist
-                    if (playlist.length === 1) {
-                        clearPlaylist();
-                        return;
-                    }
-                    
-                    // If it's the last track but there are others
-                    if (currentTrackIndex === playlist.length - 1) {
-                        currentTrackIndex--;
-                    }
-                    
-                    loadTrack(currentTrackIndex);
-                    if (isPlaying) playTrack();
-                } 
-                // If we're removing a track before the current one
-                else if (index < currentTrackIndex) {
-                    currentTrackIndex--;
-                }
-                
-                // Remove the track from the playlist
-                playlist.splice(index, 1);
-                updatePlaylistDisplay();
-            }
-
-            // Update playlist display
-            function updatePlaylistDisplay() {
-                if (playlist.length === 0) {
-                    playlistItems.innerHTML = '<div class="empty-playlist">Your playlist is empty</div>';
-                    return;
-                }
-                
-                playlistItems.innerHTML = '';
-                
-                playlist.forEach((track, index) => {
-                    const item = document.createElement('div');
-                    item.className = `playlist-item ${index === currentTrackIndex ? 'active' : ''}`;
-                    item.innerHTML = `
-                        <div class="track-number">${index + 1}</div>
-                        <span class="drag-handle">☰</span>
-                        <div style="flex-grow: 1;">
-                            ${track.title} <span style="float: right; color: #777;">${track.duration}</span>
-                        </div>
-                        <span class="remove-track" data-index="${index}">✕</span>
-                    `;
-                    
-                    item.addEventListener('click', function(e) {
-                        // Don't trigger if clicking on the remove button
-                        if (!e.target.classList.contains('remove-track')) {
-                            currentTrackIndex = index;
-                            loadTrack(currentTrackIndex);
-                            playTrack();
-                        }
-                    });
-                    
-                    // Add click event to remove button
-                    const removeBtn = item.querySelector('.remove-track');
-                    removeBtn.addEventListener('click', function(e) {
-                        e.stopPropagation(); // Prevent triggering the item click event
-                        removeTrack(index);
-                    });
-                    
-                    // Drag and drop functionality
-                    item.setAttribute('draggable', 'true');
-                    item.addEventListener('dragstart', function(e) {
-                        e.dataTransfer.setData('text/plain', index);
-                    });
-                    
-                    item.addEventListener('dragover', function(e) {
-                        e.preventDefault();
-                    });
-                    
-                    item.addEventListener('drop', function(e) {
-                        e.preventDefault();
-                        const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
-                        const toIndex = index;
-                        
-                        if (fromIndex !== toIndex) {
-                            const [movedItem] = playlist.splice(fromIndex, 1);
-                            playlist.splice(toIndex, 0, movedItem);
-                            
-                            // Update current track index if needed
-                            if (currentTrackIndex === fromIndex) {
-                                currentTrackIndex = toIndex;
-                            } else if (fromIndex < currentTrackIndex && toIndex >= currentTrackIndex) {
-                                currentTrackIndex--;
-                            } else if (fromIndex > currentTrackIndex && toIndex <= currentTrackIndex) {
-                                currentTrackIndex++;
-                            }
-                            
-                            updatePlaylistDisplay();
-                        }
-                    });
-                    
-                    playlistItems.appendChild(item);
-                });
-            }
-
-            function loadTrack(index) {
-                if (index < 0 || index >= playlist.length) return;
-                
-                currentTrackIndex = index;
-                audioPlayer.src = playlist[index].src;
-                currentTrackDisplay.textContent = playlist[index].title;
-                
-                updatePlaylistDisplay();
-                
-                if (isPlaying) {
-                    audioPlayer.play().catch(error => {
-                        console.error("Playback failed:", error);
-                    });
-                }
-            }
-
-            function playTrack() {
-                if (playlist.length === 0) return;
-                
-                if (currentTrackIndex === -1) {
-                    currentTrackIndex = 0;
-                    loadTrack(currentTrackIndex);
-                }
-                
-                audioPlayer.play()
-                    .then(() => {
-                        isPlaying = true;
-                        playBtn.textContent = "⏸️";
-                    })
-                    .catch(error => {
-                        console.error("Playback failed:", error);
-                    });
-            }
-
-            function pauseTrack() {
-                audioPlayer.pause();
-                isPlaying = false;
-                playBtn.textContent = "▶️";
-            }
-
-            function nextTrack() {
-                if (loopMode === 'one') {
-                    audioPlayer.currentTime = 0;
-                    audioPlayer.play();
-                    return;
-                }
-                
-                if (currentTrackIndex < playlist.length - 1) {
-                    currentTrackIndex++;
-                } else {
-                    if (loopMode === 'all') {
-                        currentTrackIndex = 0;
-                    } else {
-                        pauseTrack();
-                        return;
-                    }
-                }
-                loadTrack(currentTrackIndex);
-                if (isPlaying) playTrack();
-            }
-
-            function prevTrack() {
-                if (audioPlayer.currentTime > 3) {
-                    // If more than 3 seconds into the track, restart it
-                    audioPlayer.currentTime = 0;
-                } else {
-                    // Otherwise go to previous track
-                    if (currentTrackIndex > 0) {
-                        currentTrackIndex--;
-                    } else {
-                        if (loopMode === 'all') {
-                            currentTrackIndex = playlist.length - 1;
-                        } else {
-                            currentTrackIndex = 0;
-                        }
-                    }
-                    loadTrack(currentTrackIndex);
-                }
-                if (isPlaying) playTrack();
-            }
-
-            function clearPlaylist() {
-                playlist = [];
-                currentTrackIndex = -1;
-                audioPlayer.src = '';
-                currentTrackDisplay.textContent = 'No track selected';
-                currentTimeDisplay.textContent = '0:00';
-                durationDisplay.textContent = '0:00';
-                progressBar.value = 0;
-                pauseTrack();
-                updatePlaylistDisplay();
-            }
-
-            function formatTime(seconds) {
-                const mins = Math.floor(seconds / 60);
-                const secs = Math.floor(seconds % 60);
-                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            }
-
-            // Event listeners
-            playBtn.addEventListener('click', function() {
-                if (isPlaying) {
-                    pauseTrack();
-                } else {
-                    playTrack();
-                }
-            });
-            
-            nextBtn.addEventListener('click', nextTrack);
-            prevBtn.addEventListener('click', prevTrack);
-            clearBtn.addEventListener('click', clearPlaylist);
-
-            audioPlayer.addEventListener('timeupdate', function() {
-                const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-                progressBar.value = isNaN(progress) ? 0 : progress;
-                
-                if (audioPlayer.duration) {
-                    currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
-                    durationDisplay.textContent = formatTime(audioPlayer.duration);
-                }
-            });
-
-            progressBar.addEventListener('click', function(e) {
-                if (!isNaN(audioPlayer.duration)) {
-                    const percent = e.offsetX / this.offsetWidth;
-                    audioPlayer.currentTime = percent * audioPlayer.duration;
-                }
-            });
-
-            audioPlayer.addEventListener('ended', function() {
-                if (loopMode === 'one') {
-                    audioPlayer.currentTime = 0;
-                    audioPlayer.play();
-                } else {
-                    nextTrack();
-                }
-            });
-
-            // Loop mode controls
-            loopOneBtn.addEventListener('click', function() {
-                if (loopMode === 'one') {
-                    loopMode = 'none';
-                    loopOneBtn.classList.remove('active');
-                    audioPlayer.loop = false;
-                } else {
-                    loopMode = 'one';
-                    loopOneBtn.classList.add('active');
-                    audioPlayer.loop = true;
-                }
-            });
-
-            // Initialize the player
-            initializeLibrary();
-        });
-    </script>
-</body>
+    
+    <!-- Right side - Track Library -->
+    <div class="library-container">
+      <h2><i class="fas fa-guitar"></i> Music Library</h2>
+      
+      <div class="instructions">
+        <i class="fas fa-info-circle"></i>
+        <span>Click a category to expand, then click any track to add it to your playlist. Drag playlist tracks to reorder.</span>
+      </div>
+      
+      <div class="library-grid" id="library">
+        <!-- Categories will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
   
+  <footer>
+    <p>AudioOasis © 2024 | Free studio-quality background music for work & focus</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // DOM Elements
+      const audioPlayer = document.getElementById('audio-player');
+      const playBtn = document.getElementById('play-btn');
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const clearBtn = document.getElementById('clear-btn');
+      const loopBtn = document.getElementById('loop-btn');
+      const shuffleBtn = document.getElementById('shuffle-btn');
+      const progressBar = document.getElementById('progress-bar');
+      const currentTrackDisplay = document.getElementById('current-track');
+      const currentTimeDisplay = document.getElementById('current-time');
+      const durationDisplay = document.getElementById('duration');
+      const playlistItems = document.getElementById('playlist-items');
+      const emptyPlaylist = document.getElementById('empty-playlist');
+      const playlistCount = document.getElementById('playlist-count');
+      const libraryElement = document.getElementById('library');
+      
+      // Toggle elements
+      const nowPlayingHeader = document.getElementById('now-playing-header');
+      const nowPlayingContent = document.getElementById('now-playing-content');
+      const nowPlayingToggle = document.getElementById('now-playing-toggle');
+      const playlistHeader = document.getElementById('playlist-header');
+      const playlistContent = document.getElementById('playlist-content');
+      const playlistToggle = document.getElementById('playlist-toggle');
+      
+      // Player state
+      let currentTrackIndex = -1;
+      let isPlaying = false;
+      let isLooping = false;
+      let playlist = [];
+      
+      // Track library
+      const trackLibrary = {
+        "LoFi Beats": [
+          { title: "1999 Bedroom Beats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/1999_bedroom_beats.wav?raw=true", duration: "2:45" },
+          { title: "Warm Blanket Thoughts", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/warm_blanket_thoughts.wav?raw=true", duration: "6:10" }
+        ],
+        "Background Music": [
+          { title: "A Thousand Quiet Thoughts", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/a_thousand_quiet_thoughts.wav?raw=true", duration: "3:45" },
+          { title: "Whispers of the Aurora", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/whispers_of_the_aurora.wav?raw=true", duration: "6:30" }
+        ],
+        "Meditation": [
+          { title: "Mist Over the Lotus Pond", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/mist_over_the_lotus_pond.wav?raw=true", duration: "5:20" },
+          { title: "Paradise - Vincent Vega", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/paradise_vincent_vega.wav?raw=true", duration: "4:45" }
+        ],
+        "Classical": [
+          { title: "Bach", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/bach.wav?raw=true", duration: "3:45" },
+          { title: "Mozart Sonata in C", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/mozart_sonata_in_c.wav?raw=true", duration: "5:30" }
+        ],
+        "Choir": [
+          { title: "Cathedral", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/choir/cathedral.wav?raw=true", duration: "4:45" },
+          { title: "Neoclassical Chorals", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/choir/neoclassical_chorals.wav?raw=true", duration: "3:30" }
+        ],
+        "Fantasy": [
+          { title: "A Klezmer Melancholy", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/Fantasy/a_klezmer_melancholy.wav?raw=true", duration: "4:15" },
+          { title: "The Sorcerer's Nocturne", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/Fantasy/the_sorcere's_nocturne.wav?raw=true", duration: "5:20" }
+        ],
+        "Vocals": [
+          { title: "Cinematic Beauty", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/cinematic_beauty.wav?raw=true", duration: "3:45" },
+          { title: "Uplifting Vocals", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/vocals/uplifting_vocals.wav?raw=true", duration: "4:12" }
+        ],
+        "Piano": [
+          { title: "Bach Fugue No. 21", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/bach_fugue_no_21.wav?raw=true", duration: "3:45" },
+          { title: "The Elegant Chill", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/piano/the_elegant_chill.wav?raw=true", duration: "4:12" }
+        ],
+        "Strings": [
+          { title: "Baroque Violin Concerto No 1", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/baroque_violin_concerto_no_1.wav?raw=true", duration: "8:15" },
+          { title: "Virtuos Violin", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/violin_cello/virtuos_violin.wav?raw=true", duration: "3:35" }
+        ],
+        "Orchestra": [
+          { title: "19th Century Overture", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/orchestra/19th_century_overture.wav?raw=true", duration: "5:40" },
+          { title: "Patriotic Orchestra", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/orchestra/patriotic_orchestra.wav?raw=true", duration: "4:25" }
+        ],
+        "Percussion": [
+          { title: "Beat Down", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/drums/beat_down.wav?raw=true", duration: "2:30" },
+          { title: "Titan's March", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/drums/titans_march.wav?raw=true", duration: "3:45" }
+        ],
+        "Flutes": [
+          { title: "Baroque Adagio Flutes", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/flutes/baroque_adagio_flutes.wav?raw=true", duration: "4:15" },
+          { title: "Whispers of the Wind", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/flutes/whispers_of_the_wind.wav?raw=true", duration: "3:50" }
+        ],
+        "Japanese": [
+          { title: "Autumn's Embrace", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/autumns_embrace.wav?raw=true", duration: "5:10" },
+          { title: "Tranquil Waters of the East", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/japanese/tranquil_waters_of_the_east.wav?raw=true", duration: "4:40" }
+        ],
+        "Accordion": [
+          { title: "Bella Notte in Montmartre", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/accordion/bella_notte_in_montmartre.wav?raw=true", duration: "4:05" },
+          { title: "V1", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/accordion/v1.wav?raw=true", duration: "4:50" }
+        ],
+        "Ambiance": [
+          { title: "Dracula's Castle", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/oregon/draculas_castle.wav?raw=true", duration: "3:45" },
+          { title: "Rain on Roof", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/rain-roof.wav?raw=true", duration: "6:20" }
+        ],
+        "World Music": [
+          { title: "Islamic", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/arabic/islamic.wav?raw=true", duration: "3:25" },
+          { title: "The Arabian", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/arabic/the_arabian.wav?raw=true", duration: "4:30" }
+        ],
+        "Loops": [
+          { title: "Ancient Athens Loop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/ancient_athens_loop.wav?raw=true", duration: "2:15" },
+          { title: "The Last Candle Burns Loop 2", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loops/the_last_candle_burns_loop_2.wav?raw=true", duration: "3:30" }
+        ]
+      };
+      
+      // Initialize the library
+      function initializeLibrary() {
+        libraryElement.innerHTML = '';
+        
+        for (const [category, tracks] of Object.entries(trackLibrary)) {
+          const categoryElement = document.createElement('div');
+          categoryElement.className = 'category';
+          
+          const categoryItemsHTML = tracks.map(track => `
+            <div class="category-track" data-src="${track.src}" data-title="${track.title}" data-duration="${track.duration}">
+              <span>${track.title}</span>
+              <span class="add-icon"><i class="fas fa-plus"></i></span>
+              <span class="track-duration">${track.duration}</span>
+            </div>
+          `).join('');
+          
+          categoryElement.innerHTML = `
+            <div class="category-header">
+              <h3><i class="fas fa-folder"></i> ${category} <span class="track-count">(${tracks.length} tracks)</span></h3>
+              <button class="toggle-btn category-toggle">
+                <i class="fas fa-chevron-down"></i>
+              </button>
+            </div>
+            <div class="category-content">
+              <div class="category-tracks">
+                ${categoryItemsHTML}
+              </div>
+            </div>
+          `;
+          
+          libraryElement.appendChild(categoryElement);
+          
+          // Add click event to each track
+          categoryElement.querySelectorAll('.category-track').forEach(item => {
+            item.addEventListener('click', function() {
+              addToPlaylist({
+                title: this.getAttribute('data-title'),
+                src: this.getAttribute('data-src'),
+                duration: this.getAttribute('data-duration')
+              });
+              
+              // Visual feedback
+              this.style.backgroundColor = '#e8f5e8';
+              this.querySelector('.add-icon i').className = 'fas fa-check';
+              setTimeout(() => {
+                this.style.backgroundColor = '';
+                this.querySelector('.add-icon i').className = 'fas fa-plus';
+              }, 1000);
+            });
+          });
+          
+          // Add toggle functionality to category headers
+          const header = categoryElement.querySelector('.category-header');
+          const content = categoryElement.querySelector('.category-content');
+          const toggleBtn = categoryElement.querySelector('.category-toggle');
+          
+          header.addEventListener('click', function() {
+            categoryElement.classList.toggle('expanded');
+            toggleBtn.querySelector('i').className = categoryElement.classList.contains('expanded') 
+              ? 'fas fa-chevron-up' 
+              : 'fas fa-chevron-down';
+          });
+        }
+      }
+      
+      // Toggle sections
+      nowPlayingHeader.addEventListener('click', function() {
+        nowPlayingContent.classList.toggle('hidden');
+        nowPlayingToggle.querySelector('i').className = nowPlayingContent.classList.contains('hidden') 
+          ? 'fas fa-chevron-down' 
+          : 'fas fa-chevron-up';
+      });
+      
+      playlistHeader.addEventListener('click', function() {
+        playlist.classList.toggle('collapsed');
+        playlistToggle.querySelector('i').className = playlist.classList.contains('collapsed') 
+          ? 'fas fa-chevron-down' 
+          : 'fas fa-chevron-up';
+      });
+      
+      // Add track to playlist
+      function addToPlaylist(track) {
+        playlist.push(track);
+        updatePlaylistDisplay();
+        
+        // If this is the first track added, play it
+        if (playlist.length === 1) {
+          currentTrackIndex = 0;
+          loadTrack(currentTrackIndex);
+        }
+      }
+      
+      // Update playlist display
+      function updatePlaylistDisplay() {
+        playlistCount.textContent = `${playlist.length} track${playlist.length !== 1 ? 's' : ''} in playlist`;
+        
+        if (playlist.length === 0) {
+          emptyPlaylist.classList.remove('hidden');
+          playlistItems.innerHTML = '';
+          return;
+        }
+        
+        emptyPlaylist.classList.add('hidden');
+        playlistItems.innerHTML = '';
+        
+        playlist.forEach((track, index) => {
+          const item = document.createElement('li');
+          item.className = `playlist-item ${index === currentTrackIndex ? 'active' : ''}`;
+          item.setAttribute('draggable', 'true');
+          item.dataset.index = index;
+          
+          item.innerHTML = `
+            <div class="track-index">${index + 1}</div>
+            <div class="track-details">
+              <span class="track-name">${track.title}</span>
+              <span class="track-duration">${track.duration}</span>
+            </div>
+            <div class="remove-track">
+              <i class="fas fa-times"></i>
+            </div>
+          `;
+          
+          // Play track on click
+          item.addEventListener('click', function(e) {
+            if (!e.target.closest('.remove-track')) {
+              currentTrackIndex = index;
+              loadTrack(currentTrackIndex);
+              playTrack();
+            }
+          });
+          
+          // Remove track on button click
+          const removeBtn = item.querySelector('.remove-track');
+          removeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            removeTrack(index);
+          });
+          
+          // Drag and drop functionality
+          item.addEventListener('dragstart', handleDragStart);
+          item.addEventListener('dragover', handleDragOver);
+          item.addEventListener('drop', handleDrop);
+          item.addEventListener('dragend', handleDragEnd);
+          
+          playlistItems.appendChild(item);
+        });
+      }
+      
+      // Remove track from playlist
+      function removeTrack(index) {
+        if (index < 0 || index >= playlist.length) return;
+        
+        // If we're removing the currently playing track
+        if (index === currentTrackIndex) {
+          if (isPlaying) pauseTrack();
+          
+          // If it's the last track in the playlist
+          if (playlist.length === 1) {
+            clearPlaylist();
+            return;
+          }
+          
+          // If it's the last track but there are others
+          if (currentTrackIndex === playlist.length - 1) {
+            currentTrackIndex--;
+          }
+          
+          loadTrack(currentTrackIndex);
+        } 
+        // If we're removing a track before the current one
+        else if (index < currentTrackIndex) {
+          currentTrackIndex--;
+        }
+        
+        playlist.splice(index, 1);
+        updatePlaylistDisplay();
+      }
+      
+      // Clear playlist
+      function clearPlaylist() {
+        if (playlist.length === 0) return;
+        
+        if (confirm("Are you sure you want to clear the entire playlist?")) {
+          playlist = [];
+          currentTrackIndex = -1;
+          audioPlayer.src = '';
+          currentTrackDisplay.textContent = 'No Track Selected';
+          currentTimeDisplay.textContent = '0:00';
+          durationDisplay.textContent = '0:00';
+          progressBar.value = 0;
+          pauseTrack();
+          updatePlaylistDisplay();
+        }
+      }
+      
+      // Load track
+      function loadTrack(index) {
+        if (index < 0 || index >= playlist.length) return;
+        
+        currentTrackIndex = index;
+        audioPlayer.src = playlist[index].src;
+        currentTrackDisplay.textContent = playlist[index].title;
+        
+        updatePlaylistDisplay();
+        
+        // Update play button if needed
+        if (isPlaying) {
+          audioPlayer.play().catch(error => {
+            console.error("Playback failed:", error);
+          });
+        }
+      }
+      
+      // Play track
+      function playTrack() {
+        if (playlist.length === 0) return;
+        
+        if (currentTrackIndex === -1) {
+          currentTrackIndex = 0;
+          loadTrack(currentTrackIndex);
+        }
+        
+        audioPlayer.play()
+          .then(() => {
+            isPlaying = true;
+            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            playBtn.classList.add('pulse');
+          })
+          .catch(error => {
+            console.error("Playback failed:", error);
+          });
+      }
+      
+      // Pause track
+      function pauseTrack() {
+        audioPlayer.pause();
+        isPlaying = false;
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        playBtn.classList.remove('pulse');
+      }
+      
+      // Next track
+      function nextTrack() {
+        if (isLooping) {
+          audioPlayer.currentTime = 0;
+          audioPlayer.play();
+          return;
+        }
+        
+        if (currentTrackIndex < playlist.length - 1) {
+          currentTrackIndex++;
+        } else {
+          currentTrackIndex = 0; // Loop back to beginning
+        }
+        
+        loadTrack(currentTrackIndex);
+        if (isPlaying) playTrack();
+      }
+      
+      // Previous track
+      function prevTrack() {
+        if (audioPlayer.currentTime > 3) {
+          // If more than 3 seconds into the track, restart it
+          audioPlayer.currentTime = 0;
+        } else {
+          // Otherwise go to previous track
+          if (currentTrackIndex > 0) {
+            currentTrackIndex--;
+          } else {
+            currentTrackIndex = playlist.length - 1; // Go to last track
+          }
+          
+          loadTrack(currentTrackIndex);
+        }
+        
+        if (isPlaying) playTrack();
+      }
+      
+      // Format time
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      }
+      
+      // Shuffle playlist
+      function shufflePlaylist() {
+        if (playlist.length < 2) return;
+        
+        // Fisher-Yates shuffle algorithm
+        for (let i = playlist.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [playlist[i], playlist[j]] = [playlist[j], playlist[i]];
+        }
+        
+        // Update current track index if playing
+        if (currentTrackIndex >= 0) {
+          const currentTrack = playlist.find(track => track.title === currentTrackDisplay.textContent);
+          currentTrackIndex = playlist.indexOf(currentTrack);
+        }
+        
+        updatePlaylistDisplay();
+        
+        // Visual feedback
+        shuffleBtn.style.backgroundColor = '#2ecc71';
+        shuffleBtn.style.color = 'white';
+        setTimeout(() => {
+          shuffleBtn.style.backgroundColor = '';
+          shuffleBtn.style.color = '';
+        }, 500);
+      }
+      
+      // Drag and drop functions
+      let draggedItem = null;
+      
+      function handleDragStart(e) {
+        draggedItem = this;
+        this.style.opacity = '0.5';
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+      }
+      
+      function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+      }
+      
+      function handleDrop(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        
+        if (draggedItem !== this) {
+          const fromIndex = parseInt(draggedItem.dataset.index);
+          const toIndex = parseInt(this.dataset.index);
+          
+          // Reorder playlist array
+          const [movedItem] = playlist.splice(fromIndex, 1);
+          playlist.splice(toIndex, 0, movedItem);
+          
+          // Update current track index if needed
+          if (currentTrackIndex === fromIndex) {
+            currentTrackIndex = toIndex;
+          } else if (fromIndex < currentTrackIndex && toIndex >= currentTrackIndex) {
+            currentTrackIndex--;
+          } else if (fromIndex > currentTrackIndex && toIndex <= currentTrackIndex) {
+            currentTrackIndex++;
+          }
+          
+          updatePlaylistDisplay();
+        }
+        
+        return false;
+      }
+      
+      function handleDragEnd(e) {
+        this.style.opacity = '1';
+      }
+      
+      // Event listeners
+      playBtn.addEventListener('click', function() {
+        if (isPlaying) {
+          pauseTrack();
+        } else {
+          playTrack();
+        }
+      });
+      
+      nextBtn.addEventListener('click', nextTrack);
+      prevBtn.addEventListener('click', prevTrack);
+      clearBtn.addEventListener('click', clearPlaylist);
+      shuffleBtn.addEventListener('click', shufflePlaylist);
+      
+      loopBtn.addEventListener('click', function() {
+        isLooping = !isLooping;
+        audioPlayer.loop = isLooping;
+        loopBtn.classList.toggle('active', isLooping);
+      });
+      
+      // Progress bar
+      progressBar.addEventListener('input', function() {
+        if (!isNaN(audioPlayer.duration)) {
+          const time = (this.value / 100) * audioPlayer.duration;
+          audioPlayer.currentTime = time;
+        }
+      });
+      
+      // Time updates
+      audioPlayer.addEventListener('timeupdate', function() {
+        if (!isNaN(audioPlayer.duration)) {
+          const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+          progressBar.value = isNaN(progress) ? 0 : progress;
+          
+          currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
+          durationDisplay.textContent = formatTime(audioPlayer.duration);
+        }
+      });
+      
+      // Track ended
+      audioPlayer.addEventListener('ended', function() {
+        if (isLooping) {
+          audioPlayer.currentTime = 0;
+          audioPlayer.play();
+        } else {
+          nextTrack();
+        }
+      });
+      
+      // Keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        // Spacebar to play/pause
+        if (e.code === 'Space' && !e.target.matches('input, textarea')) {
+          e.preventDefault();
+          if (isPlaying) {
+            pauseTrack();
+          } else {
+            playTrack();
+          }
+        }
+        
+        // Right arrow for next track
+        if (e.code === 'ArrowRight' && e.ctrlKey) {
+          e.preventDefault();
+          nextTrack();
+        }
+        
+        // Left arrow for previous track
+        if (e.code === 'ArrowLeft' && e.ctrlKey) {
+          e.preventDefault();
+          prevTrack();
+        }
+      });
+      
+      // Initialize the player
+      initializeLibrary();
+      
+      // Auto-expand first category for better UX
+      setTimeout(() => {
+        const firstCategory = document.querySelector('.category');
+        if (firstCategory) {
+          firstCategory.classList.add('expanded');
+          firstCategory.querySelector('.category-toggle i').className = 'fas fa-chevron-up';
+        }
+      }, 300);
+    });
+  </script>
+</body>
 </html>
