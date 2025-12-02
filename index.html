@@ -23,7 +23,6 @@
   <meta name="twitter:title" content="AudioOasis | Free Studio-Quality Background Music for Work & Focus" />
   <meta name="twitter:description" content="Background music that doesn't get in the way. Explore studio-quality .WAV playlists made for deep work and calm vibes." />
   <meta name="twitter:image" content="https://drthunter.github.io/AudioOasis/UI%20Picture.png" />
-  
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-55NPK2XL9R"></script>
   <script>
@@ -32,16 +31,15 @@
     gtag('js', new Date());
     gtag('config', 'G-55NPK2XL9R');
   </script>
-  
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
   <style>
     :root {
       --primary: #3498db;
       --primary-dark: #2980b9;
       --secondary: #2c3e50;
       --accent: #2ecc71;
+      --mixer-accent: #9b59b6;
       --light: #f8f9fa;
       --dark: #343a40;
       --gray: #6c757d;
@@ -51,13 +49,11 @@
       --shadow-hover: 0 6px 16px rgba(0,0,0,0.12);
       --transition: all 0.3s ease;
     }
-    
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
@@ -69,7 +65,6 @@
       min-height: 100vh;
       line-height: 1.6;
     }
-    
     /* Header */
     header {
       background: linear-gradient(135deg, var(--secondary) 0%, #1a252f 100%);
@@ -78,7 +73,6 @@
       text-align: center;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-    
     header h1 {
       margin: 0;
       font-size: 2.5rem;
@@ -89,7 +83,6 @@
       background-clip: text;
       color: transparent;
     }
-    
     .tagline {
       margin: 0.5rem 0 0;
       font-size: 1rem;
@@ -98,7 +91,6 @@
       margin-left: auto;
       margin-right: auto;
     }
-    
     /* Main Layout */
     .main-container {
       display: flex;
@@ -109,19 +101,16 @@
       margin: 0 auto;
       width: 100%;
     }
-    
     /* Player Container */
     .player-container {
       flex: 1;
       max-width: 450px;
       min-width: 350px;
     }
-    
     .library-container {
       flex: 2;
       min-width: 0; /* Prevent overflow */
     }
-    
     /* Player Card */
     .music-player {
       background-color: white;
@@ -132,11 +121,9 @@
       overflow: hidden;
       transition: var(--transition);
     }
-    
     .music-player:hover {
       box-shadow: var(--shadow-hover);
     }
-    
     .player-header {
       display: flex;
       justify-content: space-between;
@@ -147,11 +134,9 @@
       cursor: pointer;
       transition: var(--transition);
     }
-    
     .player-header:hover {
       background: linear-gradient(135deg, var(--primary-dark) 0%, #21618c 100%);
     }
-    
     .player-header h2 {
       margin: 0;
       font-size: 1.3rem;
@@ -160,11 +145,9 @@
       align-items: center;
       gap: 10px;
     }
-    
     .player-header i {
       font-size: 1.2rem;
     }
-    
     .toggle-btn {
       background: rgba(255,255,255,0.2);
       border: none;
@@ -178,31 +161,69 @@
       justify-content: center;
       transition: var(--transition);
     }
-    
     .toggle-btn:hover {
       background: rgba(255,255,255,0.3);
       transform: scale(1.05);
     }
-    
-    /* Now Playing Content */
-    .now-playing-content {
+    /* Tabs for Now Playing */
+    .player-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--light-gray);
+      background: var(--light);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 15px;
+      background: none;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--gray);
+      transition: var(--transition);
+      position: relative;
+    }
+    .tab-btn:hover {
+      background: rgba(255,255,255,0.5);
+    }
+    .tab-btn.active {
+      color: var(--primary);
+    }
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--primary);
+    }
+    .tab-btn.mixer.active {
+      color: var(--mixer-accent);
+    }
+    .tab-btn.mixer.active::after {
+      background: var(--mixer-accent);
+    }
+    .tab-content {
+      display: none;
       padding: 25px;
     }
-    
+    .tab-content.active {
+      display: block;
+    }
+    /* Single Player Tab */
     .track-info {
       text-align: center;
       margin-bottom: 25px;
       padding-bottom: 20px;
       border-bottom: 1px solid var(--light-gray);
     }
-    
     .track-title {
       font-size: 1.4rem;
       font-weight: 600;
       margin-bottom: 8px;
       color: var(--dark);
     }
-    
     .track-status {
       font-size: 0.9rem;
       color: var(--gray);
@@ -211,18 +232,15 @@
       justify-content: center;
       gap: 8px;
     }
-    
     /* Media Player */
     .media-player {
       background: var(--light);
       border-radius: var(--border-radius);
       padding: 20px;
     }
-    
     .progress-container {
       margin-bottom: 20px;
     }
-    
     .progress-bar {
       width: 100%;
       height: 8px;
@@ -233,7 +251,6 @@
       outline: none;
       overflow: hidden;
     }
-    
     .progress-bar::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -244,7 +261,6 @@
       cursor: pointer;
       box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
     }
-    
     .progress-bar::-moz-range-thumb {
       width: 20px;
       height: 20px;
@@ -253,7 +269,6 @@
       cursor: pointer;
       border: none;
     }
-    
     .time-display {
       display: flex;
       justify-content: space-between;
@@ -261,25 +276,21 @@
       color: var(--gray);
       margin-top: 8px;
     }
-    
     .player-controls {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-top: 20px;
     }
-    
     .primary-controls {
       display: flex;
       align-items: center;
       gap: 15px;
     }
-    
     .secondary-controls {
       display: flex;
       gap: 15px;
     }
-    
     .control-btn {
       background: white;
       color: var(--dark);
@@ -295,12 +306,10 @@
       transition: var(--transition);
       box-shadow: 0 3px 8px rgba(0,0,0,0.1);
     }
-    
     .control-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 12px rgba(0,0,0,0.15);
     }
-    
     .control-btn.primary {
       background: var(--primary);
       color: white;
@@ -308,7 +317,6 @@
       height: 60px;
       font-size: 1.4rem;
     }
-    
     .control-btn.secondary {
       background: var(--light-gray);
       color: var(--dark);
@@ -316,12 +324,104 @@
       height: 40px;
       font-size: 1rem;
     }
-    
     .control-btn.active {
       background: var(--accent);
       color: white;
     }
-    
+    /* Mixer Tab */
+    .mixer-container {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    .mixer-track {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 1px solid var(--light-gray);
+      transition: var(--transition);
+    }
+    .mixer-track:hover {
+      border-color: var(--mixer-accent);
+      transform: translateX(2px);
+    }
+    .mixer-track-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .mixer-track-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mixer-track-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mixer-control-btn {
+      background: var(--light-gray);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    .mixer-control-btn:hover {
+      background: var(--mixer-accent);
+      color: white;
+    }
+    .mixer-control-btn.active {
+      background: var(--mixer-accent);
+      color: white;
+    }
+    .mixer-volume-control {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .mixer-volume-slider {
+      flex: 1;
+      height: 6px;
+      -webkit-appearance: none;
+      background: #ddd;
+      border-radius: 3px;
+      outline: none;
+    }
+    .mixer-volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--mixer-accent);
+      cursor: pointer;
+    }
+    .mixer-volume-value {
+      font-size: 0.85rem;
+      color: var(--gray);
+      min-width: 35px;
+      text-align: center;
+    }
+    .empty-mixer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+    }
+    .empty-mixer i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: #ddd;
+    }
     /* Playlist */
     .playlist {
       background-color: white;
@@ -331,11 +431,9 @@
       overflow: hidden;
       transition: var(--transition);
     }
-    
     .playlist:hover {
       box-shadow: var(--shadow-hover);
     }
-    
     .playlist-header {
       display: flex;
       justify-content: space-between;
@@ -345,7 +443,6 @@
       padding: 18px 20px;
       cursor: pointer;
     }
-    
     .playlist-header h2 {
       margin: 0;
       font-size: 1.3rem;
@@ -354,26 +451,22 @@
       align-items: center;
       gap: 10px;
     }
-    
     .playlist-content {
       padding: 20px;
       max-height: 500px;
       overflow-y: auto;
       transition: max-height 0.3s ease;
     }
-    
     .playlist.collapsed .playlist-content {
       max-height: 0;
       padding: 0 20px;
       overflow: hidden;
     }
-    
     .playlist-items {
       list-style: none;
       padding: 0;
       margin: 0;
     }
-    
     .playlist-item {
       display: flex;
       align-items: center;
@@ -384,38 +477,32 @@
       transition: var(--transition);
       border: 1px solid transparent;
     }
-    
     .playlist-item:hover {
       background-color: #f0f7ff;
       border-color: #cce5ff;
       transform: translateX(5px);
     }
-    
     .playlist-item.active {
       background-color: #e1f5fe;
       border-color: #b3e5fc;
       font-weight: 600;
       color: var(--primary-dark);
     }
-    
     .track-index {
       width: 30px;
       text-align: center;
       font-weight: 600;
       color: var(--gray);
     }
-    
     .track-details {
       flex: 1;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    
     .track-name {
       font-size: 0.95rem;
     }
-    
     .track-duration {
       font-size: 0.85rem;
       color: var(--gray);
@@ -423,7 +510,6 @@
       padding: 3px 8px;
       border-radius: 10px;
     }
-    
     .remove-track {
       opacity: 0;
       margin-left: 10px;
@@ -431,23 +517,29 @@
       cursor: pointer;
       transition: var(--transition);
     }
-    
     .playlist-item:hover .remove-track {
       opacity: 1;
     }
-    
+    .add-to-mixer-btn {
+      opacity: 0;
+      margin-left: 5px;
+      color: var(--mixer-accent);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .playlist-item:hover .add-to-mixer-btn {
+      opacity: 1;
+    }
     .empty-playlist {
       text-align: center;
       padding: 40px 20px;
       color: var(--gray);
     }
-    
     .empty-playlist i {
       font-size: 3rem;
       margin-bottom: 15px;
       color: #ddd;
     }
-    
     /* Library */
     .library-container h2 {
       margin-bottom: 20px;
@@ -457,7 +549,6 @@
       align-items: center;
       gap: 10px;
     }
-    
     .instructions {
       background: white;
       border-radius: var(--border-radius);
@@ -470,18 +561,15 @@
       align-items: center;
       gap: 10px;
     }
-    
     .instructions i {
       color: var(--primary);
       font-size: 1.2rem;
     }
-    
     .library-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
     }
-    
     .category {
       background-color: white;
       border-radius: var(--border-radius);
@@ -490,12 +578,10 @@
       overflow: hidden;
       transition: var(--transition);
     }
-    
     .category:hover {
       box-shadow: var(--shadow-hover);
       transform: translateY(-5px);
     }
-    
     .category-header {
       display: flex;
       justify-content: space-between;
@@ -505,7 +591,6 @@
       padding: 18px 20px;
       cursor: pointer;
     }
-    
     .category-header h3 {
       margin: 0;
       font-size: 1.1rem;
@@ -514,21 +599,17 @@
       align-items: center;
       gap: 10px;
     }
-    
     .category-content {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
     }
-    
     .category.expanded .category-content {
       max-height: 500px;
     }
-    
     .category-tracks {
       padding: 15px;
     }
-    
     .category-track {
       display: flex;
       justify-content: space-between;
@@ -539,21 +620,35 @@
       cursor: pointer;
       transition: var(--transition);
     }
-    
     .category-track:hover {
       background-color: #f8f9fa;
     }
-    
-    .category-track .add-icon {
-      opacity: 0;
-      color: var(--primary);
-      transition: var(--transition);
+    .category-track .track-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
-    
-    .category-track:hover .add-icon {
+    .add-to-playlist-btn, .add-to-mixer-btn {
+      opacity: 0;
+      transition: var(--transition);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      border: none;
+    }
+    .add-to-playlist-btn {
+      background: var(--primary);
+      color: white;
+    }
+    .add-to-mixer-btn {
+      background: var(--mixer-accent);
+      color: white;
+    }
+    .category-track:hover .add-to-playlist-btn,
+    .category-track:hover .add-to-mixer-btn {
       opacity: 1;
     }
-    
     /* Footer */
     footer {
       text-align: center;
@@ -563,50 +658,49 @@
       font-size: 0.9rem;
       margin-top: 30px;
     }
-    
     /* Responsive Design */
     @media (max-width: 1024px) {
       .main-container {
         flex-direction: column;
       }
-      
       .player-container {
         max-width: 100%;
       }
-      
       .library-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       }
     }
-    
     @media (max-width: 768px) {
       .library-grid {
         grid-template-columns: 1fr;
       }
-      
       .player-controls {
         flex-direction: column;
         gap: 20px;
       }
-      
       .secondary-controls {
         justify-content: center;
       }
-      
       header h1 {
         font-size: 2rem;
       }
+      .mixer-track-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .mixer-track-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
     }
-    
     /* Utility Classes */
     .hidden {
       display: none !important;
     }
-    
     .pulse {
       animation: pulse 2s infinite;
     }
-    
     @keyframes pulse {
       0% {
         box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
@@ -618,22 +712,18 @@
         box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
       }
     }
-    
     /* Scrollbar Styling */
     ::-webkit-scrollbar {
       width: 8px;
     }
-    
     ::-webkit-scrollbar-track {
       background: #f1f1f1;
       border-radius: 4px;
     }
-    
     ::-webkit-scrollbar-thumb {
       background: #c1c1c1;
       border-radius: 4px;
     }
-    
     ::-webkit-scrollbar-thumb:hover {
       background: #a8a8a8;
     }
@@ -642,9 +732,8 @@
 <body>
   <header>
     <h1><i class="fas fa-headphones"></i> AudioOasis</h1>
-    <p class="tagline">Build your own background mix: lofi, ambience, meditation, and more. Click tracks to add them to your playlist.</p>
+    <p class="tagline">Build your own background mix: lofi, ambience, meditation, and more. Click tracks to add them to your playlist or mixer.</p>
   </header>
-  
   <div class="main-container">
     <!-- Left side - Player and Playlist -->
     <div class="player-container">
@@ -653,11 +742,15 @@
         <div class="player-header" id="now-playing-header">
           <h2><i class="fas fa-play-circle"></i> Now Playing</h2>
           <button class="toggle-btn" id="now-playing-toggle">
-            <i class="fas fa-chevron-down"></i>
+            <i class="fas fa-chevron-up"></i>
           </button>
         </div>
-        
-        <div class="now-playing-content" id="now-playing-content">
+        <div class="player-tabs">
+          <button class="tab-btn active" id="single-tab">Single Player</button>
+          <button class="tab-btn mixer" id="mixer-tab">Mixer</button>
+        </div>
+        <!-- Single Player Tab -->
+        <div class="tab-content active" id="single-player-content">
           <div class="track-info">
             <div class="track-title" id="current-track">No Track Selected</div>
             <div class="track-status">
@@ -665,7 +758,6 @@
               <span id="playlist-count">0 tracks in playlist</span>
             </div>
           </div>
-          
           <!-- Media Player -->
           <div class="media-player">
             <div class="progress-container">
@@ -675,7 +767,6 @@
                 <span id="duration">0:00</span>
               </div>
             </div>
-            
             <div class="player-controls">
               <div class="primary-controls">
                 <button class="control-btn secondary" id="prev-btn" title="Previous Track">
@@ -688,7 +779,6 @@
                   <i class="fas fa-step-forward"></i>
                 </button>
               </div>
-              
               <div class="secondary-controls">
                 <button class="control-btn secondary" id="loop-btn" title="Loop Track">
                   <i class="fas fa-redo"></i>
@@ -702,20 +792,28 @@
               </div>
             </div>
           </div>
-          
           <audio id="audio-player"></audio>
         </div>
+        <!-- Mixer Tab -->
+        <div class="tab-content" id="mixer-content">
+          <div class="mixer-container" id="mixer-tracks">
+            <div class="empty-mixer" id="empty-mixer">
+              <i class="fas fa-sliders-h"></i>
+              <h3>Mixer is empty</h3>
+              <p>Add tracks from the library or playlist to create your mix</p>
+            </div>
+            <!-- Mixer tracks will be added here dynamically -->
+          </div>
+        </div>
       </div>
-      
       <!-- Playlist -->
       <div class="playlist" id="playlist">
         <div class="playlist-header" id="playlist-header">
           <h2><i class="fas fa-list"></i> Your Playlist</h2>
           <button class="toggle-btn" id="playlist-toggle">
-            <i class="fas fa-chevron-down"></i>
+            <i class="fas fa-chevron-up"></i>
           </button>
         </div>
-        
         <div class="playlist-content" id="playlist-content">
           <div class="empty-playlist" id="empty-playlist">
             <i class="fas fa-music"></i>
@@ -726,33 +824,28 @@
         </div>
       </div>
     </div>
-    
     <!-- Right side - Track Library -->
     <div class="library-container">
       <h2><i class="fas fa-guitar"></i> Music Library</h2>
-      
       <div class="instructions">
         <i class="fas fa-info-circle"></i>
-        <span>Click a category to expand, then click any track to add it to your playlist. Drag playlist tracks to reorder.</span>
+        <span>Click a category to expand, then click any track to add it to your playlist or mixer. Drag playlist tracks to reorder.</span>
       </div>
-      
       <div class="library-grid" id="library">
         <!-- Categories will be populated by JavaScript -->
       </div>
     </div>
   </div>
-  
   <footer>
     <p>AudioOasis © 2024 | Free studio-quality background music for work & focus</p>
   </footer>
-
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // DOM Elements
       const audioPlayer = document.getElementById('audio-player');
       const playBtn = document.getElementById('play-btn');
-      const prevBtn = document.getElementById('prev-btn');
       const nextBtn = document.getElementById('next-btn');
+      const prevBtn = document.getElementById('prev-btn');
       const clearBtn = document.getElementById('clear-btn');
       const loopBtn = document.getElementById('loop-btn');
       const shuffleBtn = document.getElementById('shuffle-btn');
@@ -764,24 +857,32 @@
       const emptyPlaylist = document.getElementById('empty-playlist');
       const playlistCount = document.getElementById('playlist-count');
       const libraryElement = document.getElementById('library');
-      
+
+      // Tabs elements
+      const singleTab = document.getElementById('single-tab');
+      const mixerTab = document.getElementById('mixer-tab');
+      const singlePlayerContent = document.getElementById('single-player-content');
+      const mixerContent = document.getElementById('mixer-content');
+      const mixerTracksContainer = document.getElementById('mixer-tracks');
+      const emptyMixer = document.getElementById('empty-mixer');
+
       // Toggle elements
       const nowPlayingHeader = document.getElementById('now-playing-header');
-      const nowPlayingContent = document.getElementById('now-playing-content');
       const nowPlayingToggle = document.getElementById('now-playing-toggle');
       const playlistHeader = document.getElementById('playlist-header');
       const playlistContent = document.getElementById('playlist-content');
       const playlistToggle = document.getElementById('playlist-toggle');
-      
+      const playlistElement = document.getElementById('playlist');
+
       // Player state
       let currentTrackIndex = -1;
       let isPlaying = false;
       let isLooping = false;
       let playlist = [];
-      
-      // Track library
+      let mixerTracks = [];
+
       const trackLibrary = {
-            "LoFi": [
+        "LoFi": [
             { title: "1999 Bedroom Beats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/1999_bedroom_beats.wav?raw=true", duration: "2:45" },
             { title: "Cafe con Leche Beats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/cafe_con_leche_beats.wav?raw=true", duration: "3:12" },
             { title: "Cafe Window Rain", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/cafe_window_rain.wav?raw=true", duration: "2:58" },
@@ -1033,16 +1134,17 @@
       // Initialize the library
       function initializeLibrary() {
         libraryElement.innerHTML = '';
-        
         for (const [category, tracks] of Object.entries(trackLibrary)) {
           const categoryElement = document.createElement('div');
           categoryElement.className = 'category';
-          
           const categoryItemsHTML = tracks.map(track => `
             <div class="category-track" data-src="${track.src}" data-title="${track.title}" data-duration="${track.duration}">
               <span>${track.title}</span>
-              <span class="add-icon"><i class="fas fa-plus"></i></span>
-              <span class="track-duration">${track.duration}</span>
+              <div class="track-actions">
+                <button class="add-to-playlist-btn"><i class="fas fa-plus"></i> Playlist</button>
+                <button class="add-to-mixer-btn"><i class="fas fa-sliders-h"></i> Mixer</button>
+                <span class="track-duration">${track.duration}</span>
+              </div>
             </div>
           `).join('');
           
@@ -1062,21 +1164,35 @@
           
           libraryElement.appendChild(categoryElement);
           
-          // Add click event to each track
-          categoryElement.querySelectorAll('.category-track').forEach(item => {
-            item.addEventListener('click', function() {
-              addToPlaylist({
-                title: this.getAttribute('data-title'),
-                src: this.getAttribute('data-src'),
-                duration: this.getAttribute('data-duration')
-              });
+          // Add click events to buttons
+          categoryElement.querySelectorAll('.add-to-playlist-btn').forEach((btn, index) => {
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              const track = tracks[index];
+              addToPlaylist(track);
               
               // Visual feedback
-              this.style.backgroundColor = '#e8f5e8';
-              this.querySelector('.add-icon i').className = 'fas fa-check';
+              btn.innerHTML = '<i class="fas fa-check"></i> Added';
+              btn.style.backgroundColor = '#2ecc71';
               setTimeout(() => {
-                this.style.backgroundColor = '';
-                this.querySelector('.add-icon i').className = 'fas fa-plus';
+                btn.innerHTML = '<i class="fas fa-plus"></i> Playlist';
+                btn.style.backgroundColor = '';
+              }, 1000);
+            });
+          });
+          
+          categoryElement.querySelectorAll('.add-to-mixer-btn').forEach((btn, index) => {
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              const track = tracks[index];
+              addToMixer(track);
+              
+              // Visual feedback
+              btn.innerHTML = '<i class="fas fa-check"></i> Added';
+              btn.style.backgroundColor = '#2ecc71';
+              setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-sliders-h"></i> Mixer';
+                btn.style.backgroundColor = '';
               }, 1000);
             });
           });
@@ -1088,27 +1204,189 @@
           
           header.addEventListener('click', function() {
             categoryElement.classList.toggle('expanded');
-            toggleBtn.querySelector('i').className = categoryElement.classList.contains('expanded') 
-              ? 'fas fa-chevron-up' 
+            toggleBtn.querySelector('i').className = categoryElement.classList.contains('expanded')
+              ? 'fas fa-chevron-up'
               : 'fas fa-chevron-down';
           });
         }
       }
       
-      // Toggle sections
+      // Tab switching
+      singleTab.addEventListener('click', function() {
+        singleTab.classList.add('active');
+        mixerTab.classList.remove('active');
+        singlePlayerContent.classList.add('active');
+        mixerContent.classList.remove('active');
+      });
+      
+      mixerTab.addEventListener('click', function() {
+        mixerTab.classList.add('active');
+        singleTab.classList.remove('active');
+        mixerContent.classList.add('active');
+        singlePlayerContent.classList.remove('active');
+        
+        // Pause single player if playing when switching to mixer
+        if (isPlaying && audioPlayer.src) {
+          pauseTrack();
+        }
+      });
+      
+      // Toggle sections - keep now playing open by default
       nowPlayingHeader.addEventListener('click', function() {
-        nowPlayingContent.classList.toggle('hidden');
-        nowPlayingToggle.querySelector('i').className = nowPlayingContent.classList.contains('hidden') 
-          ? 'fas fa-chevron-down' 
+        const content = document.querySelector('.player-tabs, .tab-content');
+        const isHidden = singlePlayerContent.classList.contains('hidden') && mixerContent.classList.contains('hidden');
+        
+        if (isHidden) {
+          singlePlayerContent.classList.remove('hidden');
+          mixerContent.classList.remove('hidden');
+          nowPlayingToggle.querySelector('i').className = 'fas fa-chevron-up';
+        } else {
+          singlePlayerContent.classList.add('hidden');
+          mixerContent.classList.add('hidden');
+          nowPlayingToggle.querySelector('i').className = 'fas fa-chevron-down';
+        }
+      });
+      
+      // Playlist toggle - default to open (no collapsed class)
+      playlistHeader.addEventListener('click', function() {
+        playlistElement.classList.toggle('collapsed');
+        playlistToggle.querySelector('i').className = playlistElement.classList.contains('collapsed')
+          ? 'fas fa-chevron-down'
           : 'fas fa-chevron-up';
       });
       
-      playlistHeader.addEventListener('click', function() {
-        playlist.classList.toggle('collapsed');
-        playlistToggle.querySelector('i').className = playlist.classList.contains('collapsed') 
-          ? 'fas fa-chevron-down' 
-          : 'fas fa-chevron-up';
-      });
+      // Add track to mixer
+      function addToMixer(track) {
+        // Check if track is already in mixer
+        if (mixerTracks.some(t => t.src === track.src)) {
+          // Find and remove existing track
+          const existingIndex = mixerTracks.findIndex(t => t.src === track.src);
+          removeFromMixer(existingIndex);
+          return;
+        }
+        
+        const mixerTrack = {
+          ...track,
+          audio: new Audio(track.src),
+          isPlaying: false,
+          volume: 0.5,
+          id: Date.now() + Math.random()
+        };
+        
+        mixerTracks.push(mixerTrack);
+        updateMixerDisplay();
+        
+        // Switch to mixer tab if not already there
+        if (!mixerTab.classList.contains('active')) {
+          mixerTab.click();
+        }
+      }
+      
+      // Remove track from mixer
+      function removeFromMixer(index) {
+        if (index < 0 || index >= mixerTracks.length) return;
+        
+        // Stop and clean up audio
+        const track = mixerTracks[index];
+        track.audio.pause();
+        track.audio.src = '';
+        
+        mixerTracks.splice(index, 1);
+        updateMixerDisplay();
+      }
+      
+      // Update mixer display
+      function updateMixerDisplay() {
+        if (mixerTracks.length === 0) {
+          emptyMixer.classList.remove('hidden');
+          return;
+        }
+        
+        emptyMixer.classList.add('hidden');
+        
+        // Create mixer tracks HTML
+        let mixerHTML = '';
+        mixerTracks.forEach((track, index) => {
+          mixerHTML += `
+            <div class="mixer-track" data-id="${track.id}">
+              <div class="mixer-track-header">
+                <div class="mixer-track-title">
+                  <i class="fas fa-music"></i>
+                  <span>${track.title}</span>
+                </div>
+                <div class="mixer-track-controls">
+                  <button class="mixer-control-btn ${track.isPlaying ? 'active' : ''}" data-action="play-pause" title="${track.isPlaying ? 'Pause' : 'Play'}">
+                    <i class="fas fa-${track.isPlaying ? 'pause' : 'play'}"></i>
+                  </button>
+                  <button class="mixer-control-btn" data-action="remove" title="Remove from mixer">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="mixer-volume-control">
+                <i class="fas fa-volume-down" style="color: #9b59b6;"></i>
+                <input type="range" class="mixer-volume-slider" min="0" max="100" value="${track.volume * 100}">
+                <span class="mixer-volume-value">${Math.round(track.volume * 100)}%</span>
+              </div>
+            </div>
+          `;
+        });
+        
+        mixerTracksContainer.innerHTML = mixerHTML;
+        
+        // Add event listeners to mixer controls
+        mixerTracksContainer.querySelectorAll('.mixer-track').forEach((element, index) => {
+          const track = mixerTracks[index];
+          
+          // Play/pause button
+          const playBtn = element.querySelector('[data-action="play-pause"]');
+          playBtn.addEventListener('click', function() {
+            if (track.isPlaying) {
+              track.audio.pause();
+              track.isPlaying = false;
+              this.classList.remove('active');
+              this.innerHTML = '<i class="fas fa-play"></i>';
+            } else {
+              track.audio.play().catch(error => {
+                console.error("Mixer playback failed:", error);
+              });
+              track.isPlaying = true;
+              this.classList.add('active');
+              this.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+          });
+          
+          // Remove button
+          const removeBtn = element.querySelector('[data-action="remove"]');
+          removeBtn.addEventListener('click', function() {
+            removeFromMixer(index);
+          });
+          
+          // Volume slider
+          const volumeSlider = element.querySelector('.mixer-volume-slider');
+          const volumeValue = element.querySelector('.mixer-volume-value');
+          
+          volumeSlider.addEventListener('input', function() {
+            const volume = this.value / 100;
+            track.volume = volume;
+            track.audio.volume = volume;
+            volumeValue.textContent = `${this.value}%`;
+          });
+          
+          // Set initial volume
+          track.audio.volume = track.volume;
+          
+          // Loop the audio
+          track.audio.loop = true;
+          
+          // Handle audio errors
+          track.audio.addEventListener('error', function() {
+            console.error(`Failed to load track: ${track.title}`);
+            playBtn.disabled = true;
+            playBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+          });
+        });
+      }
       
       // Add track to playlist
       function addToPlaylist(track) {
@@ -1140,12 +1418,14 @@
           item.className = `playlist-item ${index === currentTrackIndex ? 'active' : ''}`;
           item.setAttribute('draggable', 'true');
           item.dataset.index = index;
-          
           item.innerHTML = `
             <div class="track-index">${index + 1}</div>
             <div class="track-details">
               <span class="track-name">${track.title}</span>
               <span class="track-duration">${track.duration}</span>
+            </div>
+            <div class="add-to-mixer-btn" title="Add to mixer">
+              <i class="fas fa-sliders-h"></i>
             </div>
             <div class="remove-track">
               <i class="fas fa-times"></i>
@@ -1154,11 +1434,26 @@
           
           // Play track on click
           item.addEventListener('click', function(e) {
-            if (!e.target.closest('.remove-track')) {
+            if (!e.target.closest('.remove-track') && !e.target.closest('.add-to-mixer-btn')) {
               currentTrackIndex = index;
               loadTrack(currentTrackIndex);
               playTrack();
             }
+          });
+          
+          // Add to mixer button
+          const addToMixerBtn = item.querySelector('.add-to-mixer-btn');
+          addToMixerBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            addToMixer(track);
+            
+            // Visual feedback
+            this.innerHTML = '<i class="fas fa-check"></i>';
+            this.style.color = '#2ecc71';
+            setTimeout(() => {
+              this.innerHTML = '<i class="fas fa-sliders-h"></i>';
+              this.style.color = '';
+            }, 1000);
           });
           
           // Remove track on button click
@@ -1198,7 +1493,7 @@
           }
           
           loadTrack(currentTrackIndex);
-        } 
+        }
         // If we're removing a track before the current one
         else if (index < currentTrackIndex) {
           currentTrackIndex--;
@@ -1232,7 +1527,6 @@
         currentTrackIndex = index;
         audioPlayer.src = playlist[index].src;
         currentTrackDisplay.textContent = playlist[index].title;
-        
         updatePlaylistDisplay();
         
         // Update play button if needed
@@ -1301,7 +1595,6 @@
           } else {
             currentTrackIndex = playlist.length - 1; // Go to last track
           }
-          
           loadTrack(currentTrackIndex);
         }
         
@@ -1422,7 +1715,6 @@
         if (!isNaN(audioPlayer.duration)) {
           const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
           progressBar.value = isNaN(progress) ? 0 : progress;
-          
           currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
           durationDisplay.textContent = formatTime(audioPlayer.duration);
         }
