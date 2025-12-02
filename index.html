@@ -285,6 +285,49 @@
       color: var(--gray);
       margin-top: 8px;
     }
+    
+    /* Volume Control for Single Player */
+    .volume-control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--light-gray);
+    }
+    
+    .volume-bar {
+      flex: 1;
+      height: 6px;
+      -webkit-appearance: none;
+      background: #ddd;
+      border-radius: 3px;
+      outline: none;
+    }
+    
+    .volume-bar::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+    }
+    
+    .volume-bar::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: none;
+    }
+    
+    .volume-control i {
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+    
     .player-controls {
       display: flex;
       align-items: center;
@@ -421,6 +464,52 @@
       min-width: 35px;
       text-align: center;
     }
+    
+    /* Mixer Progress Bar */
+    .mixer-progress-container {
+      margin-top: 15px;
+    }
+    
+    .mixer-progress-bar {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #e0e0e0;
+      border-radius: 3px;
+      outline: none;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .mixer-progress-bar::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--mixer-accent);
+      cursor: pointer;
+      box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
+    }
+    
+    .mixer-progress-bar::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--mixer-accent);
+      cursor: pointer;
+      border: none;
+    }
+    
+    .mixer-time-display {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-top: 5px;
+    }
+    
     .empty-mixer {
       text-align: center;
       padding: 40px 20px;
@@ -512,32 +601,26 @@
     align-items: center;
     column-gap: 10px;
     }
-
     /* shared base for each column cell */
     .track-cell {
     display: flex;
     align-items: center;
     }
-
     /* left column: title, align left */
     .track-cell-left {
     justify-content: flex-start;
     }
-
     /* center column: category, truly centered */
     .track-cell-center {
     justify-content: center;
     }
-
     /* right column: duration, align right */
     .track-cell-right {
     justify-content: flex-end;
     }
-
     .track-name {
     font-size: 0.95rem;
     }
-
     /* For the pill in the playlist rows */
     .track-category-pill {
     display: inline-flex;
@@ -819,6 +902,12 @@
                 <span id="duration">0:00</span>
               </div>
             </div>
+            <!-- Volume Control -->
+            <div class="volume-control">
+              <i class="fas fa-volume-down"></i>
+              <input type="range" id="volume-bar" class="volume-bar" min="0" max="100" value="100">
+              <i class="fas fa-volume-up"></i>
+            </div>
             <div class="player-controls">
               <div class="primary-controls">
                 <button class="control-btn secondary" id="prev-btn" title="Previous Track">
@@ -902,6 +991,7 @@
       const loopBtn = document.getElementById('loop-btn');
       const shuffleBtn = document.getElementById('shuffle-btn');
       const progressBar = document.getElementById('progress-bar');
+      const volumeBar = document.getElementById('volume-bar');
       const currentTrackDisplay = document.getElementById('current-track');
       const currentCategoryDisplay = document.getElementById('current-category');
       const currentTimeDisplay = document.getElementById('current-time');
@@ -910,7 +1000,6 @@
       const emptyPlaylist = document.getElementById('empty-playlist');
       const playlistCount = document.getElementById('playlist-count');
       const libraryElement = document.getElementById('library');
-
       // Tabs elements
       const singleTab = document.getElementById('single-tab');
       const mixerTab = document.getElementById('mixer-tab');
@@ -918,7 +1007,6 @@
       const mixerContent = document.getElementById('mixer-content');
       const mixerTracksContainer = document.getElementById('mixer-tracks');
       const emptyMixer = document.getElementById('empty-mixer');
-
       // Toggle elements
       const nowPlayingHeader = document.getElementById('now-playing-header');
       const nowPlayingToggle = document.getElementById('now-playing-toggle');
@@ -926,14 +1014,12 @@
       const playlistContent = document.getElementById('playlist-content');
       const playlistToggle = document.getElementById('playlist-toggle');
       const playlistElement = document.getElementById('playlist');
-
       // Player state
       let currentTrackIndex = -1;
       let isPlaying = false;
       let isLooping = false;
       let playlist = [];
       let mixerTracks = [];
-
       const trackLibrary = {
         "LoFi": [
             { title: "1999 Bedroom Beats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/1999_bedroom_beats.wav?raw=true", category: "LoFi", duration: "2:45" },
@@ -969,6 +1055,51 @@
             { title: "Tickets to Nowhere", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/tickets_to_nowhere.wav?raw=true", category: "LoFi", duration: "4:40" },
             { title: "Vinyl Hustle", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/vinyl_hustle.wav?raw=true", category: "LoFi", duration: "3:55" },
             { title: "Warm Blanket Thoughts", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/warm_blanket_thoughts.wav?raw=true", category: "LoFi", duration: "6:10" }
+        
+
+            { title: "Aesthetic Echoes in Motion", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_aesthetic_echoes_in_motion_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Break It Down", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_break_it_down_-_dyalla.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Coffee in My Garden", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_coffee_in_my_garden_-_baegel.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Daydreaming About You While Drinking a Cup of Tea", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_daydreaming_about_you_while_drinking_a_cup_of_tea_-_baegel.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Distractions", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_distractions_-_timothy_infinite.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Drops", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_drops_-_hatamitsunami.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Earth Oak", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_earth_oak_-_guustavv.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Find Me Again", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_find_me_again_-_mizlo.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Finetuned Fiesta", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_finetuned_fiesta_-_dusty_decks.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "For the Feeling", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_for_the_feeling_-_mizlo.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Homesick", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_homesick_-_donvayei.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "I Got a Bad Habit (Instrumental Version)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_i_got_a_bad_habit_instrumental_version_-_nyck_caution.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "I Have a Crush on You", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_i_have_a_crush_on_you_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Im a Dawg", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_im_a_dawg_-_curli_loxx.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "I'm a Fool (for U)", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_im_a_fool_for_u_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "It Hasn't Been Cloudy Since We Met", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_it_hasnt_been_cloudy_since_we_met_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Jacuzzi", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_jacuzzi_-_jobii.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Lap of Luxury", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_lap_of_luxury_-_auxjack.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Mango Fizz", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_mango_fizz_-_jobii.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Maybe L8er", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_maybe_l8er_-_rocket_jr.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Midnight in Mono", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_midnight_in_mono_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Morning Coffee", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_morning_coffee_-_dyalla.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Multidimensional", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_multidimensional_-_sarah_the_illstrumentalist.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Nested Above", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_nested_above_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Odd Sensibility", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_odd_sensibility_-_jules_gaia.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Old School Soul", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_old_school_soul_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "overture", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_overture_-_dozeoff.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Saturday Reset", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_saturday_reset_-_sarah_the_illstrumentalist.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Sauts Modiques", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_sauts_modiques_-_dusty_decks.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Seahorsing", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_seahorsing_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Seasonal League", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_seasonal_league_-_dusty_decks.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Soft Pine", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_soft_pine_-_jobii.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Sonic Raindrops", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_sonic_raindrops_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Spent a Whole Day in My Head", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_spent_a_whole_day_in_my_head_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Squeeze", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_squeeze_-_jobii.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Subtle Movement", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_subtle_movement_-_loyae.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Sunrise to Sunset", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_sunrise_to_sunset_-_rebecca_mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Tapestry Tincture", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_tapestry_tincture_-_guustavv.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "The Happiest Moment", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_the_happiest_moment_-_lukas_got_lucky.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "This Makes Everything Better", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_this_makes_everything_better_-_sarah_the_illstrumentalist.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "To and From", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_to_and_from_-_donvayei.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Tokyo Tuesday", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_tokyo_tuesday_-_guustavv.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Victory Laps", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/es_victory_laps_-_dusty_decks.wav?raw=true", category: "LoFi", duration: "0:00" }
         ],
         "Background Music": [
             { title: "A Thousand Quiet Thoughts", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/a_thousand_quiet_thoughts.wav?raw=true", category: "Background Music", duration: "3:45" },
@@ -1184,7 +1315,6 @@
             { title: "The Last Candle Burns Loop 2", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loop/the_last_candle_burns_loop_2.wav?raw=true", category: "Loops", duration: "0:00" }
         ]
       };
-      
       // Initialize the library
       function initializeLibrary() {
         libraryElement.innerHTML = '';
@@ -1201,7 +1331,6 @@
               </div>
             </div>
           `).join('');
-          
           categoryElement.innerHTML = `
             <div class="category-header">
               <h3><i class="fas fa-folder"></i> ${category} <span class="track-count">(${tracks.length} tracks)</span></h3>
@@ -1215,16 +1344,13 @@
               </div>
             </div>
           `;
-          
           libraryElement.appendChild(categoryElement);
-          
           // Add click events to buttons
           categoryElement.querySelectorAll('.add-to-playlist-btn').forEach((btn, index) => {
             btn.addEventListener('click', function(e) {
               e.stopPropagation();
               const track = tracks[index];
               addToPlaylist(track);
-              
               // Visual feedback
               btn.innerHTML = '<i class="fas fa-check"></i> Added';
               btn.style.backgroundColor = '#2ecc71';
@@ -1234,13 +1360,11 @@
               }, 1000);
             });
           });
-          
           categoryElement.querySelectorAll('.add-to-mixer-btn').forEach((btn, index) => {
             btn.addEventListener('click', function(e) {
               e.stopPropagation();
               const track = tracks[index];
               addToMixer(track);
-              
               // Visual feedback
               btn.innerHTML = '<i class="fas fa-check"></i> Added';
               btn.style.backgroundColor = '#2ecc71';
@@ -1250,12 +1374,10 @@
               }, 1000);
             });
           });
-          
           // Add toggle functionality to category headers
           const header = categoryElement.querySelector('.category-header');
           const content = categoryElement.querySelector('.category-content');
           const toggleBtn = categoryElement.querySelector('.category-toggle');
-          
           header.addEventListener('click', function() {
             categoryElement.classList.toggle('expanded');
             toggleBtn.querySelector('i').className = categoryElement.classList.contains('expanded')
@@ -1264,7 +1386,6 @@
           });
         }
       }
-      
       // Tab switching
       singleTab.addEventListener('click', function() {
         singleTab.classList.add('active');
@@ -1272,19 +1393,13 @@
         singlePlayerContent.classList.add('active');
         mixerContent.classList.remove('active');
       });
-      
       mixerTab.addEventListener('click', function() {
         mixerTab.classList.add('active');
         singleTab.classList.remove('active');
         mixerContent.classList.add('active');
         singlePlayerContent.classList.remove('active');
-        
-        // Pause single player if playing when switching to mixer
-        if (isPlaying && audioPlayer.src) {
-          pauseTrack();
-        }
+        // Single player continues playing when switching to mixer
       });
-      
       // Toggle sections - keep now playing open by default
       nowPlayingHeader.addEventListener('click', function() {
       const isHidden = singlePlayerContent.classList.contains('hidden') && mixerContent.classList.contains('hidden');
@@ -1307,7 +1422,6 @@
           ? 'fas fa-chevron-down'
           : 'fas fa-chevron-up';
       });
-      
       // Add track to mixer
       function addToMixer(track) {
         // Check if track is already in mixer
@@ -1317,7 +1431,6 @@
           removeFromMixer(existingIndex);
           return;
         }
-        
         const mixerTrack = {
           ...track,
           audio: new Audio(track.src),
@@ -1325,38 +1438,30 @@
           volume: 0.5,
           id: Date.now() + Math.random()
         };
-        
         mixerTracks.push(mixerTrack);
         updateMixerDisplay();
-        
         // Switch to mixer tab if not already there
         if (!mixerTab.classList.contains('active')) {
           mixerTab.click();
         }
       }
-      
       // Remove track from mixer
       function removeFromMixer(index) {
         if (index < 0 || index >= mixerTracks.length) return;
-        
         // Stop and clean up audio
         const track = mixerTracks[index];
         track.audio.pause();
         track.audio.src = '';
-        
         mixerTracks.splice(index, 1);
         updateMixerDisplay();
       }
-      
       // Update mixer display
       function updateMixerDisplay() {
         if (mixerTracks.length === 0) {
           emptyMixer.classList.remove('hidden');
           return;
         }
-        
         emptyMixer.classList.add('hidden');
-        
         // Create mixer tracks HTML
         let mixerHTML = '';
         mixerTracks.forEach((track, index) => {
@@ -1381,16 +1486,21 @@
                 <input type="range" class="mixer-volume-slider" min="0" max="100" value="${track.volume * 100}">
                 <span class="mixer-volume-value">${Math.round(track.volume * 100)}%</span>
               </div>
+              <!-- Progress bar for mixer track -->
+              <div class="mixer-progress-container">
+                <input type="range" class="mixer-progress-bar" value="0" max="100">
+                <div class="mixer-time-display">
+                  <span class="mixer-current-time">0:00</span>
+                  <span class="mixer-duration">${track.duration || '0:00'}</span>
+                </div>
+              </div>
             </div>
           `;
         });
-        
         mixerTracksContainer.innerHTML = mixerHTML;
-        
         // Add event listeners to mixer controls
         mixerTracksContainer.querySelectorAll('.mixer-track').forEach((element, index) => {
           const track = mixerTracks[index];
-          
           // Play/pause button
           const playBtn = element.querySelector('[data-action="play-pause"]');
           playBtn.addEventListener('click', function() {
@@ -1408,64 +1518,87 @@
               this.innerHTML = '<i class="fas fa-pause"></i>';
             }
           });
-          
           // Remove button
           const removeBtn = element.querySelector('[data-action="remove"]');
           removeBtn.addEventListener('click', function() {
             removeFromMixer(index);
           });
-          
           // Volume slider
           const volumeSlider = element.querySelector('.mixer-volume-slider');
           const volumeValue = element.querySelector('.mixer-volume-value');
-          
           volumeSlider.addEventListener('input', function() {
             const volume = this.value / 100;
             track.volume = volume;
             track.audio.volume = volume;
             volumeValue.textContent = `${this.value}%`;
           });
+          // Progress bar elements
+          const progressBar = element.querySelector('.mixer-progress-bar');
+          const currentTimeDisplay = element.querySelector('.mixer-current-time');
+          const durationDisplay = element.querySelector('.mixer-duration');
+          
+          // Set initial duration if available
+          if (track.duration && track.duration !== '0:00') {
+            durationDisplay.textContent = track.duration;
+          }
+          
+          // Update progress as audio plays
+          track.audio.addEventListener('timeupdate', function() {
+            if (!isNaN(track.audio.duration)) {
+              const progress = (track.audio.currentTime / track.audio.duration) * 100;
+              progressBar.value = isNaN(progress) ? 0 : progress;
+              currentTimeDisplay.textContent = formatTime(track.audio.currentTime);
+            }
+          });
+          
+          // Allow seeking in mixer track
+          progressBar.addEventListener('input', function() {
+            if (!isNaN(track.audio.duration)) {
+              const time = (this.value / 100) * track.audio.duration;
+              track.audio.currentTime = time;
+            }
+          });
           
           // Set initial volume
           track.audio.volume = track.volume;
-          
           // Loop the audio
           track.audio.loop = true;
-          
           // Handle audio errors
           track.audio.addEventListener('error', function() {
             console.error(`Failed to load track: ${track.title}`);
             playBtn.disabled = true;
             playBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
           });
+          
+          // Loop track when it ends
+          track.audio.addEventListener('ended', function() {
+            track.audio.currentTime = 0;
+            if (track.isPlaying) {
+              track.audio.play();
+            }
+          });
         });
       }
-      
       // Add track to playlist
       function addToPlaylist(track) {
         playlist.push(track);
         updatePlaylistDisplay();
-        
         // If this is the first track added, play it
         if (playlist.length === 1) {
           currentTrackIndex = 0;
           loadTrack(currentTrackIndex);
         }
       }
-      
       // Update playlist display
       function updatePlaylistDisplay() {
         playlistCount.textContent = `${playlist.length} track${playlist.length !== 1 ? 's' : ''} in playlist`;
-        
         if (playlist.length === 0) {
           emptyPlaylist.classList.remove('hidden');
           playlistItems.innerHTML = '';
           return;
         }
-        
         emptyPlaylist.classList.add('hidden');
         playlistItems.innerHTML = '';
-        
         playlist.forEach((track, index) => {
           const item = document.createElement('li');
           item.className = `playlist-item ${index === currentTrackIndex ? 'active' : ''}`;
@@ -1491,7 +1624,6 @@
             <i class="fas fa-times"></i>
         </div>
         `;
-          
           // Play track on click
           item.addEventListener('click', function(e) {
             if (!e.target.closest('.remove-track') && !e.target.closest('.add-to-mixer-btn')) {
@@ -1500,13 +1632,11 @@
               playTrack();
             }
           });
-          
           // Add to mixer button
           const addToMixerBtn = item.querySelector('.add-to-mixer-btn');
           addToMixerBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             addToMixer(track);
-            
             // Visual feedback
             this.innerHTML = '<i class="fas fa-check"></i>';
             this.style.color = '#2ecc71';
@@ -1515,58 +1645,47 @@
               this.style.color = '';
             }, 1000);
           });
-          
           // Remove track on button click
           const removeBtn = item.querySelector('.remove-track');
           removeBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             removeTrack(index);
           });
-          
           // Drag and drop functionality
           item.addEventListener('dragstart', handleDragStart);
           item.addEventListener('dragover', handleDragOver);
           item.addEventListener('drop', handleDrop);
           item.addEventListener('dragend', handleDragEnd);
-          
           playlistItems.appendChild(item);
         });
       }
-      
       // Remove track from playlist
       function removeTrack(index) {
         if (index < 0 || index >= playlist.length) return;
-        
         // If we're removing the currently playing track
         if (index === currentTrackIndex) {
           if (isPlaying) pauseTrack();
-          
           // If it's the last track in the playlist
           if (playlist.length === 1) {
             clearPlaylist();
             return;
           }
-          
           // If it's the last track but there are others
           if (currentTrackIndex === playlist.length - 1) {
             currentTrackIndex--;
           }
-          
           loadTrack(currentTrackIndex);
         }
         // If we're removing a track before the current one
         else if (index < currentTrackIndex) {
           currentTrackIndex--;
         }
-        
         playlist.splice(index, 1);
         updatePlaylistDisplay();
       }
-      
       // Clear playlist
       function clearPlaylist() {
         if (playlist.length === 0) return;
-        
         if (confirm("Are you sure you want to clear the entire playlist?")) {
           playlist = [];
           currentTrackIndex = -1;
@@ -1580,24 +1699,19 @@
           updatePlaylistDisplay();
         }
       }
-      
       // Load track
       function loadTrack(index) {
         if (index < 0 || index >= playlist.length) return;
-
         currentTrackIndex = index;
         audioPlayer.src = playlist[index].src;
         currentTrackDisplay.textContent = playlist[index].title;
-
         // Update current category display (if track provides category)
         if (playlist[index].category) {
           currentCategoryDisplay.textContent = `• ${playlist[index].category}`;
         } else {
           currentCategoryDisplay.textContent = '';
         }
-
         updatePlaylistDisplay();
-
         // If the player was already playing, continue playback
         if (isPlaying) {
           audioPlayer.play().catch(error => {
@@ -1605,16 +1719,13 @@
           });
         }
       }
-      
       // Play track
       function playTrack() {
         if (playlist.length === 0) return;
-        
         if (currentTrackIndex === -1) {
           currentTrackIndex = 0;
           loadTrack(currentTrackIndex);
         }
-        
         audioPlayer.play()
           .then(() => {
             isPlaying = true;
@@ -1625,7 +1736,6 @@
             console.error("Playback failed:", error);
           });
       }
-      
       // Pause track
       function pauseTrack() {
         audioPlayer.pause();
@@ -1633,7 +1743,6 @@
         playBtn.innerHTML = '<i class="fas fa-play"></i>';
         playBtn.classList.remove('pulse');
       }
-      
       // Next track
       function nextTrack() {
         if (isLooping) {
@@ -1641,17 +1750,14 @@
           audioPlayer.play();
           return;
         }
-        
         if (currentTrackIndex < playlist.length - 1) {
           currentTrackIndex++;
         } else {
           currentTrackIndex = 0; // Loop back to beginning
         }
-        
         loadTrack(currentTrackIndex);
         if (isPlaying) playTrack();
       }
-      
       // Previous track
       function prevTrack() {
         if (audioPlayer.currentTime > 3) {
@@ -1666,35 +1772,28 @@
           }
           loadTrack(currentTrackIndex);
         }
-        
         if (isPlaying) playTrack();
       }
-      
       // Format time
       function formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
       }
-      
       // Shuffle playlist
       function shufflePlaylist() {
         if (playlist.length < 2) return;
-        
         // Fisher-Yates shuffle algorithm
         for (let i = playlist.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [playlist[i], playlist[j]] = [playlist[j], playlist[i]];
         }
-        
         // Update current track index if playing
         if (currentTrackIndex >= 0) {
           const currentTrack = playlist.find(track => track.title === currentTrackDisplay.textContent);
           currentTrackIndex = playlist.indexOf(currentTrack);
         }
-        
         updatePlaylistDisplay();
-        
         // Visual feedback
         shuffleBtn.style.backgroundColor = '#2ecc71';
         shuffleBtn.style.color = 'white';
@@ -1703,35 +1802,28 @@
           shuffleBtn.style.color = '';
         }, 500);
       }
-      
       // Drag and drop functions
       let draggedItem = null;
-      
       function handleDragStart(e) {
         draggedItem = this;
         this.style.opacity = '0.5';
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', this.innerHTML);
       }
-      
       function handleDragOver(e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
         return false;
       }
-      
       function handleDrop(e) {
         e.stopPropagation();
         e.preventDefault();
-        
         if (draggedItem !== this) {
           const fromIndex = parseInt(draggedItem.dataset.index);
           const toIndex = parseInt(this.dataset.index);
-          
           // Reorder playlist array
           const [movedItem] = playlist.splice(fromIndex, 1);
           playlist.splice(toIndex, 0, movedItem);
-          
           // Update current track index if needed
           if (currentTrackIndex === fromIndex) {
             currentTrackIndex = toIndex;
@@ -1740,17 +1832,13 @@
           } else if (fromIndex > currentTrackIndex && toIndex <= currentTrackIndex) {
             currentTrackIndex++;
           }
-          
           updatePlaylistDisplay();
         }
-        
         return false;
       }
-      
       function handleDragEnd(e) {
         this.style.opacity = '1';
       }
-      
       // Event listeners
       playBtn.addEventListener('click', function() {
         if (isPlaying) {
@@ -1759,18 +1847,15 @@
           playTrack();
         }
       });
-      
       nextBtn.addEventListener('click', nextTrack);
       prevBtn.addEventListener('click', prevTrack);
       clearBtn.addEventListener('click', clearPlaylist);
       shuffleBtn.addEventListener('click', shufflePlaylist);
-      
       loopBtn.addEventListener('click', function() {
         isLooping = !isLooping;
         audioPlayer.loop = isLooping;
         loopBtn.classList.toggle('active', isLooping);
       });
-      
       // Progress bar
       progressBar.addEventListener('input', function() {
         if (!isNaN(audioPlayer.duration)) {
@@ -1778,7 +1863,24 @@
           audioPlayer.currentTime = time;
         }
       });
-      
+      // Volume control
+      volumeBar.addEventListener('input', function() {
+        audioPlayer.volume = this.value / 100;
+        // Update volume icon based on level
+        const volumeDownIcon = document.querySelector('.volume-control .fa-volume-down');
+        const volumeUpIcon = document.querySelector('.volume-control .fa-volume-up');
+        
+        if (this.value == 0) {
+          volumeDownIcon.className = 'fas fa-volume-mute';
+          volumeUpIcon.style.opacity = '0.5';
+        } else if (this.value < 50) {
+          volumeDownIcon.className = 'fas fa-volume-down';
+          volumeUpIcon.style.opacity = '0.5';
+        } else {
+          volumeDownIcon.className = 'fas fa-volume-down';
+          volumeUpIcon.style.opacity = '1';
+        }
+      });
       // Time updates
       audioPlayer.addEventListener('timeupdate', function() {
         if (!isNaN(audioPlayer.duration)) {
@@ -1788,7 +1890,6 @@
           durationDisplay.textContent = formatTime(audioPlayer.duration);
         }
       });
-      
       // Track ended
       audioPlayer.addEventListener('ended', function() {
         if (isLooping) {
@@ -1798,7 +1899,6 @@
           nextTrack();
         }
       });
-      
       // Keyboard shortcuts
       document.addEventListener('keydown', function(e) {
         // Spacebar to play/pause
@@ -1810,23 +1910,19 @@
             playTrack();
           }
         }
-        
         // Right arrow for next track
         if (e.code === 'ArrowRight' && e.ctrlKey) {
           e.preventDefault();
           nextTrack();
         }
-        
         // Left arrow for previous track
         if (e.code === 'ArrowLeft' && e.ctrlKey) {
           e.preventDefault();
           prevTrack();
         }
       });
-      
       // Initialize the player
       initializeLibrary();
-      
       // Auto-expand first category for better UX
       setTimeout(() => {
         const firstCategory = document.querySelector('.category');
