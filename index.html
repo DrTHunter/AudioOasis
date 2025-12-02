@@ -453,7 +453,8 @@
     }
     .playlist-content {
       padding: 20px;
-      max-height: 500px;
+      /* more conservative height to keep playlist from growing too tall */
+      max-height: 420px;
       overflow-y: auto;
       transition: max-height 0.3s ease;
     }
@@ -605,7 +606,10 @@
       transition: max-height 0.3s ease;
     }
     .category.expanded .category-content {
-      max-height: 500px;
+      /* limit height so very long categories scroll independently */
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 6px; /* leave a bit of room for the scrollbar */
     }
     .category-tracks {
       padding: 15px;
