@@ -124,6 +124,9 @@ var trackLibrary = {
             { title: "Beneath the Bodhi Tree", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/beneath_the_bodhi_tree.wav?raw=true", category: "Meditation", duration: "0:00" },
             { title: "Paradise - Vincent Vega", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/paradise_vincent_vega.wav?raw=true", category: "Meditation", duration: "0:00" }
         ],
+        "Background Music": [
+            { title: "Lunar Reverie", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/ES_Lunar_Reverie_-_Lucas_Pittman.wav?raw=true", category: "Background Music", duration: "3:45" }
+        ],
         "Classical": [
             { title: "Bach", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/bach.wav?raw=true", category: "Classical", duration: "3:45" },
             { title: "Canon in D", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/canon_in_d.wav?raw=true", category: "Classical", duration: "4:12" },
