@@ -120,6 +120,11 @@ var trackLibrary = {
             { title: "Time Dissolves in Water", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/time_dissolves_in_water.wav?raw=true", category: "Background Music", duration: "7:10" },
             { title: "Whispers of the Aurora", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/whispers_of_the_aurora.wav?raw=true", category: "Background Music", duration: "6:30" }
         ],
+        "Coding Mix": [
+            { title: "Light Rails", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/coding_mix/lucky_sound_-_light_rails.wav?raw=true", category: "Coding Mix", duration: "3:45" },
+            { title: "VHS Waterfalls", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/coding_mix/raz_stamper_-_vhs_waterfalls.wav?raw=true", category: "Coding Mix", duration: "3:45" },
+            { title: "Breath of Autumn", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/coding_mix/vladislav_kurnikov_-_breath_of_autumn.wav?raw=true", category: "Coding Mix", duration: "3:45" }
+        ],
         "Meditation": [
             { title: "Mist Over the Lotus Pond", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/mist_over_the_lotus_pond.wav?raw=true", category: "Meditation", duration: "0:00" },
             { title: "Journey Through the Chakras", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/journey_through_the_chakras.wav?raw=true", category: "Meditation", duration: "0:00" },
@@ -146,7 +151,13 @@ var trackLibrary = {
             { title: "Paradise - Vincent Vega", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/paradise_vincent_vega.wav?raw=true", category: "Meditation", duration: "0:00" }
         ],
         "Dark": [
-            { title: "Lunar Reverie", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/ES_Lunar_Reverie_-_Lucas_Pittman.wav?raw=true", category: "Dark", duration: "3:45" }
+            { title: "Lunar Reverie", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/ES_Lunar_Reverie_-_Lucas_Pittman.wav?raw=true", category: "Dark", duration: "3:45" },
+            { title: "Kanjo", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/jozeque_-_kanjo.wav?raw=true", category: "Dark", duration: "4:12" },
+            { title: "Morning Caffe", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/jozeque_-_morning_caffe.wav?raw=true", category: "Dark", duration: "5:20" },
+            { title: "Slumber", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/michael_drake_-_slumber.wav?raw=true", category: "Dark", duration: "6:15" },
+            { title: "Empire", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/oliver_michael_-_empire.wav?raw=true", category: "Dark", duration: "4:50" },
+            { title: "Deserved", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/scro_-_deserved.wav?raw=true", category: "Dark", duration: "5:00" },
+            { title: "Forest Sun", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/sero_-_forest_sun.wav?raw=true", category: "Dark", duration: "4:30" }
         ],
         "Classical": [
             { title: "Bach", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/bach.wav?raw=true", category: "Classical", duration: "3:45" },
