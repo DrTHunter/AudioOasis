@@ -1,6 +1,25 @@
 // trackList.js - All tracks organized by category
 var trackLibrary = {
-        "LoFi": [
+         "LoFi": [
+            { title: "Raindrops", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/ariel_shalom_-_raindrops.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Bubble Bath", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/aves_-_bubble_bath.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Coffee Stop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/aves_-_coffee_stop.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "River Banks", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/dor_hadad_-_river_banks.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "The Living Room", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/flint_-_the_living_room.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "A Part of Me", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/ikoliks_-_a_part_of_me.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Busi", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/jimit_-_busi.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Augmaster", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/jozeque_-_augmaster.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Cup O Tea", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/lalinea_-_cup_o_tea.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Come Over", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/novembers_-_come_over.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Zircon", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/ottom_-_zircon.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Magic Hour", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/samurai_royal_-_magic_hour.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Pink Desert", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/samurai_royal_-_pink_desert.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Forgive", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/sero_-_forgive.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "A Trip", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/sig_howler_-_a_trip.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Sunchilling", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/vicate_-_sunchilling.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Ocean Hued", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/wav_two_-_ocean_hued.wav?raw=true", category: "LoFi", duration: "2:45" },
+            { title: "Dreams", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/woolfson_-_dreams.wav?raw=true", category: "LoFi", duration: "2:45" },
+            
             { title: "1999 Bedroom Beats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/1999_bedroom_beats.wav?raw=true", category: "LoFi", duration: "2:45" },
             { title: "Cafe con Leche Beats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/cafe_con_leche_beats.wav?raw=true", category: "LoFi", duration: "3:12" },
             { title: "Cafe Window Rain", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/cafe_window_rain.wav?raw=true", category: "LoFi", duration: "2:58" },
