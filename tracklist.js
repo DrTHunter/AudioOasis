@@ -1,6 +1,6 @@
 // trackList.js - All tracks organized by category
 var trackLibrary = {
-         "LoFi": [
+        "LoFi": [
             { title: "Raindrops", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/ariel_shalom_-_raindrops.wav?raw=true", category: "LoFi", duration: "2:45" },
             { title: "Bubble Bath", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/aves_-_bubble_bath.wav?raw=true", category: "LoFi", duration: "2:45" },
             { title: "Coffee Stop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/aves_-_coffee_stop.wav?raw=true", category: "LoFi", duration: "2:45" },
@@ -19,7 +19,6 @@ var trackLibrary = {
             { title: "Sunchilling", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/vicate_-_sunchilling.wav?raw=true", category: "LoFi", duration: "2:45" },
             { title: "Ocean Hued", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/wav_two_-_ocean_hued.wav?raw=true", category: "LoFi", duration: "2:45" },
             { title: "Dreams", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/artlist_tracks/woolfson_-_dreams.wav?raw=true", category: "LoFi", duration: "2:45" },
-            
             { title: "1999 Bedroom Beats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/1999_bedroom_beats.wav?raw=true", category: "LoFi", duration: "2:45" },
             { title: "Cafe con Leche Beats", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/cafe_con_leche_beats.wav?raw=true", category: "LoFi", duration: "3:12" },
             { title: "Cafe Window Rain", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/cafe_window_rain.wav?raw=true", category: "LoFi", duration: "2:58" },
@@ -52,7 +51,6 @@ var trackLibrary = {
             { title: "The Last Candle Burns", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/the_last_candle_burns.wav?raw=true", category: "LoFi", duration: "5:50" },
             { title: "Tickets to Nowhere", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/tickets_to_nowhere.wav?raw=true", category: "LoFi", duration: "4:40" },
             { title: "Vinyl Hustle", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/vinyl_hustle.wav?raw=true", category: "LoFi", duration: "3:55" },
-            
             { title: "Warm Blanket Thoughts", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/warm_blanket_thoughts.wav?raw=true", category: "LoFi", duration: "6:10" },
             { title: "Aesthetic Echoes in Motion", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/ES_Aesthetic_Echoes_in_Motion_-_Rebecca_Mardal.wav?raw=true", category: "LoFi", duration: "0:00" },
             { title: "Break It Down", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/ES_Break_It_Down_-_Dyalla.wav?raw=true", category: "LoFi", duration: "0:00" },
@@ -143,8 +141,8 @@ var trackLibrary = {
             { title: "Beneath the Bodhi Tree", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/beneath_the_bodhi_tree.wav?raw=true", category: "Meditation", duration: "0:00" },
             { title: "Paradise - Vincent Vega", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/meditation/paradise_vincent_vega.wav?raw=true", category: "Meditation", duration: "0:00" }
         ],
-        "Background Music": [
-            { title: "Lunar Reverie", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/ES_Lunar_Reverie_-_Lucas_Pittman.wav?raw=true", category: "Background Music", duration: "3:45" }
+        "Dark": [
+            { title: "Lunar Reverie", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/dark/ES_Lunar_Reverie_-_Lucas_Pittman.wav?raw=true", category: "Dark", duration: "3:45" }
         ],
         "Classical": [
             { title: "Bach", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/classical/bach.wav?raw=true", category: "Classical", duration: "3:45" },
