@@ -76,7 +76,7 @@ var trackLibrary = {
             { title: "This Makes Everything Better", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/ES_This_Makes_Everything_Better_-_Sarah_the_IlIstrumentalist.wav?raw=true", category: "LoFi", duration: "0:00" },
             { title: "To and From", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/ES_To_and_From_-_DonVayei.wav?raw=true", category: "LoFi", duration: "0:00" },
             { title: "Tokyo Tuesday", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/ES_Tokyo_Tuesday_-_Guustavv.wav?raw=true", category: "LoFi", duration: "0:00" },
-            { title: "Victory Laps", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/ES_Victory_Laps_-_Dusty_Decks.wav?raw=true", category: "LoFi", duration: "0:00" },
+            { title: "Victory Laps", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/lofi/ES_Victory_Laps_-_Dusty_Decks.wav?raw=true", category: "LoFi", duration: "0:00" }
         ],
         "Artlist LoFi": [
             { title: "Raindrops", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/artlist_tracks/ariel_shalom_-_raindrops.wav?raw=true", category: "LoFi", duration: "2:45" },
