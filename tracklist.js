@@ -275,7 +275,8 @@ var trackLibrary = {
             { title: "Crickets", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/Crickets.wav?raw=true", category: "Background Ambiance", duration: "0:00" },
             { title: "Waterfall", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/waterfall.wav?raw=true", category: "Background Ambiance", duration: "0:00" },
             { title: "Library", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/library.wav?raw=true", category: "Background Ambiance", duration: "0:00" },
-            { title: "Rain on Roof", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/rain-roof.wav?raw=true", category: "Background Ambiance", duration: "0:00" }
+            { title: "Rain on Roof", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/rain-roof.wav?raw=true", category: "Background Ambiance", duration: "0:00" },
+            { title: "Vinyl Crackle", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/backgroundambiance/vinyl_crackle.wav?raw=true", category: "Background Ambiance", duration: "0:11" }
         ],
         "Loops": [
             { title: "Ancient Athens Loop", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/loop/ancient_athens_loop.wav?raw=true", category: "Loops", duration: "0:00" },
