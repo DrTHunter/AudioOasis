@@ -732,6 +732,35 @@
       flex-direction: column;
       gap: 10px;
     }
+    .saved-playlist-editing {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 12px 0 15px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(52, 152, 219, 0.12);
+      color: var(--secondary);
+      font-size: 0.9rem;
+      border: 1px solid rgba(52, 152, 219, 0.2);
+    }
+    .saved-playlist-editing span {
+      font-weight: 600;
+    }
+    .saved-playlist-editing button {
+      border: none;
+      background: var(--secondary);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: var(--transition);
+    }
+    .saved-playlist-editing button:hover {
+      background: #1a252f;
+    }
     .saved-playlist-item {
       display: flex;
       align-items: center;
@@ -1093,6 +1122,10 @@
             <input type="text" id="playlist-name-input" placeholder="Playlist name">
             <button id="save-playlist-btn">Save Playlist</button>
           </div>
+          <div class="saved-playlist-editing hidden" id="saved-playlist-editing">
+            <span>Editing "<strong id="editing-playlist-name"></strong>"</span>
+            <button id="cancel-edit-btn" type="button">Cancel</button>
+          </div>
           <ul class="saved-playlists-list" id="saved-playlists-list">
             <li class="saved-playlists-empty">No saved playlists yet.</li>
           </ul>
@@ -1156,6 +1189,9 @@
       const playlistNameInput = document.getElementById('playlist-name-input');
       const savePlaylistBtn = document.getElementById('save-playlist-btn');
       const savedPlaylistsList = document.getElementById('saved-playlists-list');
+      const savedPlaylistEditing = document.getElementById('saved-playlist-editing');
+      const editingPlaylistNameDisplay = document.getElementById('editing-playlist-name');
+      const cancelEditBtn = document.getElementById('cancel-edit-btn');
       // Player state
       let currentTrackIndex = -1;
       let isPlaying = false;
@@ -1163,6 +1199,7 @@
       let playlist = [];
       let mixerTracks = [];
       let savedPlaylists = {};
+      let editingPlaylistName = null;
       
       // Note: trackLibrary is now loaded from trackList.js
       // Check if trackLibrary exists
@@ -1184,6 +1221,40 @@
 
       function savePlaylistsToStorage() {
         localStorage.setItem('audiooasis.savedPlaylists', JSON.stringify(savedPlaylists));
+      }
+
+      function setEditingPlaylist(name) {
+        editingPlaylistName = name;
+        if (name) {
+          savedPlaylistEditing.classList.remove('hidden');
+          editingPlaylistNameDisplay.textContent = name;
+          savePlaylistBtn.textContent = 'Update Playlist';
+          playlistNameInput.value = name;
+          return;
+        }
+        savedPlaylistEditing.classList.add('hidden');
+        editingPlaylistNameDisplay.textContent = '';
+        savePlaylistBtn.textContent = 'Save Playlist';
+        playlistNameInput.value = '';
+      }
+
+      function loadPlaylistTracks(tracks) {
+        playlist = tracks.map(track => ({ ...track }));
+        if (playlist.length === 0) {
+          currentTrackIndex = -1;
+          audioPlayer.src = '';
+          currentTrackDisplay.textContent = 'No Track Selected';
+          currentCategoryDisplay.textContent = '';
+          currentTimeDisplay.textContent = '0:00';
+          durationDisplay.textContent = '0:00';
+          progressBar.value = 0;
+          pauseTrack();
+          updatePlaylistDisplay();
+          return;
+        }
+        currentTrackIndex = 0;
+        updatePlaylistDisplay();
+        loadTrack(0);
       }
 
       // Initialize the library
@@ -1552,35 +1623,31 @@
           actions.className = 'saved-playlist-actions';
           const loadBtn = document.createElement('button');
           loadBtn.textContent = 'Load';
+          const editBtn = document.createElement('button');
+          editBtn.textContent = 'Edit';
           const deleteBtn = document.createElement('button');
           deleteBtn.className = 'delete';
           deleteBtn.textContent = 'Delete';
           actions.appendChild(loadBtn);
+          actions.appendChild(editBtn);
           actions.appendChild(deleteBtn);
           item.appendChild(details);
           item.appendChild(actions);
           loadBtn.addEventListener('click', function() {
-            playlist = tracks.map(track => ({ ...track }));
-            if (playlist.length === 0) {
-              currentTrackIndex = -1;
-              audioPlayer.src = '';
-              currentTrackDisplay.textContent = 'No Track Selected';
-              currentCategoryDisplay.textContent = '';
-              currentTimeDisplay.textContent = '0:00';
-              durationDisplay.textContent = '0:00';
-              progressBar.value = 0;
-              pauseTrack();
-              updatePlaylistDisplay();
-              return;
-            }
-            currentTrackIndex = 0;
-            updatePlaylistDisplay();
-            loadTrack(0);
+            setEditingPlaylist(null);
+            loadPlaylistTracks(tracks);
+          });
+          editBtn.addEventListener('click', function() {
+            setEditingPlaylist(name);
+            loadPlaylistTracks(tracks);
           });
           deleteBtn.addEventListener('click', function() {
             delete savedPlaylists[name];
             savePlaylistsToStorage();
             renderSavedPlaylists();
+            if (editingPlaylistName === name) {
+              setEditingPlaylist(null);
+            }
           });
           savedPlaylistsList.appendChild(item);
         });
@@ -1595,13 +1662,24 @@
           alert('Add tracks to your playlist before saving.');
           return;
         }
-        if (savedPlaylists[name] && !confirm(`"${name}" already exists. Overwrite?`)) {
-          return;
+        if (editingPlaylistName) {
+          if (name !== editingPlaylistName && savedPlaylists[name] && !confirm(`"${name}" already exists. Overwrite?`)) {
+            return;
+          }
+          if (name !== editingPlaylistName) {
+            delete savedPlaylists[editingPlaylistName];
+          }
+          savedPlaylists[name] = playlist.map(track => ({ ...track }));
+          setEditingPlaylist(null);
+        } else {
+          if (savedPlaylists[name] && !confirm(`"${name}" already exists. Overwrite?`)) {
+            return;
+          }
+          savedPlaylists[name] = playlist.map(track => ({ ...track }));
+          playlistNameInput.value = '';
         }
-        savedPlaylists[name] = playlist.map(track => ({ ...track }));
         savePlaylistsToStorage();
         renderSavedPlaylists();
-        playlistNameInput.value = '';
       }
       // Remove track from playlist
       function removeTrack(index) {
@@ -1805,6 +1883,9 @@
         if (e.key === 'Enter') {
           saveCurrentPlaylist();
         }
+      });
+      cancelEditBtn.addEventListener('click', function() {
+        setEditingPlaylist(null);
       });
       // Progress bar
       progressBar.addEventListener('input', function() {
