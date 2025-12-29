@@ -772,6 +772,10 @@
       background: #f8fbff;
       transition: var(--transition);
     }
+    .saved-playlist-item.editing {
+      border-color: rgba(52, 152, 219, 0.6);
+      background: rgba(52, 152, 219, 0.08);
+    }
     .saved-playlist-item:hover {
       border-color: #cce5ff;
       transform: translateX(3px);
@@ -1223,6 +1227,13 @@
         localStorage.setItem('audiooasis.savedPlaylists', JSON.stringify(savedPlaylists));
       }
 
+      function syncEditingPlaylist() {
+        if (!editingPlaylistName) return;
+        savedPlaylists[editingPlaylistName] = playlist.map(track => ({ ...track }));
+        savePlaylistsToStorage();
+        renderSavedPlaylists();
+      }
+
       function setEditingPlaylist(name) {
         editingPlaylistName = name;
         if (name) {
@@ -1532,10 +1543,11 @@
         if (playlist.length === 0) {
           emptyPlaylist.classList.remove('hidden');
           playlistItems.innerHTML = '';
+          syncEditingPlaylist();
           return;
         }
-        emptyPlaylist.classList.add('hidden');
-        playlistItems.innerHTML = '';
+      emptyPlaylist.classList.add('hidden');
+      playlistItems.innerHTML = '';
         playlist.forEach((track, index) => {
           const item = document.createElement('li');
           item.className = `playlist-item ${index === currentTrackIndex ? 'active' : ''}`;
@@ -1595,6 +1607,7 @@
           item.addEventListener('dragend', handleDragEnd);
           playlistItems.appendChild(item);
         });
+        syncEditingPlaylist();
       }
             function renderSavedPlaylists() {
         savedPlaylistsList.innerHTML = '';
@@ -1608,7 +1621,7 @@
         }
         savedEntries.forEach(([name, tracks]) => {
           const item = document.createElement('li');
-          item.className = 'saved-playlist-item';
+          item.className = `saved-playlist-item${name === editingPlaylistName ? ' editing' : ''}`;
           const details = document.createElement('div');
           details.className = 'saved-playlist-details';
           const title = document.createElement('span');
@@ -1668,9 +1681,10 @@
           }
           if (name !== editingPlaylistName) {
             delete savedPlaylists[editingPlaylistName];
+            editingPlaylistName = name;
           }
           savedPlaylists[name] = playlist.map(track => ({ ...track }));
-          setEditingPlaylist(null);
+          setEditingPlaylist(editingPlaylistName);
         } else {
           if (savedPlaylists[name] && !confirm(`"${name}" already exists. Overwrite?`)) {
             return;
