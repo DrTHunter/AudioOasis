@@ -659,6 +659,138 @@
       margin-bottom: 15px;
       color: #ddd;
     }
+       /* Saved Playlists */
+    .saved-playlists {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 0;
+      overflow: hidden;
+      transition: var(--transition);
+      margin-top: 25px;
+    }
+    .saved-playlists:hover {
+      box-shadow: var(--shadow-hover);
+    }
+    .saved-playlists-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      padding: 18px 20px;
+    }
+    .saved-playlists-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .saved-playlists-content {
+      padding: 20px;
+    }
+    .saved-playlist-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .saved-playlist-controls input {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--light-gray);
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+    .saved-playlist-controls input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    }
+    .saved-playlist-controls button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .saved-playlist-controls button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+    .saved-playlists-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .saved-playlist-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: #f8fbff;
+      transition: var(--transition);
+    }
+    .saved-playlist-item:hover {
+      border-color: #cce5ff;
+      transform: translateX(3px);
+    }
+    .saved-playlist-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .saved-playlist-name {
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .saved-playlist-meta {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+    .saved-playlist-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .saved-playlist-actions button {
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: var(--transition);
+      background: var(--light-gray);
+      color: var(--dark);
+    }
+    .saved-playlist-actions button:hover {
+      background: var(--primary);
+      color: white;
+    }
+    .saved-playlist-actions button.delete {
+      background: #fdecea;
+      color: #e74c3c;
+    }
+    .saved-playlist-actions button.delete:hover {
+      background: #e74c3c;
+      color: white;
+    }
+    .saved-playlists-empty {
+      text-align: center;
+      padding: 20px;
+      color: var(--gray);
+    }
     /* Library */
     .library-container h2 {
       margin-bottom: 20px;
@@ -952,6 +1084,20 @@
           <ul class="playlist-items" id="playlist-items"></ul>
         </div>
       </div>
+            <div class="saved-playlists" id="saved-playlists">
+        <div class="saved-playlists-header">
+          <h2><i class="fas fa-save"></i> Saved Playlists</h2>
+        </div>
+        <div class="saved-playlists-content">
+          <div class="saved-playlist-controls">
+            <input type="text" id="playlist-name-input" placeholder="Playlist name">
+            <button id="save-playlist-btn">Save Playlist</button>
+          </div>
+          <ul class="saved-playlists-list" id="saved-playlists-list">
+            <li class="saved-playlists-empty">No saved playlists yet.</li>
+          </ul>
+        </div>
+      </div>
     </div>
     <!-- Right side - Track Library -->
     <div class="library-container">
@@ -1007,18 +1153,37 @@
       const playlistContent = document.getElementById('playlist-content');
       const playlistToggle = document.getElementById('playlist-toggle');
       const playlistElement = document.getElementById('playlist');
+      const playlistNameInput = document.getElementById('playlist-name-input');
+      const savePlaylistBtn = document.getElementById('save-playlist-btn');
+      const savedPlaylistsList = document.getElementById('saved-playlists-list');
       // Player state
       let currentTrackIndex = -1;
       let isPlaying = false;
       let isLooping = false;
       let playlist = [];
       let mixerTracks = [];
+      let savedPlaylists = {};
       
       // Note: trackLibrary is now loaded from trackList.js
       // Check if trackLibrary exists
       if (typeof trackLibrary === 'undefined') {
         console.error('trackLibrary not found. Make sure trackList.js is loaded.');
         trackLibrary = {}; // Fallback to empty object
+      }
+
+      const storedPlaylists = localStorage.getItem('audiooasis.savedPlaylists');
+      if (storedPlaylists) {
+        try {
+          savedPlaylists = JSON.parse(storedPlaylists);
+        } catch (error) {
+          console.warn('Saved playlists data was invalid. Resetting storage.', error);
+          savedPlaylists = {};
+          localStorage.removeItem('audiooasis.savedPlaylists');
+        }
+      }
+
+      function savePlaylistsToStorage() {
+        localStorage.setItem('audiooasis.savedPlaylists', JSON.stringify(savedPlaylists));
       }
 
       // Initialize the library
@@ -1360,6 +1525,84 @@
           playlistItems.appendChild(item);
         });
       }
+            function renderSavedPlaylists() {
+        savedPlaylistsList.innerHTML = '';
+        const savedEntries = Object.entries(savedPlaylists);
+        if (savedEntries.length === 0) {
+          const emptyItem = document.createElement('li');
+          emptyItem.className = 'saved-playlists-empty';
+          emptyItem.textContent = 'No saved playlists yet.';
+          savedPlaylistsList.appendChild(emptyItem);
+          return;
+        }
+        savedEntries.forEach(([name, tracks]) => {
+          const item = document.createElement('li');
+          item.className = 'saved-playlist-item';
+          const details = document.createElement('div');
+          details.className = 'saved-playlist-details';
+          const title = document.createElement('span');
+          title.className = 'saved-playlist-name';
+          title.textContent = name;
+          const meta = document.createElement('span');
+          meta.className = 'saved-playlist-meta';
+          meta.textContent = `${tracks.length} track${tracks.length !== 1 ? 's' : ''}`;
+          details.appendChild(title);
+          details.appendChild(meta);
+          const actions = document.createElement('div');
+          actions.className = 'saved-playlist-actions';
+          const loadBtn = document.createElement('button');
+          loadBtn.textContent = 'Load';
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete';
+          deleteBtn.textContent = 'Delete';
+          actions.appendChild(loadBtn);
+          actions.appendChild(deleteBtn);
+          item.appendChild(details);
+          item.appendChild(actions);
+          loadBtn.addEventListener('click', function() {
+            playlist = tracks.map(track => ({ ...track }));
+            if (playlist.length === 0) {
+              currentTrackIndex = -1;
+              audioPlayer.src = '';
+              currentTrackDisplay.textContent = 'No Track Selected';
+              currentCategoryDisplay.textContent = '';
+              currentTimeDisplay.textContent = '0:00';
+              durationDisplay.textContent = '0:00';
+              progressBar.value = 0;
+              pauseTrack();
+              updatePlaylistDisplay();
+              return;
+            }
+            currentTrackIndex = 0;
+            updatePlaylistDisplay();
+            loadTrack(0);
+          });
+          deleteBtn.addEventListener('click', function() {
+            delete savedPlaylists[name];
+            savePlaylistsToStorage();
+            renderSavedPlaylists();
+          });
+          savedPlaylistsList.appendChild(item);
+        });
+      }
+      function saveCurrentPlaylist() {
+        const name = playlistNameInput.value.trim();
+        if (!name) {
+          alert('Please enter a playlist name.');
+          return;
+        }
+        if (playlist.length === 0) {
+          alert('Add tracks to your playlist before saving.');
+          return;
+        }
+        if (savedPlaylists[name] && !confirm(`"${name}" already exists. Overwrite?`)) {
+          return;
+        }
+        savedPlaylists[name] = playlist.map(track => ({ ...track }));
+        savePlaylistsToStorage();
+        renderSavedPlaylists();
+        playlistNameInput.value = '';
+      }
       // Remove track from playlist
       function removeTrack(index) {
         if (index < 0 || index >= playlist.length) return;
@@ -1557,6 +1800,12 @@
         audioPlayer.loop = isLooping;
         loopBtn.classList.toggle('active', isLooping);
       });
+      savePlaylistBtn.addEventListener('click', saveCurrentPlaylist);
+      playlistNameInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          saveCurrentPlaylist();
+        }
+      });
       // Progress bar
       progressBar.addEventListener('input', function() {
         if (!isNaN(audioPlayer.duration)) {
@@ -1623,6 +1872,7 @@
       });
       // Initialize the player
       initializeLibrary();
+      renderSavedPlaylists();
       // Auto-expand first category for better UX
       setTimeout(() => {
         const firstCategory = document.querySelector('.category');
