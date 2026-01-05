@@ -121,8 +121,8 @@ var trackLibrary = {
             { title: "Whispers of the Aurora", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/background/whispers_of_the_aurora.wav?raw=true", category: "Background Music", duration: "6:30" }
         ],
         "Coding Mix": [
-            { title: "Light Rails", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/coding_mix/lucky_sound_-_light_rails.wav?raw=true", category: "Coding Mix", duration: "3:45" },
             { title: "VHS Waterfalls", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/coding_mix/raz_stamper_-_vhs_waterfalls.wav?raw=true", category: "Coding Mix", duration: "3:45" },
+            { title: "Light Rails", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/coding_mix/lucky_sound_-_light_rails.wav?raw=true", category: "Coding Mix", duration: "3:45" },
             { title: "Breath of Autumn", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/tracks/coding_mix/vladislav_kurnikov_-_breath_of_autumn.wav?raw=true", category: "Coding Mix", duration: "3:45" }
         ],
         "Meditation": [
