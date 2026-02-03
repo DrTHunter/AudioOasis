@@ -1,158 +1,296 @@
-AudioOasis
+🎧 AudioOasis
 
-Free Studio-Quality Background Music for Work and Focus
+Studio-quality background music for deep work, calm vibes, and flow states.
+No ads. No clutter. Just sound.
 
-AudioOasis is a clean, modern, browser-based music app designed for creators, students, and deep-work sessions. It streams high-quality WAV audio, organizes tracks into categories, and includes both a single-player mode and a multi-track mixer for custom ambient blends.
+AudioOasis is a sleek, client-side music web app built for creators, coders, writers, students, and anyone who wants background music that doesn’t fight for attention. It’s designed around two modes:
 
-The entire app runs client-side and works with GitHub Pages, making it easy to host, modify, and extend.
+Single Player for simple listening
+
+Mixer Mode for layering tracks into your own custom atmosphere
+
+
+Hosted easily on GitHub Pages, runs entirely in the browser, and saves your playlists locally.
 
 
 ---
 
-Features
+✨ Highlights
 
-Core Experience
+🎵 Single Player (Now Playing)
 
-High-quality WAV audio playback
+Play/pause, next, previous
 
-Simple, distraction-free interface
-
-Categories for lofi, ambience, meditation, and more
-
-Fully collapsible layout for clean navigation
-
-
-Single Track Player
-
-Play, pause, next, previous
-
-Seek bar with live time tracking
+Seek bar with current time and duration
 
 Volume control
 
-Loop and shuffle mode
+Loop and shuffle
 
-Keyboard shortcuts (space, left/right arrows)
-
-
-Playlist System
-
-Add tracks from the library with one click
-
-Drag to reorder playlist items
-
-Remove individual tracks
-
-Save and load named playlists
-
-Edit saved playlists in place
+Keyboard shortcuts for speed and flow
 
 
-Mixer Engine
+🧠 Playlist Engine
 
-Add multiple tracks and layer them
+Add tracks from the library into a queue
 
-Individual volume sliders
+Drag to reorder
 
-Progress tracking for each layer
+Remove tracks instantly
 
-Looping enabled by default
+Clear playlist with confirmation
 
-Independent play/pause per layer
-
-Visual feedback on interaction
+Displays track category + duration
 
 
-UI/UX
+🎚️ Mixer Mode (Layer Your World)
 
-Smooth animations and hover effects
+Add multiple tracks at once and blend them
 
-Responsive design for desktop, tablet, and mobile
+Individual play/pause toggles per layer
 
-Custom-styled scrollbars
+Per-track volume control
 
-Clean gradients, soft shadows, and accessible color usage
+Per-track progress and seeking
 
+Always-on looping for continuous atmosphere
 
-Data Persistence
-
-Saved playlists stored in localStorage
-
-Restores user playlists across sessions
-
-Graceful fallback when corrupted storage is detected
+Perfect for lofi + rain + ambience stacks
 
 
-SEO + Metadata
+💾 Saved Playlists
 
-Full Open Graph and Twitter card support
+Name and save playlists
 
-Google Analytics (optional)
+Load saved playlists instantly
 
-Canonical link for GitHub Pages
+Edit existing playlists (and update them live)
+
+Delete saved playlists cleanly
+
+All saved locally using localStorage
+
+
+🧼 Clean UX
+
+Category cards that expand/collapse
+
+Hover controls for “Playlist” and “Mixer” add buttons
+
+Responsive layout for mobile/tablet/desktop
+
+Modern styling with gradients, soft shadows, and smooth animations
+
+
+🔍 SEO + Sharing Ready
+
+Open Graph + Twitter cards
+
+Canonical URL for GitHub Pages
+
+Optional Google Analytics included
 
 
 
 ---
 
-Project Structure
+🧱 Tech Stack
+
+HTML (single-file app structure)
+
+CSS (modern variables, gradients, responsive layout)
+
+Vanilla JavaScript (no frameworks)
+
+Font Awesome icons
+
+trackList.js for external track library data
+
+localStorage for saved playlists
+
+
+
+---
+
+🗂️ Project Structure
 
 AudioOasis/
-│
-├── index.html             # Main application file
-├── trackList.js           # External track definitions loaded into the app
-├── /assets                # Images, icons, thumbnails
-├── /audio                 # Local or externally-hosted audio files
-└── README.md              # Project documentation
+├── index.html          # Main UI + app logic
+├── trackList.js        # Track library data (categories + tracks)
+├── UI Picture.png      # Social sharing image
+└── (audio files)       # Your audio assets or hosted track sources
 
 
 ---
 
-How It Works
+🚀 Quick Start
 
-Track Library
+1) Clone the repo
 
-Tracks are loaded from trackList.js in a structured format:
+git clone https://github.com/DrTHunter/AudioOasis
+cd AudioOasis
 
-{
+2) Run it
+
+Open index.html in a browser.
+
+If your audio files are local, make sure paths in trackList.js are correct.
+
+3) Optional: Host on GitHub Pages
+
+Push to GitHub
+
+Enable GitHub Pages (root directory)
+
+Your site becomes instantly shareable
+
+
+
+---
+
+🎼 Track Library Format (trackList.js)
+
+AudioOasis loads tracks from trackList.js into a category grid.
+
+Example format:
+
+const trackLibrary = {
   "Lofi": [
-    { title: "Warm Lights", src: "audio/lofi/warm-lights.wav", duration: "3:12" },
-    ...
+    { title: "Warm Lights", src: "audio/lofi/warm-lights.wav", duration: "3:12", category: "Lofi" }
   ],
   "Ambience": [
-    { title: "Rain Study Room", src: "audio/ambience/rain.wav", duration: "1:00:00" },
-    ...
+    { title: "Rain Room", src: "audio/ambience/rain-room.wav", duration: "15:00", category: "Ambience" }
   ]
-}
+};
 
-Playlists
+Each track supports:
 
-Users create playlists dynamically
+title
 
-Tracks store metadata (title, src, category, duration)
+src
 
-Saved playlists are JSON-serialized into localStorage
+duration
 
-Load / edit / delete playlist options included
+category (optional but recommended)
 
 
-Mixer
 
-Each mixer track is stored as an object with:
+---
 
-audio element
+🎛️ How Mixer Mode Works
+
+Each mixer track becomes its own Audio() instance, with independent state:
+
+play/pause
 
 volume
 
-play/pause state
+progress
 
-unique ID
-
-duration (for display)
+loop behavior
 
 
-Mixer layers run independently but are displayed in a unified container.
+This makes it easy to stack tracks like:
 
+Lofi beat + rainfall + soft synth pad
+
+Meditation bowl + ambient drones
+
+Cafe chatter + vinyl crackle + piano
+
+
+
+---
+
+⌨️ Keyboard Shortcuts
+
+Space: play/pause
+
+Ctrl + Right Arrow: next track
+
+Ctrl + Left Arrow: previous track
+
+
+
+---
+
+🧠 Saved Playlists
+
+Saved playlists persist through browser refresh using:
+
+localStorage.setItem("audiooasis.savedPlaylists", JSON.stringify(savedPlaylists));
+
+So when you come back later, AudioOasis remembers your sets.
+
+
+---
+
+🛡️ Notes and Limitations
+
+Saved playlists are local to your device/browser
+
+Mixer mode layers multiple audio streams, so very large mixes may tax weaker devices
+
+Audio autoplay is restricted by browsers until user interaction
+
+
+
+---
+
+🌌 Why AudioOasis Exists
+
+Most “background music” platforms are noisy in the wrong way: ads, algorithmic chaos, and UI clutter.
+
+AudioOasis is the opposite: a clean workspace, where sound supports focus instead of hijacking it.
+
+
+---
+
+🗺️ Roadmap (Optional Future Upgrades)
+
+If you ever want to level this up:
+
+waveform visualizer
+
+export/import playlists as JSON
+
+crossfade + fade-in/out
+
+sleep timer / auto-stop
+
+“focus mode” minimal fullscreen UI
+
+offline caching (service worker)
+
+
+
+---
+
+👤 Author
+
+Built by Trent Hunter
+AudioOasis by Orion AI
+
+
+---
+
+📜 License
+
+Choose your vibe:
+
+MIT if you want it widely reusable
+
+CC BY-NC if you want forks but no commercial reselling
+
+Custom license if you want to protect branding
+
+
+If you tell me what you want (open-source vs protected), I’ll generate the exact license file.
+
+
+---
+
+If you want, I can also format this into a perfect GitHub README layout with badges, a screenshot section, and a “Live Demo” block using your GitHub Pages URL.
 
 ---
 
