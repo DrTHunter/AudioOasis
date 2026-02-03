@@ -292,6 +292,153 @@ If you tell me what you want (open-source vs protected), I’ll generate the exa
 
 If you want, I can also format this into a perfect GitHub README layout with badges, a screenshot section, and a “Live Demo” block using your GitHub Pages URL.
 
+
+---
+
+🎼 Track Library Format (trackList.js)
+
+AudioOasis loads tracks from trackList.js into a category grid.
+
+Example format:
+
+const trackLibrary = {
+  "Lofi": [
+    { title: "Warm Lights", src: "audio/lofi/warm-lights.wav", duration: "3:12", category: "Lofi" }
+  ],
+  "Ambience": [
+    { title: "Rain Room", src: "audio/ambience/rain-room.wav", duration: "15:00", category: "Ambience" }
+  ]
+};
+
+Each track supports:
+
+title
+
+src
+
+duration
+
+category (optional but recommended)
+
+
+
+---
+
+🎛️ How Mixer Mode Works
+
+Each mixer track becomes its own Audio() instance, with independent state:
+
+play/pause
+
+volume
+
+progress
+
+loop behavior
+
+
+This makes it easy to stack tracks like:
+
+Lofi beat + rainfall + soft synth pad
+
+Meditation bowl + ambient drones
+
+Cafe chatter + vinyl crackle + piano
+
+
+
+---
+
+⌨️ Keyboard Shortcuts
+
+Space: play/pause
+
+Ctrl + Right Arrow: next track
+
+Ctrl + Left Arrow: previous track
+
+
+
+---
+
+🧠 Saved Playlists
+
+Saved playlists persist through browser refresh using:
+
+localStorage.setItem("audiooasis.savedPlaylists", JSON.stringify(savedPlaylists));
+
+So when you come back later, AudioOasis remembers your sets.
+
+
+---
+
+🛡️ Notes and Limitations
+
+Saved playlists are local to your device/browser
+
+Mixer mode layers multiple audio streams, so very large mixes may tax weaker devices
+
+Audio autoplay is restricted by browsers until user interaction
+
+
+
+---
+
+🌌 Why AudioOasis Exists
+
+Most “background music” platforms are noisy in the wrong way: ads, algorithmic chaos, and UI clutter.
+
+AudioOasis is the opposite: a clean workspace, where sound supports focus instead of hijacking it.
+
+
+---
+
+🗺️ Roadmap (Optional Future Upgrades)
+
+If you ever want to level this up:
+
+waveform visualizer
+
+export/import playlists as JSON
+
+crossfade + fade-in/out
+
+sleep timer / auto-stop
+
+“focus mode” minimal fullscreen UI
+
+offline caching (service worker)
+
+
+
+---
+
+👤 Author
+
+Built by Trent Hunter
+AudioOasis by Orion AI
+
+
+---
+
+📜 License
+
+Choose your vibe:
+
+MIT if you want it widely reusable
+
+CC BY-NC if you want forks but no commercial reselling
+
+Custom license if you want to protect branding
+
+
+If you tell me what you want (open-source vs protected), I’ll generate the exact license file.
+
+
+---
+
+If you want, I can also format this into a perfect GitHub README layout with badges, a screenshot section, and a “Live Demo” block using your GitHub Pages URL.
+
 ---
 
 Installation
