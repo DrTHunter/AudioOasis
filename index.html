@@ -1,148 +1,155 @@
-# AudioOasis
-
-**AudioOasis** is a lightweight, no-login web app for building your own background soundscape—perfect for deep work, flow, study, and calm focus. Create a playlist, mix multiple layers at once, and save your favorite playlists locally.
-
-Live app: https://drthunter.github.io/AudioOasis/ [1]
-
----
-
-## Features
-
-### Playback (Single Player)
-- Add tracks from the library to **Your Playlist**
-- Play / pause, next / previous
-- **Shuffle** playlist
-- **Loop** track
-- Seek with progress bar + view time/duration
-- Volume control
-- Keyboard shortcuts:
-  - `Space` → Play/Pause
-  - `Ctrl + →` → Next track
-  - `Ctrl + ←` → Previous track
-
-### Mixer (Multi-Track Layering)
-- Add tracks to the **Mixer** to play multiple layers simultaneously
-- Independent play/pause per track
-- Independent volume sliders per track
-- Seek per mixer track
-- Tracks loop continuously for steady ambience
-
-### Library UX
-- Expand/collapse categories
-- One-click add to **Playlist** or **Mixer**
-- Responsive layout for desktop and mobile
-
-### Saved Playlists (Local)
-- Save playlists to your browser via `localStorage`
-- Load, edit, update, and delete saved playlists
-- “Editing mode” updates the saved playlist automatically as you change the playlist
-
----
-
-## How It Works
-
-AudioOasis is a simple static site:
-- `index.html` contains UI + app logic
-- `trackList.js` contains the music library data (categories + track metadata)
-- Saved playlists are stored locally in the browser (no backend)
-
-This is designed to stay fast, portable, and deployable via GitHub Pages.
-
----
-
-## Project Structure
-
-```txt
-AudioOasis/
-├─ index.html          # Main UI + app logic
-├─ trackList.js        # Track library data (categories + tracks)
-├─ UI Picture.png      # Social preview / screenshot (used in meta tags)
-└─ (audio assets...)   # Your .wav/.mp3 files or hosted audio URLs
-```
-
----
-
-## Running Locally
-
-Because this project loads `trackList.js`, you should run it from a local server (not by double-clicking the HTML file).
-
-### Option A: Python (recommended)
-```bash
-python -m http.server 8080
-```
-Then open: `http://localhost:8080`
-
-### Option B: VS Code Live Server
-- Install the **Live Server** extension
-- Right click `index.html` → “Open with Live Server”
-
----
-
-## Editing / Adding Tracks
-
-Update `trackList.js` to add tracks and categories.
-
-Expected structure:
-
-```js
-const trackLibrary = {
-  "Lofi": [
-    { title: "Midnight Desk", src: "audio/midnight-desk.wav", duration: "3:12", category: "Lofi" }
-  ],
-  "Ambient": [
-    { title: "Rain Window", src: "audio/rain-window.wav", duration: "10:00", category: "Ambient" }
-  ]
-};
-```
-
-Notes:
-- `src` can be a relative path (repo asset) or a hosted URL.
-- `duration` is currently displayed as a label (the player still reads true duration from the audio metadata when available).
-
----
-
-## Data Storage
-
-AudioOasis uses:
-
-- `localStorage["audiooasis.savedPlaylists"]`
-
-No accounts. No cloud sync. No tracking beyond what you add yourself.
-
----
-
-## Roadmap Ideas
-
-Planned/possible upgrades (depending on what you want to ship next):
-- Preset “starter mixes” (focus, sleep, meditation)
-- Shareable playlist export/import
-- More ambience layers (rain/fire/café/etc.) and saved presets [1]
-- Optional themes / visual loops [1]
-- Timer mode (focus/sleep) [1]
-
----
-
-## Credits
-
-Created by **Trent Hunter**.  
-AudioOasis is part of a longer-term ecosystem built to turn “background audio discovery” into a customizable web app experience [1].
-
----
-
-## License
-
-Add a license file if you want this open-source (MIT is common).  
-If your audio assets are not freely redistributable, you may want to:
-- keep the code open-source,
-- and restrict audio files or host them elsewhere with proper rights.
-
----
-
-If you tell me:
-1) what license you want (MIT / GPL / “All Rights Reserved”), and  
-2) whether your audio files are in-repo or hosted externally,  
-
-…I’ll tighten the README to match your exact setup and add a clean “Audio Asset Rights” section so you don’t accidentally nuke your own project later.      background: rgba(255,255,255,0.2);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Permissions-Policy" content="autoplay=(), fullscreen=()">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Trent Hunter, AudioOasis by Orion AI">
+  <!-- SEO Primary Meta Tags -->
+  <title>AudioOasis | Free Studio-Quality Background Music for Work & Focus</title>
+  <meta name="title" content="AudioOasis | Free Studio-Quality Background Music for Work & Focus" />
+  <meta name="description" content="Stream high-quality .WAV music for deep work, focus, and flow. No ads. No distractions. Just curated background soundtracks for creators and thinkers." />
+  <link rel="canonical" href="https://drthunter.github.io/AudioOasis/" />
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://drthunter.github.io/AudioOasis/" />
+  <meta property="og:title" content="AudioOasis | Free Studio-Quality Background Music for Work & Focus" />
+  <meta property="og:description" content="Escape the noise. Discover a curated library of lofi and ambient .WAV tracks to help you focus, relax, and get things done." />
+  <meta property="og:image" content="https://drthunter.github.io/AudioOasis/UI%20Picture.png" />
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://drthunter.github.io/AudioOasis/" />
+  <meta name="twitter:title" content="AudioOasis | Free Studio-Quality Background Music for Work & Focus" />
+  <meta name="twitter:description" content="Background music that doesn't get in the way. Explore studio-quality .WAV playlists made for deep work and calm vibes." />
+  <meta name="twitter:image" content="https://drthunter.github.io/AudioOasis/UI%20Picture.png" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-55NPK2XL9R"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-55NPK2XL9R');
+  </script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #3498db;
+      --primary-dark: #2980b9;
+      --secondary: #2c3e50;
+      --accent: #2ecc71;
+      --mixer-accent: #9b59b6;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --border-radius: 12px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-hover: 0 6px 16px rgba(0,0,0,0.12);
+      --transition: all 0.3s ease;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    /* Header */
+    header {
+      background: linear-gradient(135deg, var(--secondary) 0%, #1a252f 100%);
+      color: white;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .tagline {
+      margin: 0.5rem 0 0;
+      font-size: 1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    /* Main Layout */
+    .main-container {
+      display: flex;
+      flex: 1;
+      padding: 20px;
+      gap: 25px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    /* Player Container */
+    .player-container {
+      flex: 1;
+      max-width: 450px;
+      min-width: 350px;
+    }
+    .library-container {
+      flex: 2;
+      min-width: 0; /* Prevent overflow */
+    }
+    /* Player Card */
+    .music-player {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: 0;
+      margin-bottom: 25px;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .music-player:hover {
+      box-shadow: var(--shadow-hover);
+    }
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .player-header:hover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, #21618c 100%);
+    }
+    .player-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .player-header i {
+      font-size: 1.2rem;
+    }
+    .toggle-btn {
+      background: rgba(255,255,255,0.2);
       border: none;
       color: white;
       width: 36px;
