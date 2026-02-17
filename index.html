@@ -685,15 +685,17 @@
     }
     .saved-playlist-controls {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 15px;
+      flex-wrap: wrap;
     }
     .saved-playlist-controls input {
       flex: 1;
-      padding: 10px 12px;
+      min-width: 0;
+      padding: 8px 10px;
       border-radius: 8px;
       border: 1px solid var(--light-gray);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       transition: var(--transition);
     }
     .saved-playlist-controls input:focus {
@@ -701,20 +703,115 @@
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
     }
-    .saved-playlist-controls button {
+    .save-dropdown {
+      position: relative;
+      display: inline-flex;
+    }
+    .save-dropdown .save-main-btn {
       background: var(--primary);
       color: white;
       border: none;
-      padding: 10px 14px;
-      border-radius: 8px;
+      padding: 8px 10px;
+      border-radius: 8px 0 0 8px;
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
       white-space: nowrap;
+      font-size: 0.85rem;
     }
-    .saved-playlist-controls button:hover {
+    .save-dropdown .save-main-btn:hover {
       background: var(--primary-dark);
-      transform: translateY(-1px);
+    }
+    .save-dropdown .save-arrow-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-left: 1px solid rgba(255,255,255,0.3);
+      padding: 8px 6px;
+      border-radius: 0 8px 8px 0;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.7rem;
+    }
+    .save-dropdown .save-arrow-btn:hover {
+      background: var(--primary-dark);
+    }
+    .save-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      z-index: 100;
+      min-width: 180px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    body.dark-mode .save-dropdown-menu {
+      background: #2a2a40;
+    }
+    .save-dropdown-menu.show {
+      display: block;
+    }
+    .save-dropdown-menu button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 14px;
+      border: none;
+      background: none;
+      color: var(--dark);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: left;
+    }
+    body.dark-mode .save-dropdown-menu button {
+      color: #ccc;
+    }
+    .save-dropdown-menu button:hover {
+      background: #f0f4ff;
+    }
+    body.dark-mode .save-dropdown-menu button:hover {
+      background: #353555;
+    }
+    .save-dropdown-menu button i {
+      width: 16px;
+      text-align: center;
+    }
+    .saved-playlist-type-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+    .saved-playlist-type-badge.type-all { background: #e8f5e9; color: #2e7d32; }
+    .saved-playlist-type-badge.type-music { background: #e3f2fd; color: #1565c0; }
+    .saved-playlist-type-badge.type-video { background: #fce4ec; color: #c62828; }
+    body.dark-mode .saved-playlist-type-badge.type-all { background: rgba(46,125,50,0.25); color: #81c784; }
+    body.dark-mode .saved-playlist-type-badge.type-music { background: rgba(21,101,192,0.25); color: #64b5f6; }
+    body.dark-mode .saved-playlist-type-badge.type-video { background: rgba(198,40,40,0.25); color: #ef9a9a; }
+    @media (max-width: 768px) {
+      .saved-playlist-controls {
+        flex-wrap: nowrap;
+      }
+      .saved-playlist-controls input {
+        min-width: 0;
+        padding: 8px 8px;
+        font-size: 0.85rem;
+      }
+      .save-dropdown .save-main-btn {
+        padding: 8px 8px;
+        font-size: 0.8rem;
+      }
+      .save-dropdown .save-arrow-btn {
+        padding: 8px 5px;
+      }
     }
     .saved-playlists-list {
       list-style: none;
@@ -1945,7 +2042,15 @@
         <div class="saved-playlists-content">
           <div class="saved-playlist-controls">
             <input type="text" id="playlist-name-input" placeholder="Playlist name">
-            <button id="save-playlist-btn">Save Playlist</button>
+            <div class="save-dropdown">
+              <button class="save-main-btn" id="save-playlist-btn">Save All</button>
+              <button class="save-arrow-btn" id="save-dropdown-toggle"><i class="fas fa-chevron-down"></i></button>
+              <div class="save-dropdown-menu" id="save-dropdown-menu">
+                <button data-save-type="all"><i class="fas fa-layer-group"></i> Save All (Music + Videos)</button>
+                <button data-save-type="music"><i class="fas fa-music"></i> Save Music Only</button>
+                <button data-save-type="video"><i class="fas fa-film"></i> Save Videos Only</button>
+              </div>
+            </div>
           </div>
           <div class="saved-playlist-editing hidden" id="saved-playlist-editing">
             <span>Editing "<strong id="editing-playlist-name"></strong>"</span>
@@ -2052,6 +2157,8 @@
       const playlistElement = document.getElementById('playlist');
       const playlistNameInput = document.getElementById('playlist-name-input');
       const savePlaylistBtn = document.getElementById('save-playlist-btn');
+      const saveDropdownToggle = document.getElementById('save-dropdown-toggle');
+      const saveDropdownMenu = document.getElementById('save-dropdown-menu');
       const savedPlaylistsList = document.getElementById('saved-playlists-list');
       const savedPlaylistEditing = document.getElementById('saved-playlist-editing');
       const editingPlaylistNameDisplay = document.getElementById('editing-playlist-name');
@@ -2103,6 +2210,7 @@
       let mixerTracks = [];
       let savedPlaylists = {};
       let editingPlaylistName = null;
+      let currentSaveType = 'all'; // 'all', 'music', 'video'
       
       // Note: trackLibrary is now loaded from trackList.js
       // Check if trackLibrary exists
@@ -2114,7 +2222,14 @@
       const storedPlaylists = localStorage.getItem('audiooasis.savedPlaylists');
       if (storedPlaylists) {
         try {
-          savedPlaylists = JSON.parse(storedPlaylists);
+          const parsed = JSON.parse(storedPlaylists);
+          // Migrate old format: if value is an array, convert to new {type, tracks, videos} format
+          for (const [name, data] of Object.entries(parsed)) {
+            if (Array.isArray(data)) {
+              parsed[name] = { type: 'music', tracks: data, videos: [] };
+            }
+          }
+          savedPlaylists = parsed;
         } catch (error) {
           console.warn('Saved playlists data was invalid. Resetting storage.', error);
           savedPlaylists = {};
@@ -2128,7 +2243,15 @@
 
       function syncEditingPlaylist() {
         if (!editingPlaylistName) return;
-        savedPlaylists[editingPlaylistName] = playlist.map(track => ({ ...track }));
+        const entry = savedPlaylists[editingPlaylistName];
+        const saveType = entry ? entry.type : 'all';
+        if (saveType === 'music') {
+          savedPlaylists[editingPlaylistName] = { type: 'music', tracks: playlist.map(t => ({...t})), videos: [] };
+        } else if (saveType === 'video') {
+          savedPlaylists[editingPlaylistName] = { type: 'video', tracks: [], videos: (typeof videoPlaylist !== 'undefined' ? videoPlaylist : []).map(v => ({...v})) };
+        } else {
+          savedPlaylists[editingPlaylistName] = { type: 'all', tracks: playlist.map(t => ({...t})), videos: (typeof videoPlaylist !== 'undefined' ? videoPlaylist : []).map(v => ({...v})) };
+        }
         savePlaylistsToStorage();
         renderSavedPlaylists();
       }
@@ -2138,13 +2261,13 @@
         if (name) {
           savedPlaylistEditing.classList.remove('hidden');
           editingPlaylistNameDisplay.textContent = name;
-          savePlaylistBtn.textContent = 'Update Playlist';
+          savePlaylistBtn.textContent = 'Update';
           playlistNameInput.value = name;
           return;
         }
         savedPlaylistEditing.classList.add('hidden');
         editingPlaylistNameDisplay.textContent = '';
-        savePlaylistBtn.textContent = 'Save Playlist';
+        savePlaylistBtn.textContent = 'Save All';
         playlistNameInput.value = '';
       }
 
@@ -2166,6 +2289,11 @@
         updatePlaylistDisplay();
         loadTrack(0);
       }
+
+      var loadPlaylistVideos = function(videos) {
+        // Video system not ready yet — store for deferred loading
+        window._pendingVideoLoad = videos;
+      };
 
       // Get saved category order from localStorage
       function getSavedCategoryOrder() {
@@ -2707,17 +2835,30 @@
           savedPlaylistsList.appendChild(emptyItem);
           return;
         }
-        savedEntries.forEach(([name, tracks]) => {
+        savedEntries.forEach(([name, data]) => {
+          // data = { type: 'all'|'music'|'video', tracks: [...], videos: [...] }
+          const trackCount = (data.tracks || []).length;
+          const videoCount = (data.videos || []).length;
+          const saveType = data.type || 'music';
+
           const item = document.createElement('li');
           item.className = `saved-playlist-item${name === editingPlaylistName ? ' editing' : ''}`;
           const details = document.createElement('div');
           details.className = 'saved-playlist-details';
           const title = document.createElement('span');
           title.className = 'saved-playlist-name';
-          title.textContent = name;
+          title.innerHTML = name;
+          // Type badge
+          const badgeClass = saveType === 'all' ? 'type-all' : saveType === 'video' ? 'type-video' : 'type-music';
+          const badgeLabel = saveType === 'all' ? 'All' : saveType === 'video' ? 'Video' : 'Music';
+          title.innerHTML += ` <span class="saved-playlist-type-badge ${badgeClass}">${badgeLabel}</span>`;
+
           const meta = document.createElement('span');
           meta.className = 'saved-playlist-meta';
-          meta.textContent = `${tracks.length} track${tracks.length !== 1 ? 's' : ''}`;
+          const parts = [];
+          if (trackCount > 0) parts.push(`${trackCount} track${trackCount !== 1 ? 's' : ''}`);
+          if (videoCount > 0) parts.push(`${videoCount} video${videoCount !== 1 ? 's' : ''}`);
+          meta.textContent = parts.join(', ') || 'Empty';
           details.appendChild(title);
           details.appendChild(meta);
           const actions = document.createElement('div');
@@ -2736,11 +2877,23 @@
           item.appendChild(actions);
           loadBtn.addEventListener('click', function() {
             setEditingPlaylist(null);
-            loadPlaylistTracks(tracks);
+            // Load tracks if present
+            if (data.tracks && data.tracks.length > 0) {
+              loadPlaylistTracks(data.tracks);
+            }
+            // Load videos if present
+            if (data.videos && data.videos.length > 0) {
+              loadPlaylistVideos(data.videos);
+            }
           });
           editBtn.addEventListener('click', function() {
             setEditingPlaylist(name);
-            loadPlaylistTracks(tracks);
+            if (data.tracks && data.tracks.length > 0) {
+              loadPlaylistTracks(data.tracks);
+            }
+            if (data.videos && data.videos.length > 0) {
+              loadPlaylistVideos(data.videos);
+            }
           });
           deleteBtn.addEventListener('click', function() {
             delete savedPlaylists[name];
@@ -2753,16 +2906,34 @@
           savedPlaylistsList.appendChild(item);
         });
       }
-      function saveCurrentPlaylist() {
+      function saveCurrentPlaylist(saveType) {
+        saveType = saveType || currentSaveType;
         const name = playlistNameInput.value.trim();
         if (!name) {
           alert('Please enter a playlist name.');
           return;
         }
-        if (playlist.length === 0) {
-          alert('Add tracks to your playlist before saving.');
+        const musicTracks = playlist.map(t => ({...t}));
+        const vids = (typeof videoPlaylist !== 'undefined' ? videoPlaylist : []).map(v => ({...v}));
+        
+        let tracksToSave = [];
+        let videosToSave = [];
+        if (saveType === 'all') {
+          tracksToSave = musicTracks;
+          videosToSave = vids;
+        } else if (saveType === 'music') {
+          tracksToSave = musicTracks;
+        } else if (saveType === 'video') {
+          videosToSave = vids;
+        }
+        
+        if (tracksToSave.length === 0 && videosToSave.length === 0) {
+          alert('Nothing to save. Add tracks or videos to your playlist first.');
           return;
         }
+        
+        const entry = { type: saveType, tracks: tracksToSave, videos: videosToSave };
+        
         if (editingPlaylistName) {
           if (name !== editingPlaylistName && savedPlaylists[name] && !confirm(`"${name}" already exists. Overwrite?`)) {
             return;
@@ -2771,13 +2942,13 @@
             delete savedPlaylists[editingPlaylistName];
             editingPlaylistName = name;
           }
-          savedPlaylists[name] = playlist.map(track => ({ ...track }));
+          savedPlaylists[name] = entry;
           setEditingPlaylist(editingPlaylistName);
         } else {
           if (savedPlaylists[name] && !confirm(`"${name}" already exists. Overwrite?`)) {
             return;
           }
-          savedPlaylists[name] = playlist.map(track => ({ ...track }));
+          savedPlaylists[name] = entry;
           playlistNameInput.value = '';
         }
         savePlaylistsToStorage();
@@ -2980,10 +3151,30 @@
         audioPlayer.loop = isLooping;
         loopBtn.classList.toggle('active', isLooping);
       });
-      savePlaylistBtn.addEventListener('click', saveCurrentPlaylist);
+      savePlaylistBtn.addEventListener('click', function() { saveCurrentPlaylist(currentSaveType); });
+      // Save dropdown toggle
+      saveDropdownToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        saveDropdownMenu.classList.toggle('show');
+      });
+      // Save dropdown menu items
+      saveDropdownMenu.querySelectorAll('button[data-save-type]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          currentSaveType = this.dataset.saveType;
+          const labels = { all: 'Save All', music: 'Save Music', video: 'Save Video' };
+          savePlaylistBtn.textContent = editingPlaylistName ? 'Update' : labels[currentSaveType];
+          saveDropdownMenu.classList.remove('show');
+          saveCurrentPlaylist(currentSaveType);
+        });
+      });
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function() {
+        saveDropdownMenu.classList.remove('show');
+      });
       playlistNameInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
-          saveCurrentPlaylist();
+          saveCurrentPlaylist(currentSaveType);
         }
       });
       doneEditBtn.addEventListener('click', function() {
@@ -3389,6 +3580,31 @@
         }
         // Switch to videos subtab
         videosSubtab.click();
+      }
+
+      // Override loadPlaylistVideos now that video system is ready
+      loadPlaylistVideos = function(videos) {
+        videoPlaylist = [];
+        currentVideoIndex = -1;
+        ambianceVideo.src = '';
+        videos.forEach(v => videoPlaylist.push({...v}));
+        updateVideoPlaylistDisplay();
+        if (videoPlaylist.length > 0) {
+          videoPlayerWrapper.classList.remove('hidden');
+          videoSettings.classList.remove('hidden');
+          currentVideoIndex = 0;
+          loadVideo(0);
+          videosSubtab.click();
+        } else {
+          videoPlayerWrapper.classList.add('hidden');
+          videoSettings.classList.add('hidden');
+          videoNowPlaying.textContent = 'No video';
+        }
+      };
+      // Process any pending video load from before video system was ready
+      if (window._pendingVideoLoad) {
+        loadPlaylistVideos(window._pendingVideoLoad);
+        delete window._pendingVideoLoad;
       }
 
       function removeFromVideoPlaylist(index) {
