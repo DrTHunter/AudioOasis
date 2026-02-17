@@ -302,32 +302,25 @@
     .control-btn.active:hover {
       background: rgba(46,204,113,0.12);
     }
-    .control-btn.video-toggle-btn {
+    .video-playpause-toggle {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
       color: var(--gray);
-      position: relative;
+      background: none;
+      border: none;
+      font-size: 0.85rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: var(--transition);
     }
-    .control-btn.video-toggle-btn::after {
-      content: '';
-      position: absolute;
-      bottom: 2px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--mixer-accent);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .control-btn.video-toggle-btn.video-playing {
+    .video-playpause-toggle.video-playing {
       color: var(--mixer-accent);
     }
-    .control-btn.video-toggle-btn.video-playing::after {
-      opacity: 1;
-    }
-    .control-btn.video-toggle-btn:hover {
+    .video-playpause-toggle:hover {
       color: var(--mixer-accent);
-      background: rgba(155,89,182,0.12);
+      background: rgba(155,89,182,0.1);
     }
 
     /* ── Volume (inline) ── */
@@ -2136,6 +2129,10 @@
         <span class="video-loop-toggle active" id="video-loop-toggle" title="Loop videos">
           <i class="fas fa-redo"></i> Loop
         </span>
+        <div class="vs-divider"></div>
+        <button class="video-playpause-toggle" id="video-toggle-btn" title="Play/Pause Video">
+          <i class="fas fa-pause"></i>
+        </button>
       </div>
       <!-- Music Player -->
       <div class="music-player">
@@ -2165,7 +2162,6 @@
             <button class="control-btn primary" id="play-btn" title="Play/Pause"><i class="fas fa-play"></i></button>
             <button class="control-btn" id="next-btn" title="Next"><i class="fas fa-step-forward"></i></button>
             <button class="control-btn" id="loop-btn" title="Loop"><i class="fas fa-redo"></i></button>
-            <button class="control-btn video-toggle-btn" id="video-toggle-btn" title="Play/Pause Video"><i class="fas fa-play"></i></button>
             <button class="control-btn" id="clear-btn" title="Clear"><i class="fas fa-trash"></i></button>
           </div>
           <div class="volume-control">
@@ -3487,23 +3483,13 @@
         audioPlayer.loop = isLooping;
         loopBtn.classList.toggle('active', isLooping);
       });
-      // Video play/pause toggle in player controls
+      // Video play/pause toggle in video settings bar
       videoToggleBtn.addEventListener('click', function() {
-        const ambianceVideo = document.getElementById('ambiance-video');
         if (!ambianceVideo || !ambianceVideo.src || ambianceVideo.src === window.location.href) return;
         if (ambianceVideo.paused) {
-          ambianceVideo.play().catch(() => {});
-          videoToggleBtn.innerHTML = '<i class="fas fa-pause"></i>';
-          videoToggleBtn.classList.add('video-playing');
-          // Also sync the video player's own play button
-          const vpBtn = document.getElementById('video-playpause-btn');
-          if (vpBtn) vpBtn.innerHTML = '<i class="fas fa-pause"></i>';
+          playVideo();
         } else {
-          ambianceVideo.pause();
-          videoToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
-          videoToggleBtn.classList.remove('video-playing');
-          const vpBtn = document.getElementById('video-playpause-btn');
-          if (vpBtn) vpBtn.innerHTML = '<i class="fas fa-play"></i>';
+          pauseVideo();
         }
       });
       savePlaylistBtn.addEventListener('click', function() { saveCurrentPlaylist(currentSaveType); });
@@ -4046,7 +4032,7 @@
         videoPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         videoPlayerWrapper.classList.remove('hidden');
         videoSettings.classList.remove('hidden');
-        // Sync player-tab video toggle
+        // Sync video settings bar toggle
         videoToggleBtn.innerHTML = '<i class="fas fa-pause"></i>';
         videoToggleBtn.classList.add('video-playing');
       }
@@ -4054,7 +4040,7 @@
       function pauseVideo() {
         ambianceVideo.pause();
         videoPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-        // Sync player-tab video toggle
+        // Sync video settings bar toggle
         videoToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
         videoToggleBtn.classList.remove('video-playing');
       }
@@ -4100,6 +4086,18 @@
         } else if (videoPlaylist.length > 1) {
           nextVideo();
         }
+      });
+
+      // Keep video toggle button in sync with actual video state
+      ambianceVideo.addEventListener('play', function() {
+        videoToggleBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        videoToggleBtn.classList.add('video-playing');
+        videoPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      });
+      ambianceVideo.addEventListener('pause', function() {
+        videoToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
+        videoToggleBtn.classList.remove('video-playing');
+        videoPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
       });
 
       // ── Video Interval Mode ──
