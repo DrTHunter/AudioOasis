@@ -2147,6 +2147,55 @@
       display: none;
     }
     .auth-modal .auth-error.show { display: block; }
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 16px 0;
+      color: var(--gray);
+      font-size: 0.8rem;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    .auth-divider::before { margin-right: 10px; }
+    .auth-divider::after { margin-left: 10px; }
+    .oauth-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .oauth-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border: 1.5px solid var(--light-gray);
+      border-radius: 10px;
+      background: white;
+      color: #333;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .oauth-btn:hover { background: #f5f5f5; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .oauth-btn i, .oauth-btn svg { font-size: 1.1rem; width: 20px; text-align: center; }
+    .oauth-btn.google-btn i { color: #4285f4; }
+    .oauth-btn.github-btn i { color: #333; }
+    .oauth-btn.discord-btn i { color: #5865f2; }
+    body.dark-mode .oauth-btn {
+      background: #252540;
+      border-color: #3a3a5c;
+      color: #e0e0e0;
+    }
+    body.dark-mode .oauth-btn:hover { background: #2f2f50; }
+    body.dark-mode .oauth-btn.github-btn i { color: #e0e0e0; }
+    body.dark-mode .auth-divider::before, body.dark-mode .auth-divider::after { border-color: #3a3a5c; }
     body.dark-mode .auth-modal {
       background: #1e1e2f;
       color: #e0e0e0;
@@ -2583,6 +2632,12 @@
         <h2 id="auth-modal-title">Log In</h2>
         <p class="auth-subtitle" id="auth-modal-subtitle">Sign in to save favorites & share playlists</p>
         <div class="auth-error" id="auth-error"></div>
+        <div class="oauth-buttons">
+          <button class="oauth-btn google-btn" onclick="location.href=API_URL+'/auth/google'"><i class="fab fa-google"></i> Continue with Google</button>
+          <button class="oauth-btn github-btn" onclick="location.href=API_URL+'/auth/github'"><i class="fab fa-github"></i> Continue with GitHub</button>
+          <button class="oauth-btn discord-btn" onclick="location.href=API_URL+'/auth/discord'"><i class="fab fa-discord"></i> Continue with Discord</button>
+        </div>
+        <div class="auth-divider">or</div>
         <div id="auth-signup-fields" style="display:none;">
           <input type="text" id="auth-username" placeholder="Username" autocomplete="username">
         </div>
@@ -3052,6 +3107,35 @@
       }
 
       // Initialize auth on page load
+      // Check for OAuth callback token in URL hash
+      (function handleOAuthReturn() {
+        const hash = window.location.hash;
+        if (hash.includes('auth_token=')) {
+          const token = hash.split('auth_token=')[1];
+          if (token) {
+            authToken = token;
+            localStorage.setItem('audiooasis.authToken', token);
+          }
+          // Clean URL hash
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+        // Check for OAuth error in query params
+        const params = new URLSearchParams(window.location.search);
+        const authError = params.get('auth_error');
+        if (authError) {
+          const messages = {
+            no_code: 'OAuth login was cancelled.',
+            token_failed: 'Could not complete login. Try again.',
+            no_email: 'No email found on your account. Please use email signup instead.',
+            server_error: 'Something went wrong. Please try again.',
+          };
+          alert(messages[authError] || `Login error: ${authError}`);
+          // Clean URL
+          params.delete('auth_error');
+          const cleanUrl = params.toString() ? `${window.location.pathname}?${params}` : window.location.pathname;
+          history.replaceState(null, '', cleanUrl);
+        }
+      })();
       restoreSession();
 
       // Genre icon mapping
