@@ -2081,7 +2081,7 @@
     <div class="player-container">
       <!-- Video Player (above music player) -->
       <div class="video-player-wrapper hidden" id="video-player-wrapper">
-        <video id="ambiance-video" muted loop playsinline webkit-playsinline autoplay></video>
+        <video id="ambiance-video" muted playsinline></video>
         <div class="video-player-controls">
           <span class="video-now-playing" id="video-now-playing">No video</span>
           <button id="video-prev-btn" title="Previous video"><i class="fas fa-step-backward"></i></button>
@@ -2287,7 +2287,7 @@
   </div>
   <!-- Ambiance / Detached video overlay -->
   <div class="video-ambiance-overlay" id="video-ambiance-overlay">
-    <video id="ambiance-video-detached" muted loop playsinline webkit-playsinline autoplay></video>
+    <video id="ambiance-video-detached" muted playsinline></video>
     <div class="video-ambiance-controls">
       <button id="ambiance-prev-btn" title="Previous"><i class="fas fa-step-backward"></i></button>
       <button id="ambiance-playpause-btn" title="Play/Pause"><i class="fas fa-pause"></i></button>
@@ -3968,54 +3968,48 @@
         });
       }
 
-      // ── Video Player Controls ──
+      // ── Video Player Controls (rewritten cleanly) ──
+
       function loadVideo(index) {
         if (index < 0 || index >= videoPlaylist.length) return;
         currentVideoIndex = index;
         const video = videoPlaylist[index];
-        ambianceVideo.src = video.src;
-        ambianceVideo.load();
         videoNowPlaying.textContent = video.title;
+        updateVideoPlaylistDisplay();
+
+        // Set source and let the browser handle loading
+        ambianceVideo.src = video.src;
+
+        // Sync detached video if ambiance mode is active
         if (isAmbianceMode) {
           ambianceVideoDetached.src = video.src;
-          ambianceVideoDetached.load();
-          ambianceVideoDetached.play().catch(() => {});
         }
-        updateVideoPlaylistDisplay();
-        // Auto-play after loading
+
+        // Show player
+        videoPlayerWrapper.classList.remove('hidden');
+        videoSettings.classList.remove('hidden');
+
+        // Play once the browser has enough data
         playVideo();
       }
 
       function playVideo() {
-        // Ensure muted for mobile autoplay policy
-        ambianceVideo.muted = true;
-        const tryPlay = () => {
-          const p = ambianceVideo.play();
-          if (p && p.catch) {
-            p.catch(() => {
-              // Retry after canplay event (mobile buffering)
-              ambianceVideo.addEventListener('canplay', function onCanPlay() {
-                ambianceVideo.removeEventListener('canplay', onCanPlay);
-                ambianceVideo.play().catch(() => {});
-              });
-              // Also retry after a short delay as fallback
-              setTimeout(() => {
-                if (ambianceVideo.paused && ambianceVideo.src) {
-                  ambianceVideo.play().catch(() => {});
-                }
-              }, 500);
-            });
-          }
-        };
-        tryPlay();
-        videoPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        videoPlayerWrapper.classList.remove('hidden');
-        videoSettings.classList.remove('hidden');
+        // Simple play: the video is muted + playsinline so mobile should allow it
+        var promise = ambianceVideo.play();
+        if (promise !== undefined) {
+          promise.catch(function() {
+            // Browser blocked play — wait for data then try once more
+            function retry() {
+              ambianceVideo.removeEventListener('canplay', retry);
+              ambianceVideo.play().catch(function() {});
+            }
+            ambianceVideo.addEventListener('canplay', retry);
+          });
+        }
       }
 
       function pauseVideo() {
         ambianceVideo.pause();
-        videoPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
       }
 
       function nextVideo() {
@@ -4030,6 +4024,25 @@
         loadVideo(currentVideoIndex);
       }
 
+      // Sync the play/pause button icon from native video events
+      ambianceVideo.addEventListener('playing', function() {
+        videoPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      });
+      ambianceVideo.addEventListener('pause', function() {
+        videoPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+      });
+
+      // When video ends: loop single, or advance playlist
+      ambianceVideo.addEventListener('ended', function() {
+        if (videoPlaylist.length <= 1 && videoIsLooping) {
+          ambianceVideo.currentTime = 0;
+          playVideo();
+        } else if (videoPlaylist.length > 1) {
+          nextVideo();
+        }
+      });
+
+      // Player control buttons
       videoPlayPauseBtn.addEventListener('click', function() {
         if (ambianceVideo.paused) playVideo();
         else pauseVideo();
@@ -4043,28 +4056,9 @@
         videoSettings.classList.add('hidden');
       });
 
-      // Fullscreen
       videoFullscreenBtn.addEventListener('click', function() {
         if (videoPlayerWrapper.requestFullscreen) videoPlayerWrapper.requestFullscreen();
         else if (videoPlayerWrapper.webkitRequestFullscreen) videoPlayerWrapper.webkitRequestFullscreen();
-      });
-
-      // Video ended handler
-      ambianceVideo.addEventListener('ended', function() {
-        if (videoIsLooping && videoPlaylist.length === 1) {
-          ambianceVideo.currentTime = 0;
-          ambianceVideo.play().catch(() => {});
-        } else if (videoPlaylist.length > 1) {
-          nextVideo();
-        }
-      });
-
-      // Keep video play/pause button in sync with actual video state
-      ambianceVideo.addEventListener('play', function() {
-        videoPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-      });
-      ambianceVideo.addEventListener('pause', function() {
-        videoPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
       });
 
       // ── Video Interval Mode ──
@@ -4076,10 +4070,10 @@
 
       function startTimedInterval() {
         clearInterval(videoIntervalTimer);
-        const min = parseInt(videoIntervalMin.value) || 0;
-        const sec = parseInt(videoIntervalSec.value) || 0;
-        const ms = (min * 60 + sec) * 1000;
-        if (ms < 5000) return; // minimum 5 seconds
+        var min = parseInt(videoIntervalMin.value) || 0;
+        var sec = parseInt(videoIntervalSec.value) || 0;
+        var ms = (min * 60 + sec) * 1000;
+        if (ms < 5000) return;
         videoIntervalTimer = setInterval(nextVideo, ms);
       }
 
@@ -4090,7 +4084,7 @@
         if (videoIntervalMode.value === 'timed') startTimedInterval();
       });
 
-      // Per-track mode: change video when audio track changes
+      // Per-track mode: advance video when a music track starts
       audioPlayer.addEventListener('play', function() {
         if (videoIntervalMode.value === 'per-track' && videoPlaylist.length > 1) {
           nextVideo();
@@ -4100,8 +4094,6 @@
       // Loop toggle
       videoLoopToggle.addEventListener('click', function() {
         videoIsLooping = !videoIsLooping;
-        ambianceVideo.loop = videoIsLooping && videoPlaylist.length <= 1;
-        ambianceVideoDetached.loop = ambianceVideo.loop;
         this.classList.toggle('active', videoIsLooping);
       });
 
@@ -4111,7 +4103,7 @@
         ambianceOverlay.classList.add('active');
         ambianceVideoDetached.src = ambianceVideo.src;
         ambianceVideoDetached.currentTime = ambianceVideo.currentTime;
-        ambianceVideoDetached.play().catch(() => {});
+        ambianceVideoDetached.play().catch(function() {});
         ambiancePlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
       });
 
@@ -4119,12 +4111,13 @@
         isAmbianceMode = false;
         ambianceOverlay.classList.remove('active');
         ambianceVideoDetached.pause();
-        ambianceVideoDetached.src = '';
+        ambianceVideoDetached.removeAttribute('src');
+        ambianceVideoDetached.load();
       });
 
       ambiancePlayPauseBtn.addEventListener('click', function() {
         if (ambianceVideoDetached.paused) {
-          ambianceVideoDetached.play().catch(() => {});
+          ambianceVideoDetached.play().catch(function() {});
           this.innerHTML = '<i class="fas fa-pause"></i>';
         } else {
           ambianceVideoDetached.pause();
@@ -4136,14 +4129,14 @@
         prevVideo();
         if (isAmbianceMode) {
           ambianceVideoDetached.src = ambianceVideo.src;
-          ambianceVideoDetached.play().catch(() => {});
+          ambianceVideoDetached.play().catch(function() {});
         }
       });
       ambianceNextBtn.addEventListener('click', function() {
         nextVideo();
         if (isAmbianceMode) {
           ambianceVideoDetached.src = ambianceVideo.src;
-          ambianceVideoDetached.play().catch(() => {});
+          ambianceVideoDetached.play().catch(function() {});
         }
       });
 
@@ -4153,14 +4146,14 @@
       });
 
       ambianceVideoDetached.addEventListener('ended', function() {
-        if (videoIsLooping && videoPlaylist.length === 1) {
+        if (videoPlaylist.length <= 1 && videoIsLooping) {
           ambianceVideoDetached.currentTime = 0;
-          ambianceVideoDetached.play().catch(() => {});
+          ambianceVideoDetached.play().catch(function() {});
         } else if (videoPlaylist.length > 1) {
           nextVideo();
           if (isAmbianceMode) {
             ambianceVideoDetached.src = ambianceVideo.src;
-            ambianceVideoDetached.play().catch(() => {});
+            ambianceVideoDetached.play().catch(function() {});
           }
         }
       });
