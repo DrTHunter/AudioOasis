@@ -69,44 +69,27 @@
     header {
       background: linear-gradient(135deg, var(--secondary) 0%, #1a252f 100%);
       color: white;
-      padding: 0.6rem 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
-    }
-    .header-text {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 1.5rem 1rem;
       text-align: center;
-      gap: 2px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     header h1 {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: 2.5rem;
       font-weight: 700;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
       background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      white-space: nowrap;
-    }
-    header h1 i {
-      font-size: 1rem;
     }
     .tagline {
-      margin: 0;
-      font-size: 0.8rem;
-      opacity: 0.6;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex: 1;
-      min-width: 0;
+      margin: 0.5rem 0 0;
+      font-size: 1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
     /* Main Layout */
     .main-container {
@@ -128,123 +111,168 @@
       flex: 2;
       min-width: 0; /* Prevent overflow */
     }
-    /* ══════ Redesigned Player ══════ */
+    /* Player Card */
     .music-player {
-      background: white;
+      background-color: white;
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
-      margin-bottom: 20px;
+      padding: 0;
+      margin-bottom: 25px;
       overflow: hidden;
+      transition: var(--transition);
     }
-
-    /* ── Tabs (act as the header) ── */
+    .music-player:hover {
+      box-shadow: var(--shadow-hover);
+    }
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .player-header:hover {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, #21618c 100%);
+    }
+    .player-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .player-header i {
+      font-size: 1.2rem;
+    }
+    .toggle-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    .toggle-btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.05);
+    }
+    /* Tabs for Now Playing */
     .player-tabs {
       display: flex;
-      background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
-      padding: 0;
+      border-bottom: 1px solid var(--light-gray);
+      background: var(--light);
     }
     .tab-btn {
       flex: 1;
-      padding: 12px 16px;
+      padding: 15px;
       background: none;
       border: none;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       font-weight: 600;
-      letter-spacing: 0.3px;
       cursor: pointer;
-      color: rgba(255,255,255,0.5);
+      color: var(--gray);
       transition: var(--transition);
       position: relative;
     }
     .tab-btn:hover {
-      color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.5);
     }
     .tab-btn.active {
-      color: white;
+      color: var(--primary);
     }
     .tab-btn.active::after {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 20%;
-      right: 20%;
-      height: 2px;
-      border-radius: 2px;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 3px;
       background: var(--primary);
+    }
+    .tab-btn.mixer.active {
+      color: var(--mixer-accent);
     }
     .tab-btn.mixer.active::after {
       background: var(--mixer-accent);
     }
     .tab-content {
       display: none;
-      padding: 16px;
+      padding: 25px;
     }
     .tab-content.active {
       display: block;
     }
-
-    /* ── Track Info (compact) ── */
+    /* Single Player Tab */
     .track-info {
       text-align: center;
-      margin-bottom: 14px;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--light-gray);
     }
     .track-title {
-      font-size: 1.05rem;
+      font-size: 1.4rem;
       font-weight: 600;
+      margin-bottom: 8px;
       color: var(--dark);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 4px;
     }
+    /* For the small label under "Now Playing" */
     .track-category-label {
-      font-size: 0.7rem;
-      color: var(--gray);
-      padding: 1px 8px;
-      border-radius: 10px;
-      background: #f1f3f5;
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-left: 8px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background: #f1f3f5;
     }
     .track-status {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: var(--gray);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      margin-top: 4px;
+      gap: 8px;
     }
-    .track-status i { font-size: 0.7rem; }
-
-    /* ── Progress Bar ── */
+    /* Media Player */
+    .media-player {
+      background: var(--light);
+      border-radius: var(--border-radius);
+      padding: 20px;
+    }
     .progress-container {
-      margin-bottom: 8px;
+      margin-bottom: 20px;
     }
     .progress-bar {
       width: 100%;
-      height: 4px;
+      height: 8px;
       -webkit-appearance: none;
       appearance: none;
-      background: var(--light-gray);
-      border-radius: 2px;
+      background: #ddd;
+      border-radius: 4px;
       outline: none;
-      cursor: pointer;
-      transition: height 0.15s ease;
-    }
-    .progress-bar:hover {
-      height: 6px;
+      overflow: hidden;
     }
     .progress-bar::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 12px;
-      height: 12px;
+      appearance: none;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: var(--primary);
       cursor: pointer;
-      box-shadow: 0 0 0 2px rgba(52,152,219,0.2);
+      box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);
     }
     .progress-bar::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: var(--primary);
       cursor: pointer;
@@ -253,86 +281,38 @@
     .time-display {
       display: flex;
       justify-content: space-between;
-      font-size: 0.72rem;
+      font-size: 0.85rem;
       color: var(--gray);
-      margin-top: 3px;
-      font-variant-numeric: tabular-nums;
+      margin-top: 8px;
     }
-
-    /* ── Controls Row ── */
-    .player-controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 10px;
-    }
-    .control-btn {
-      background: none;
-      color: var(--gray);
-      border: none;
-      border-radius: 50%;
-      width: 34px;
-      height: 34px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-    }
-    .control-btn:hover {
-      color: var(--dark);
-      background: var(--light-gray);
-    }
-    .control-btn.primary {
-      background: var(--primary);
-      color: white;
-      width: 42px;
-      height: 42px;
-      font-size: 1.05rem;
-      box-shadow: 0 2px 8px rgba(52,152,219,0.3);
-    }
-    .control-btn.primary:hover {
-      background: var(--primary-dark);
-      transform: scale(1.05);
-    }
-    .control-btn.active {
-      color: var(--accent);
-    }
-    .control-btn.active:hover {
-      background: rgba(46,204,113,0.12);
-    }
-
-    /* ── Volume (inline) ── */
+    /* Volume Control for Single Player */
     .volume-control {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 10px;
-      padding-top: 10px;
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 20px;
       border-top: 1px solid var(--light-gray);
     }
     .volume-bar {
       flex: 1;
-      height: 3px;
+      height: 6px;
       -webkit-appearance: none;
-      background: var(--light-gray);
-      border-radius: 2px;
+      background: #ddd;
+      border-radius: 3px;
       outline: none;
-      cursor: pointer;
     }
     .volume-bar::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 12px;
-      height: 12px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: var(--primary);
       cursor: pointer;
     }
     .volume-bar::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: var(--primary);
       cursor: pointer;
@@ -340,71 +320,107 @@
     }
     .volume-control i {
       color: var(--gray);
-      font-size: 0.85rem;
-      width: 16px;
-      text-align: center;
+      font-size: 1.1rem;
     }
-
-    /* ── Mixer Tab ── */
+    .player-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .primary-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .secondary-controls {
+      display: flex;
+      gap: 15px;
+    }
+    .control-btn {
+      background: white;
+      color: var(--dark);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    .control-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+    }
+    .control-btn.primary {
+      background: var(--primary);
+      color: white;
+      width: 60px;
+      height: 60px;
+      font-size: 1.4rem;
+    }
+    .control-btn.secondary {
+      background: var(--light-gray);
+      color: var(--dark);
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+    .control-btn.active {
+      background: var(--accent);
+      color: white;
+    }
+    /* Mixer Tab */
     .mixer-container {
-      max-height: 380px;
+      max-height: 400px;
       overflow-y: auto;
-      padding-right: 4px;
+      padding-right: 5px;
     }
     .mixer-track {
-      background: var(--light);
+      background: white;
       border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 10px;
-      border: 1px solid transparent;
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 1px solid var(--light-gray);
       transition: var(--transition);
     }
     .mixer-track:hover {
-      border-color: rgba(155,89,182,0.3);
+      border-color: var(--mixer-accent);
+      transform: translateX(2px);
     }
     .mixer-track-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 15px;
     }
     .mixer-track-title {
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.95rem;
       color: var(--dark);
       display: flex;
       align-items: center;
-      gap: 8px;
-      overflow: hidden;
-    }
-    .mixer-track-title span {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .mixer-track-title i {
-      color: var(--mixer-accent);
-      font-size: 0.75rem;
-      flex-shrink: 0;
+      gap: 10px;
     }
     .mixer-track-controls {
       display: flex;
       align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
+      gap: 10px;
     }
     .mixer-control-btn {
-      background: transparent;
+      background: var(--light-gray);
       border: none;
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
-      color: var(--gray);
       transition: var(--transition);
     }
     .mixer-control-btn:hover {
@@ -418,56 +434,58 @@
     .mixer-volume-control {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 15px;
     }
     .mixer-volume-slider {
       flex: 1;
-      height: 3px;
+      height: 6px;
       -webkit-appearance: none;
       background: #ddd;
-      border-radius: 2px;
+      border-radius: 3px;
       outline: none;
-      cursor: pointer;
     }
     .mixer-volume-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 12px;
-      height: 12px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       background: var(--mixer-accent);
       cursor: pointer;
     }
     .mixer-volume-value {
-      font-size: 0.72rem;
+      font-size: 0.85rem;
       color: var(--gray);
-      min-width: 28px;
-      text-align: right;
-      font-variant-numeric: tabular-nums;
+      min-width: 35px;
+      text-align: center;
     }
+    /* Mixer Progress Bar */
     .mixer-progress-container {
-      margin-top: 8px;
+      margin-top: 15px;
     }
     .mixer-progress-bar {
       width: 100%;
-      height: 3px;
+      height: 6px;
       -webkit-appearance: none;
       appearance: none;
       background: #e0e0e0;
-      border-radius: 2px;
+      border-radius: 3px;
       outline: none;
+      overflow: hidden;
       cursor: pointer;
     }
     .mixer-progress-bar::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 10px;
-      height: 10px;
+      appearance: none;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: var(--mixer-accent);
       cursor: pointer;
+      box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
     }
     .mixer-progress-bar::-moz-range-thumb {
-      width: 10px;
-      height: 10px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
       background: var(--mixer-accent);
       cursor: pointer;
@@ -476,10 +494,9 @@
     .mixer-time-display {
       display: flex;
       justify-content: space-between;
-      font-size: 0.65rem;
+      font-size: 0.75rem;
       color: var(--gray);
-      margin-top: 3px;
-      font-variant-numeric: tabular-nums;
+      margin-top: 5px;
     }
     .empty-mixer {
       text-align: center;
@@ -509,17 +526,16 @@
       align-items: center;
       background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
       color: white;
-      padding: 10px 16px;
+      padding: 18px 20px;
       cursor: pointer;
     }
     .playlist-header h2 {
       margin: 0;
-      font-size: 0.85rem;
+      font-size: 1.3rem;
       font-weight: 600;
-      letter-spacing: 0.3px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
     .playlist-content {
       padding: 20px;
@@ -662,26 +678,18 @@
       align-items: center;
       background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
       color: white;
-      padding: 10px 16px;
-      cursor: pointer;
+      padding: 18px 20px;
     }
     .saved-playlists-header h2 {
       margin: 0;
-      font-size: 0.85rem;
+      font-size: 1.3rem;
       font-weight: 600;
-      letter-spacing: 0.3px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
     .saved-playlists-content {
       padding: 20px;
-      transition: max-height 0.3s ease;
-    }
-    .saved-playlists.collapsed .saved-playlists-content {
-      max-height: 0;
-      padding: 0 20px;
-      overflow: hidden;
     }
     .saved-playlist-controls {
       display: flex;
@@ -817,7 +825,36 @@
       color: var(--gray);
     }
     /* Library */
-    .library-wrapper {
+    .library-container h2 {
+      margin-bottom: 20px;
+      color: var(--secondary);
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .instructions {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 15px 20px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+      font-size: 0.95rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .instructions i {
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .category {
       background-color: white;
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
@@ -825,181 +862,58 @@
       overflow: hidden;
       transition: var(--transition);
     }
-    .library-wrapper:hover {
+    .category:hover {
       box-shadow: var(--shadow-hover);
-    }
-    .library-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-      color: white;
-      padding: 10px 16px;
-      cursor: pointer;
-    }
-    .library-header h2 {
-      margin: 0;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .library-body {
-      padding: 20px;
-    }
-    .instructions {
-      text-align: center;
-      padding: 10px 20px;
-      margin-bottom: 15px;
-      font-size: 0.85rem;
-      color: var(--gray);
-    }
-    .instructions i {
-      color: var(--gray);
-      font-size: 0.85rem;
-    }
-    .library-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      background: white;
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .category {
-      background-color: white;
-      padding: 0;
-      overflow: hidden;
-      transition: background-color 0.2s ease;
-      border-bottom: 1px solid var(--light-gray);
-    }
-    .category:last-child {
-      border-bottom: none;
-    }
-    .category.drag-over {
-      border-top: 3px solid var(--primary);
-    }
-    .category.dragging {
-      opacity: 0.5;
+      transform: translateY(-5px);
     }
     .category-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: transparent;
-      color: var(--dark);
-      padding: 8px 16px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-      user-select: none;
-    }
-    .category-header:hover {
-      background: #f0f4ff;
-    }
-    .category.expanded .category-header {
-      background: linear-gradient(135deg, #3a4a8a 0%, #4e3570 100%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
+      padding: 18px 20px;
+      cursor: pointer;
     }
     .category-header h3 {
       margin: 0;
-      font-size: 0.85rem;
+      font-size: 1.1rem;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-    .category-header .track-count {
-      font-weight: 400;
-      font-size: 0.75rem;
-      opacity: 0.7;
-    }
-    .category-drag-handle {
-      cursor: grab;
-      color: var(--gray);
-      font-size: 0.9rem;
-      padding: 4px 6px;
-      opacity: 0.4;
-      transition: opacity 0.2s;
-    }
-    .category-header:hover .category-drag-handle {
-      opacity: 1;
-    }
-    .category .toggle-btn {
-      color: var(--gray);
-      background: transparent;
-    }
-    .category .add-all-btn {
-      color: var(--primary);
-      border-color: var(--primary);
-      background: transparent;
-    }
-    .category.expanded .category-header .category-drag-handle,
-    .category.expanded .category-header .toggle-btn {
-      color: rgba(255,255,255,0.8);
-    }
-    .category.expanded .toggle-btn {
-      background: rgba(255,255,255,0.15);
-    }
-    .category.expanded .add-all-btn {
-      color: white;
-      border-color: rgba(255,255,255,0.4);
-      background: rgba(255,255,255,0.15);
+      gap: 10px;
     }
     .category-content {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.35s ease;
+      transition: max-height 0.3s ease;
     }
     .category.expanded .category-content {
-      max-height: 2000px;
+      /* limit height so very long categories scroll independently */
+      max-height: 320px;
       overflow-y: auto;
+      padding-right: 6px; /* leave a bit of room for the scrollbar */
     }
     .category-tracks {
-      padding: 8px 15px 15px;
+      padding: 15px;
     }
     .category-track {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 12px;
+      padding: 12px 15px;
       border-radius: 8px;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
       cursor: pointer;
       transition: var(--transition);
-      font-size: 0.93rem;
     }
     .category-track:hover {
-      background-color: #f0f4ff;
+      background-color: #f8f9fa;
     }
     .category-track .track-actions {
       display: flex;
       gap: 8px;
       align-items: center;
-      flex-shrink: 0;
-    }
-    /* Dark Mode - library accordion overrides */
-    body.dark-mode .library-grid {
-      background: #1e1e2f;
-    }
-    body.dark-mode .category {
-      background-color: #1e1e2f;
-      border-color: #3a3a5c;
-    }
-    body.dark-mode .category-header {
-      color: #e0e0e0;
-    }
-    body.dark-mode .category-header:hover {
-      background: #252540;
-    }
-    body.dark-mode .category.expanded .category-header {
-      background: linear-gradient(135deg, #2e3a6e 0%, #3d2858 100%);
-      color: white;
-    }
-    body.dark-mode .category-track:hover {
-      background-color: #252540;
     }
     .add-to-playlist-btn, .add-to-mixer-btn {
       opacity: 0;
@@ -1039,33 +953,32 @@
       .player-container {
         max-width: 100%;
       }
+      .library-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
     }
     @media (max-width: 768px) {
+      .library-grid {
+        grid-template-columns: 1fr;
+      }
       .player-controls {
-        gap: 4px;
+        flex-direction: column;
+        gap: 20px;
       }
-      .control-btn { width: 30px; height: 30px; font-size: 0.8rem; }
-      .control-btn.primary { width: 36px; height: 36px; font-size: 0.95rem; }
+      .secondary-controls {
+        justify-content: center;
+      }
       header h1 {
-        font-size: 1.1rem;
-      }
-      header {
-        flex-wrap: wrap;
-        gap: 4px 12px;
-        padding: 0.5rem 1rem;
-      }
-      .tagline {
-        white-space: normal;
-        text-align: center;
+        font-size: 2rem;
       }
       .mixer-track-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 6px;
+        gap: 10px;
       }
       .mixer-track-controls {
         width: 100%;
-        justify-content: flex-end;
+        justify-content: space-between;
       }
     }
     /* Search Bar */
@@ -1138,23 +1051,23 @@
     body.dark-mode .music-player,
     body.dark-mode .playlist,
     body.dark-mode .saved-playlists,
-    body.dark-mode .library-wrapper,
-    body.dark-mode .category {
+    body.dark-mode .category,
+    body.dark-mode .instructions {
       background-color: #1e1e2f;
       color: #e0e0e0;
     }
-    body.dark-mode .instructions {
-      background-color: transparent;
-      color: #6c757d;
+    body.dark-mode .media-player {
+      background: #252540;
     }
     body.dark-mode .player-tabs {
-      background: linear-gradient(135deg, #1a1a2e 0%, #0d0d1a 100%);
+      background: #252540;
+      border-color: #3a3a5c;
     }
     body.dark-mode .tab-btn {
-      color: rgba(255,255,255,0.4);
+      color: #888;
     }
-    body.dark-mode .tab-btn.active {
-      color: white;
+    body.dark-mode .track-info {
+      border-color: #3a3a5c;
     }
     body.dark-mode .track-title {
       color: #e0e0e0;
@@ -1163,34 +1076,32 @@
       border-color: #3a3a5c;
     }
     body.dark-mode .control-btn {
-      background: none;
-      color: #999;
-    }
-    body.dark-mode .control-btn:hover {
+      background: #2a2a45;
       color: #e0e0e0;
-      background: #3a3a5c;
     }
     body.dark-mode .control-btn.primary {
       background: var(--primary);
       color: white;
     }
+    body.dark-mode .control-btn.secondary {
+      background: #2a2a45;
+      color: #ccc;
+    }
     body.dark-mode .control-btn.active {
-      color: var(--accent);
+      background: var(--accent);
+      color: white;
     }
     body.dark-mode .mixer-track {
       background: #252540;
-      border-color: transparent;
+      border-color: #3a3a5c;
       color: #e0e0e0;
-    }
-    body.dark-mode .mixer-track:hover {
-      border-color: rgba(155,89,182,0.3);
     }
     body.dark-mode .mixer-track-title {
       color: #e0e0e0;
     }
     body.dark-mode .mixer-control-btn {
-      background: transparent;
-      color: #999;
+      background: #3a3a5c;
+      color: #ccc;
     }
     body.dark-mode .playlist-item {
       color: #e0e0e0;
@@ -1253,20 +1164,23 @@
     }
     /* Dark mode toggle button */
     .dark-mode-toggle {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 1000;
       background: rgba(255,255,255,0.15);
       border: 2px solid rgba(255,255,255,0.25);
       color: white;
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 1.2rem;
       transition: var(--transition);
-      flex-shrink: 0;
-      margin-left: auto;
+      backdrop-filter: blur(8px);
     }
     .dark-mode-toggle:hover {
       background: rgba(255,255,255,0.25);
@@ -1376,383 +1290,6 @@
         box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
       }
     }
-    /* ══════ Video Player ══════ */
-    .video-player-wrapper {
-      position: relative;
-      background: #000;
-      border-radius: var(--border-radius) var(--border-radius) 0 0;
-      overflow: hidden;
-      aspect-ratio: 16/9;
-      max-height: 300px;
-    }
-    .video-player-wrapper.hidden { display: none; }
-    .video-player-wrapper video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .video-player-controls {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      background: linear-gradient(transparent, rgba(0,0,0,0.7));
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .video-player-wrapper:hover .video-player-controls { opacity: 1; }
-    .video-player-controls button {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 0.8rem;
-      padding: 4px 6px;
-      border-radius: 4px;
-      transition: background 0.2s;
-    }
-    .video-player-controls button:hover { background: rgba(255,255,255,0.2); }
-    .video-now-playing {
-      flex: 1;
-      color: rgba(255,255,255,0.8);
-      font-size: 0.7rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* Video Settings Panel */
-    .video-settings {
-      background: #f8f9fa;
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--light-gray);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-size: 0.75rem;
-    }
-    body.dark-mode .video-settings { background: #1a1a2e; border-color: #3a3a5c; }
-    .video-settings label {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--gray);
-      white-space: nowrap;
-    }
-    .video-settings select,
-    .video-settings input[type="number"] {
-      padding: 3px 6px;
-      border: 1px solid var(--light-gray);
-      border-radius: 4px;
-      font-size: 0.75rem;
-      background: white;
-      width: 50px;
-    }
-    body.dark-mode .video-settings select,
-    body.dark-mode .video-settings input[type="number"] {
-      background: #252540;
-      border-color: #3a3a5c;
-      color: #e0e0e0;
-    }
-    .video-settings select { width: auto; }
-    .video-settings .vs-divider {
-      width: 1px;
-      height: 18px;
-      background: var(--light-gray);
-    }
-    body.dark-mode .video-settings .vs-divider { background: #3a3a5c; }
-    .video-loop-toggle {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      color: var(--gray);
-    }
-    .video-loop-toggle.active { color: var(--primary); }
-    .video-loop-toggle i { font-size: 0.85rem; }
-
-    /* Playlist sub-tabs (Tracks / Videos) */
-    .playlist-subtabs {
-      display: flex;
-      border-bottom: 1px solid var(--light-gray);
-    }
-    body.dark-mode .playlist-subtabs { border-color: #3a3a5c; }
-    .playlist-subtab {
-      flex: 1;
-      padding: 8px 12px;
-      background: none;
-      border: none;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--gray);
-      cursor: pointer;
-      position: relative;
-      transition: var(--transition);
-    }
-    .playlist-subtab:hover { color: var(--dark); }
-    body.dark-mode .playlist-subtab:hover { color: #e0e0e0; }
-    .playlist-subtab.active { color: var(--primary); }
-    .playlist-subtab.active::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 20%;
-      right: 20%;
-      height: 2px;
-      border-radius: 2px;
-      background: var(--primary);
-    }
-    .playlist-subcontent { display: none; }
-    .playlist-subcontent.active { display: block; }
-
-    /* Video playlist items */
-    .video-playlist-items {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .video-playlist-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--light-gray);
-      cursor: pointer;
-      transition: background 0.2s;
-      font-size: 0.8rem;
-    }
-    body.dark-mode .video-playlist-item { border-color: #3a3a5c; }
-    .video-playlist-item:hover { background: #f0f4ff; }
-    body.dark-mode .video-playlist-item:hover { background: #252540; }
-    .video-playlist-item.active { background: rgba(52,152,219,0.1); }
-    .video-playlist-item .vpi-index {
-      width: 20px;
-      text-align: center;
-      color: var(--gray);
-      font-size: 0.7rem;
-    }
-    .video-playlist-item .vpi-thumb {
-      width: 48px;
-      height: 28px;
-      border-radius: 3px;
-      object-fit: cover;
-      background: #000;
-      flex-shrink: 0;
-    }
-    .video-playlist-item .vpi-title {
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .video-playlist-item .vpi-remove {
-      background: none;
-      border: none;
-      color: var(--gray);
-      cursor: pointer;
-      padding: 2px 4px;
-      font-size: 0.75rem;
-    }
-    .video-playlist-item .vpi-remove:hover { color: #e74c3c; }
-    .empty-video-playlist {
-      text-align: center;
-      padding: 20px;
-      color: var(--gray);
-      font-size: 0.85rem;
-    }
-
-    /* ══════ Video Library ══════ */
-    .video-library-wrapper {
-      background-color: white;
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      transition: var(--transition);
-      margin-top: 20px;
-    }
-    .video-library-wrapper:hover { box-shadow: var(--shadow-hover); }
-    body.dark-mode .video-library-wrapper {
-      background-color: #1e1e2f;
-      color: #e0e0e0;
-    }
-    .video-library-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-      color: white;
-      padding: 10px 16px;
-      cursor: pointer;
-    }
-    .video-library-header h2 {
-      margin: 0;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .video-library-body { padding: 12px; }
-    .video-library-body.hidden { display: none; }
-
-    /* View toggle */
-    .video-view-toggle {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-    .video-view-btn {
-      padding: 4px 10px;
-      border: 1px solid var(--light-gray);
-      background: white;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.75rem;
-      color: var(--gray);
-      transition: var(--transition);
-    }
-    .video-view-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-    body.dark-mode .video-view-btn {
-      background: #252540;
-      border-color: #3a3a5c;
-      color: #999;
-    }
-    body.dark-mode .video-view-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-
-    /* Video grid */
-    .video-grid {
-      display: grid;
-      gap: 8px;
-    }
-    .video-grid.horizontal {
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    }
-    .video-grid.vertical {
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    }
-    .video-thumb-card {
-      position: relative;
-      border-radius: 6px;
-      overflow: hidden;
-      cursor: pointer;
-      background: #000;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .video-thumb-card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    .video-thumb-card video {
-      width: 100%;
-      display: block;
-      pointer-events: none;
-    }
-    .video-grid.horizontal .video-thumb-card video { aspect-ratio: 16/9; object-fit: cover; }
-    .video-grid.vertical .video-thumb-card video { aspect-ratio: 9/16; object-fit: cover; }
-    .video-thumb-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 4px 6px;
-      background: linear-gradient(transparent, rgba(0,0,0,0.8));
-      color: white;
-      font-size: 0.65rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .video-thumb-actions {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      display: flex;
-      gap: 3px;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .video-thumb-card:hover .video-thumb-actions { opacity: 1; }
-    .video-thumb-actions button {
-      background: rgba(0,0,0,0.6);
-      border: none;
-      color: white;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 0.6rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .video-thumb-actions button:hover { background: var(--primary); }
-
-    /* Video category headers in library */
-    .video-category-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--gray);
-      padding: 8px 4px 4px;
-      border-bottom: 1px solid var(--light-gray);
-      margin-bottom: 6px;
-    }
-    body.dark-mode .video-category-label { border-color: #3a3a5c; }
-
-    /* Detached / Ambiance view */
-    .video-ambiance-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      z-index: 9999;
-      background: #000;
-    }
-    .video-ambiance-overlay.active { display: flex; align-items: center; justify-content: center; }
-    .video-ambiance-overlay video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .video-ambiance-controls {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 8px;
-      padding: 8px 14px;
-      background: rgba(0,0,0,0.6);
-      border-radius: 20px;
-      z-index: 10000;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .video-ambiance-overlay:hover .video-ambiance-controls { opacity: 1; }
-    .video-ambiance-controls button {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 4px 8px;
-      border-radius: 4px;
-    }
-    .video-ambiance-controls button:hover { background: rgba(255,255,255,0.2); }
-
     /* Scrollbar Styling */
     ::-webkit-scrollbar {
       width: 8px;
@@ -1771,84 +1308,77 @@
   </style>
 </head>
 <body>
+  <button class="dark-mode-toggle" id="dark-mode-toggle" title="Toggle dark mode">
+    <i class="fas fa-moon"></i>
+  </button>
   <header>
-    <div class="header-text">
-      <h1><i class="fas fa-headphones"></i> AudioOasis</h1>
-      <p class="tagline">Build your own background mix: lofi, ambience, meditation, and more. Click tracks to add them to your playlist or mixer.</p>
-    </div>
-    <button class="dark-mode-toggle" id="dark-mode-toggle" title="Toggle dark mode">
-      <i class="fas fa-moon"></i>
-    </button>
+    <h1><i class="fas fa-headphones"></i> AudioOasis</h1>
+    <p class="tagline">Build your own background mix: lofi, ambience, meditation, and more. Click tracks to add them to your playlist or mixer.</p>
   </header>
   <div class="main-container">
     <!-- Left side - Player and Playlist -->
     <div class="player-container">
-      <!-- Video Player (above music player) -->
-      <div class="video-player-wrapper hidden" id="video-player-wrapper">
-        <video id="ambiance-video" muted loop></video>
-        <div class="video-player-controls">
-          <span class="video-now-playing" id="video-now-playing">No video</span>
-          <button id="video-prev-btn" title="Previous video"><i class="fas fa-step-backward"></i></button>
-          <button id="video-playpause-btn" title="Play/Pause video"><i class="fas fa-play"></i></button>
-          <button id="video-next-btn" title="Next video"><i class="fas fa-step-forward"></i></button>
-          <button id="video-detach-btn" title="Ambiance view"><i class="fas fa-external-link-alt"></i></button>
-          <button id="video-fullscreen-btn" title="Fullscreen"><i class="fas fa-expand"></i></button>
-          <button id="video-close-btn" title="Close video"><i class="fas fa-times"></i></button>
-        </div>
-      </div>
-      <!-- Video Settings -->
-      <div class="video-settings hidden" id="video-settings">
-        <label>Mode:
-          <select id="video-interval-mode">
-            <option value="per-track">Per Music Track</option>
-            <option value="timed">Timed Interval</option>
-            <option value="manual">Manual</option>
-          </select>
-        </label>
-        <div class="vs-divider"></div>
-        <label id="video-interval-time-label" class="hidden">Every
-          <input type="number" id="video-interval-min" value="1" min="0" max="60"> m
-          <input type="number" id="video-interval-sec" value="0" min="0" max="59"> s
-        </label>
-        <div class="vs-divider"></div>
-        <span class="video-loop-toggle active" id="video-loop-toggle" title="Loop videos">
-          <i class="fas fa-redo"></i> Loop
-        </span>
-      </div>
       <!-- Music Player -->
       <div class="music-player">
+        <div class="player-header" id="now-playing-header">
+          <h2><i class="fas fa-play-circle"></i> Now Playing</h2>
+          <button class="toggle-btn" id="now-playing-toggle">
+            <i class="fas fa-chevron-up"></i>
+          </button>
+        </div>
         <div class="player-tabs">
-          <button class="tab-btn active" id="single-tab"><i class="fas fa-play-circle"></i> Player</button>
-          <button class="tab-btn mixer" id="mixer-tab"><i class="fas fa-sliders-h"></i> Mixer</button>
+          <button class="tab-btn active" id="single-tab">Single Player</button>
+          <button class="tab-btn mixer" id="mixer-tab">Mixer</button>
         </div>
         <!-- Single Player Tab -->
         <div class="tab-content active" id="single-player-content">
           <div class="track-info">
             <div class="track-title" id="current-track">No Track Selected</div>
             <div class="track-status">
+              <i class="fas fa-music"></i>
               <span id="playlist-count">0 tracks in playlist</span>
               <span id="current-category" class="track-category-label"></span>
             </div>
           </div>
-          <div class="progress-container">
-            <input type="range" id="progress-bar" class="progress-bar" value="0" max="100">
-            <div class="time-display">
-              <span id="current-time">0:00</span>
-              <span id="duration">0:00</span>
+          <!-- Media Player -->
+          <div class="media-player">
+            <div class="progress-container">
+              <input type="range" id="progress-bar" class="progress-bar" value="0" max="100">
+              <div class="time-display">
+                <span id="current-time">0:00</span>
+                <span id="duration">0:00</span>
+              </div>
             </div>
-          </div>
-          <div class="player-controls">
-            <button class="control-btn" id="shuffle-btn" title="Shuffle"><i class="fas fa-random"></i></button>
-            <button class="control-btn" id="prev-btn" title="Previous"><i class="fas fa-step-backward"></i></button>
-            <button class="control-btn primary" id="play-btn" title="Play/Pause"><i class="fas fa-play"></i></button>
-            <button class="control-btn" id="next-btn" title="Next"><i class="fas fa-step-forward"></i></button>
-            <button class="control-btn" id="loop-btn" title="Loop"><i class="fas fa-redo"></i></button>
-            <button class="control-btn" id="clear-btn" title="Clear"><i class="fas fa-trash"></i></button>
-          </div>
-          <div class="volume-control">
-            <i class="fas fa-volume-down"></i>
-            <input type="range" id="volume-bar" class="volume-bar" min="0" max="100" value="100">
-            <i class="fas fa-volume-up"></i>
+            <!-- Volume Control -->
+            <div class="volume-control">
+              <i class="fas fa-volume-down"></i>
+              <input type="range" id="volume-bar" class="volume-bar" min="0" max="100" value="100">
+              <i class="fas fa-volume-up"></i>
+            </div>
+            <div class="player-controls">
+              <div class="primary-controls">
+                <button class="control-btn secondary" id="prev-btn" title="Previous Track">
+                  <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="control-btn primary" id="play-btn" title="Play/Pause">
+                  <i class="fas fa-play"></i>
+                </button>
+                <button class="control-btn secondary" id="next-btn" title="Next Track">
+                  <i class="fas fa-step-forward"></i>
+                </button>
+              </div>
+              <div class="secondary-controls">
+                <button class="control-btn secondary" id="loop-btn" title="Loop Track">
+                  <i class="fas fa-redo"></i>
+                </button>
+                <button class="control-btn secondary" id="shuffle-btn" title="Shuffle Playlist">
+                  <i class="fas fa-random"></i>
+                </button>
+                <button class="control-btn secondary" id="clear-btn" title="Clear Playlist">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
           </div>
           <audio id="audio-player"></audio>
         </div>
@@ -1878,33 +1408,17 @@
           </button>
         </div>
         <div class="playlist-content" id="playlist-content">
-          <div class="playlist-subtabs">
-            <button class="playlist-subtab active" id="tracks-subtab"><i class="fas fa-music"></i> Tracks</button>
-            <button class="playlist-subtab" id="videos-subtab"><i class="fas fa-film"></i> Videos</button>
+          <div class="empty-playlist" id="empty-playlist">
+            <i class="fas fa-music"></i>
+            <h3>Your playlist is empty</h3>
+            <p>Click any track from the Music Library to add it here</p>
           </div>
-          <div class="playlist-subcontent active" id="tracks-subcontent">
-            <div class="empty-playlist" id="empty-playlist">
-              <i class="fas fa-music"></i>
-              <h3>Your playlist is empty</h3>
-              <p>Click any track from the Music Library to add it here</p>
-            </div>
-            <ul class="playlist-items" id="playlist-items"></ul>
-          </div>
-          <div class="playlist-subcontent" id="videos-subcontent">
-            <div class="empty-video-playlist" id="empty-video-playlist">
-              <i class="fas fa-film"></i>
-              <p>No videos in playlist. Add videos from the Video Library below.</p>
-            </div>
-            <ul class="video-playlist-items" id="video-playlist-items"></ul>
-          </div>
+          <ul class="playlist-items" id="playlist-items"></ul>
         </div>
       </div>
             <div class="saved-playlists" id="saved-playlists">
-        <div class="saved-playlists-header" id="saved-playlists-header">
+        <div class="saved-playlists-header">
           <h2><i class="fas fa-save"></i> Saved Playlists</h2>
-          <button class="toggle-btn" id="saved-playlists-toggle">
-            <i class="fas fa-chevron-up"></i>
-          </button>
         </div>
         <div class="saved-playlists-content">
           <div class="saved-playlist-controls">
@@ -1923,54 +1437,20 @@
     </div>
     <!-- Right side - Track Library -->
     <div class="library-container">
-      <div class="library-wrapper">
-        <div class="library-header" id="music-library-header">
-          <h2><i class="fas fa-guitar"></i> Music Library</h2>
-          <button class="toggle-btn" id="music-library-toggle"><i class="fas fa-chevron-up"></i></button>
-        </div>
-        <div class="library-body">
-          <div class="instructions">
-            <i class="fas fa-info-circle"></i>
-            <span>Click a category to expand it. Drag categories by the grip icon to reorder. <strong>Shortcuts:</strong> Space = play/pause, Ctrl+Arrow = prev/next.</span>
-          </div>
-          <div class="library-search">
-            <i class="fas fa-search"></i>
-            <input type="text" id="library-search" placeholder="Search tracks by name, category...">
-            <button class="search-clear" id="search-clear" title="Clear search"><i class="fas fa-times"></i></button>
-          </div>
-          <div class="search-stats" id="search-stats"></div>
-          <div class="library-grid" id="library">
-            <!-- Categories will be populated by JavaScript -->
-          </div>
-        </div>
+      <h2><i class="fas fa-guitar"></i> Music Library</h2>
+      <div class="instructions">
+        <i class="fas fa-info-circle"></i>
+        <span>Click a category to expand, then click any track to add it to your playlist or mixer. Drag playlist tracks to reorder. <strong>Shortcuts:</strong> Space = play/pause, Ctrl+Arrow = prev/next.</span>
       </div>
-      <!-- Video Library -->
-      <div class="video-library-wrapper" id="video-library-wrapper">
-        <div class="video-library-header" id="video-library-header">
-          <h2><i class="fas fa-film"></i> Video Library</h2>
-          <button class="toggle-btn" id="video-library-toggle"><i class="fas fa-chevron-down"></i></button>
-        </div>
-        <div class="video-library-body hidden" id="video-library-body">
-          <div class="video-view-toggle">
-            <button class="video-view-btn active" data-view="horizontal"><i class="fas fa-th"></i> Horizontal</button>
-            <button class="video-view-btn" data-view="vertical"><i class="fas fa-grip-vertical"></i> Vertical</button>
-          </div>
-          <div class="video-grid horizontal" id="video-grid">
-            <!-- Populated by JS -->
-          </div>
-        </div>
+      <div class="library-search">
+        <i class="fas fa-search"></i>
+        <input type="text" id="library-search" placeholder="Search tracks by name, category...">
+        <button class="search-clear" id="search-clear" title="Clear search"><i class="fas fa-times"></i></button>
       </div>
-    </div>
-  </div>
-  <!-- Ambiance / Detached video overlay -->
-  <div class="video-ambiance-overlay" id="video-ambiance-overlay">
-    <video id="ambiance-video-detached" muted loop></video>
-    <div class="video-ambiance-controls">
-      <button id="ambiance-prev-btn" title="Previous"><i class="fas fa-step-backward"></i></button>
-      <button id="ambiance-playpause-btn" title="Play/Pause"><i class="fas fa-pause"></i></button>
-      <button id="ambiance-next-btn" title="Next"><i class="fas fa-step-forward"></i></button>
-      <button id="ambiance-fullscreen-btn" title="Fullscreen"><i class="fas fa-expand"></i></button>
-      <button id="ambiance-close-btn" title="Exit ambiance"><i class="fas fa-times"></i></button>
+      <div class="search-stats" id="search-stats"></div>
+      <div class="library-grid" id="library">
+        <!-- Categories will be populated by JavaScript -->
+      </div>
     </div>
   </div>
   <footer>
@@ -1979,7 +1459,6 @@
   
   <!-- Load external track data FIRST -->
   <script src="trackList.js"></script>
-  <script src="videoList.js"></script>
   
   <!-- Main application script -->
   <script>
@@ -2010,6 +1489,8 @@
       const mixerTracksContainer = document.getElementById('mixer-tracks');
       const emptyMixer = document.getElementById('empty-mixer');
       // Toggle elements
+      const nowPlayingHeader = document.getElementById('now-playing-header');
+      const nowPlayingToggle = document.getElementById('now-playing-toggle');
       const playlistHeader = document.getElementById('playlist-header');
       const playlistContent = document.getElementById('playlist-content');
       const playlistToggle = document.getElementById('playlist-toggle');
@@ -2131,42 +1612,13 @@
         loadTrack(0);
       }
 
-      // Get saved category order from localStorage
-      function getSavedCategoryOrder() {
-        try {
-          const saved = localStorage.getItem('audiooasis.categoryOrder');
-          return saved ? JSON.parse(saved) : null;
-        } catch(e) { return null; }
-      }
-      function saveCategoryOrder() {
-        const order = Array.from(libraryElement.querySelectorAll('.category')).map(el => el.dataset.categoryKey);
-        localStorage.setItem('audiooasis.categoryOrder', JSON.stringify(order));
-      }
-
       // Initialize the library
       function initializeLibrary() {
         libraryElement.innerHTML = '';
-
-        // Determine category order
-        const savedOrder = getSavedCategoryOrder();
-        let categoryEntries = Object.entries(trackLibrary);
-        if (savedOrder && savedOrder.length > 0) {
-          categoryEntries.sort((a, b) => {
-            const idxA = savedOrder.indexOf(a[0]);
-            const idxB = savedOrder.indexOf(b[0]);
-            if (idxA === -1 && idxB === -1) return 0;
-            if (idxA === -1) return 1;
-            if (idxB === -1) return -1;
-            return idxA - idxB;
-          });
-        }
-
-        for (const [category, tracks] of categoryEntries) {
+        for (const [category, tracks] of Object.entries(trackLibrary)) {
           const categoryElement = document.createElement('div');
           categoryElement.className = 'category';
           categoryElement.dataset.category = category.toLowerCase();
-          categoryElement.dataset.categoryKey = category;
-          categoryElement.setAttribute('draggable', 'true');
           const iconClass = genreIcons[category] || 'fa-folder';
           const categoryItemsHTML = tracks.map(track => `
             <div class="category-track" data-src="${track.src}" data-title="${track.title}" data-duration="${track.duration}" data-search="${track.title.toLowerCase()} ${category.toLowerCase()}">
@@ -2181,7 +1633,6 @@
           categoryElement.innerHTML = `
             <div class="category-header">
               <div class="category-header-left">
-                <span class="category-drag-handle" title="Drag to reorder"><i class="fas fa-grip-vertical"></i></span>
                 <h3><i class="fas ${iconClass}"></i> ${category} <span class="track-count">(${tracks.length} tracks)</span></h3>
               </div>
               <div class="category-header-right">
@@ -2198,13 +1649,13 @@
             </div>
           `;
           libraryElement.appendChild(categoryElement);
-
           // Add click events to buttons
           categoryElement.querySelectorAll('.add-to-playlist-btn').forEach((btn, index) => {
             btn.addEventListener('click', function(e) {
               e.stopPropagation();
               const track = tracks[index];
               addToPlaylist(track);
+              // Visual feedback
               btn.innerHTML = '<i class="fas fa-check"></i> Added';
               btn.style.backgroundColor = '#2ecc71';
               setTimeout(() => {
@@ -2218,6 +1669,7 @@
               e.stopPropagation();
               const track = tracks[index];
               addToMixer(track);
+              // Visual feedback
               btn.innerHTML = '<i class="fas fa-check"></i> Added';
               btn.style.backgroundColor = '#2ecc71';
               setTimeout(() => {
@@ -2238,58 +1690,15 @@
               this.style.background = '';
             }, 1500);
           });
-          // Toggle expand/collapse
+          // Add toggle functionality to category headers
           const header = categoryElement.querySelector('.category-header');
+          const content = categoryElement.querySelector('.category-content');
           const toggleBtn = categoryElement.querySelector('.category-toggle');
-          header.addEventListener('click', function(e) {
-            if (e.target.closest('.add-all-btn') || e.target.closest('.category-drag-handle')) return;
+          header.addEventListener('click', function() {
             categoryElement.classList.toggle('expanded');
             toggleBtn.querySelector('i').className = categoryElement.classList.contains('expanded')
               ? 'fas fa-chevron-up'
               : 'fas fa-chevron-down';
-          });
-
-          // ── Category Drag & Drop ──
-          categoryElement.addEventListener('dragstart', function(e) {
-            // Only start drag from the grip handle
-            if (!e.target.closest('.category-drag-handle') && !e.target.closest('.category-header')) {
-              e.preventDefault();
-              return;
-            }
-            categoryElement.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/plain', category);
-          });
-          categoryElement.addEventListener('dragend', function() {
-            categoryElement.classList.remove('dragging');
-            libraryElement.querySelectorAll('.category').forEach(c => c.classList.remove('drag-over'));
-          });
-          categoryElement.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-            const dragging = libraryElement.querySelector('.category.dragging');
-            if (dragging && dragging !== categoryElement) {
-              categoryElement.classList.add('drag-over');
-            }
-          });
-          categoryElement.addEventListener('dragleave', function() {
-            categoryElement.classList.remove('drag-over');
-          });
-          categoryElement.addEventListener('drop', function(e) {
-            e.preventDefault();
-            categoryElement.classList.remove('drag-over');
-            const dragging = libraryElement.querySelector('.category.dragging');
-            if (dragging && dragging !== categoryElement) {
-              const allCats = Array.from(libraryElement.querySelectorAll('.category'));
-              const fromIdx = allCats.indexOf(dragging);
-              const toIdx = allCats.indexOf(categoryElement);
-              if (fromIdx < toIdx) {
-                categoryElement.after(dragging);
-              } else {
-                categoryElement.before(dragging);
-              }
-              saveCategoryOrder();
-            }
           });
         }
       }
@@ -2307,20 +1716,25 @@
         singlePlayerContent.classList.remove('active');
         // Single player continues playing when switching to mixer
       });
+      // Toggle sections - keep now playing open by default
+      nowPlayingHeader.addEventListener('click', function() {
+      const isHidden = singlePlayerContent.classList.contains('hidden') && mixerContent.classList.contains('hidden');
+      if (isHidden) {
+          // Show both tab contents (whichever tab is active will be visible)
+          singlePlayerContent.classList.remove('hidden');
+          mixerContent.classList.remove('hidden');
+          nowPlayingToggle.querySelector('i').className = 'fas fa-chevron-up';
+      } else {
+        // Hide both tab contents
+        singlePlayerContent.classList.add('hidden');
+        mixerContent.classList.add('hidden');
+        nowPlayingToggle.querySelector('i').className = 'fas fa-chevron-down';
+    }
+    });
       // Playlist toggle - default to open (no collapsed class)
       playlistHeader.addEventListener('click', function() {
         playlistElement.classList.toggle('collapsed');
         playlistToggle.querySelector('i').className = playlistElement.classList.contains('collapsed')
-          ? 'fas fa-chevron-down'
-          : 'fas fa-chevron-up';
-      });
-      // Saved playlists toggle
-      const savedPlaylistsHeader = document.getElementById('saved-playlists-header');
-      const savedPlaylistsElement = document.getElementById('saved-playlists');
-      const savedPlaylistsToggle = document.getElementById('saved-playlists-toggle');
-      savedPlaylistsHeader.addEventListener('click', function() {
-        savedPlaylistsElement.classList.toggle('collapsed');
-        savedPlaylistsToggle.querySelector('i').className = savedPlaylistsElement.classList.contains('collapsed')
           ? 'fas fa-chevron-down'
           : 'fas fa-chevron-up';
       });
@@ -2361,11 +1775,9 @@
       function updateMixerDisplay() {
         if (mixerTracks.length === 0) {
           emptyMixer.classList.remove('hidden');
-          mixerMasterControls.classList.add('hidden');
           return;
         }
         emptyMixer.classList.add('hidden');
-        mixerMasterControls.classList.remove('hidden');
         // Create mixer tracks HTML
         let mixerHTML = '';
         mixerTracks.forEach((track, index) => {
@@ -2919,530 +2331,14 @@
       // Initialize the player
       initializeLibrary();
       renderSavedPlaylists();
-
-      // ── Dark Mode (default ON) ──
-      const savedDarkMode = localStorage.getItem('audiooasis.darkMode');
-      if (savedDarkMode !== 'false') {
-        document.body.classList.add('dark-mode');
-        darkModeToggle.querySelector('i').className = 'fas fa-sun';
-      }
-      darkModeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        this.querySelector('i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-        localStorage.setItem('audiooasis.darkMode', isDark);
-      });
-
-      // ── Library Search ──
-      let searchTimeout;
-      librarySearchInput.addEventListener('input', function() {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => filterLibrary(this.value), 150);
-        searchClearBtn.classList.toggle('visible', this.value.length > 0);
-      });
-      searchClearBtn.addEventListener('click', function() {
-        librarySearchInput.value = '';
-        searchClearBtn.classList.remove('visible');
-        filterLibrary('');
-        librarySearchInput.focus();
-      });
-      function filterLibrary(query) {
-        const q = query.toLowerCase().trim();
-        const categories = libraryElement.querySelectorAll('.category');
-        let totalMatches = 0;
-        let visibleCategories = 0;
-
-        categories.forEach(cat => {
-          const tracks = cat.querySelectorAll('.category-track');
-          let categoryMatches = 0;
-          tracks.forEach(track => {
-            const searchText = track.dataset.search || '';
-            const matches = !q || searchText.includes(q);
-            track.classList.toggle('search-hidden', !matches);
-            if (matches) categoryMatches++;
-          });
-          const hideCategory = q && categoryMatches === 0;
-          cat.classList.toggle('search-hidden', hideCategory);
-          if (!hideCategory) visibleCategories++;
-          totalMatches += categoryMatches;
-
-          // Auto-expand categories with matches during search
-          if (q && categoryMatches > 0 && !cat.classList.contains('expanded')) {
-            cat.classList.add('expanded');
-            const toggleIcon = cat.querySelector('.category-toggle i');
-            if (toggleIcon) toggleIcon.className = 'fas fa-chevron-up';
-          }
-          // Update visible track count
-          const countSpan = cat.querySelector('.track-count');
-          if (countSpan) {
-            const totalInCategory = tracks.length;
-            countSpan.textContent = q ? `(${categoryMatches}/${totalInCategory} tracks)` : `(${totalInCategory} tracks)`;
-          }
-        });
-
-        if (q) {
-          searchStats.textContent = `Found ${totalMatches} track${totalMatches !== 1 ? 's' : ''} in ${visibleCategories} categor${visibleCategories !== 1 ? 'ies' : 'y'}`;
-          searchStats.classList.add('visible');
-        } else {
-          searchStats.classList.remove('visible');
+      // Auto-expand first category for better UX
+      setTimeout(() => {
+        const firstCategory = document.querySelector('.category');
+        if (firstCategory) {
+          firstCategory.classList.add('expanded');
+          firstCategory.querySelector('.category-toggle i').className = 'fas fa-chevron-up';
         }
-      }
-
-      // ── Master Mixer Controls ──
-      mixerPlayAll.addEventListener('click', function() {
-        mixerTracks.forEach(track => {
-          if (!track.isPlaying) {
-            track.audio.play().catch(e => console.error('Mixer play failed:', e));
-            track.isPlaying = true;
-          }
-        });
-        updateMixerDisplay();
-      });
-      mixerPauseAll.addEventListener('click', function() {
-        mixerTracks.forEach(track => {
-          if (track.isPlaying) {
-            track.audio.pause();
-            track.isPlaying = false;
-          }
-        });
-        updateMixerDisplay();
-      });
-      mixerStopAll.addEventListener('click', function() {
-        mixerTracks.forEach(track => {
-          track.audio.pause();
-          track.audio.currentTime = 0;
-          track.isPlaying = false;
-        });
-        updateMixerDisplay();
-      });
-
-      // ── Auto-detect Track Durations ──
-      // Scan for tracks with "0:00" duration and fetch real duration from audio metadata
-      function autoDetectDurations() {
-        for (const [category, tracks] of Object.entries(trackLibrary)) {
-          tracks.forEach(track => {
-            if (track.duration === '0:00') {
-              const tempAudio = new Audio();
-              tempAudio.preload = 'metadata';
-              tempAudio.addEventListener('loadedmetadata', function() {
-                if (!isNaN(tempAudio.duration) && tempAudio.duration > 0) {
-                  const realDuration = formatTime(tempAudio.duration);
-                  track.duration = realDuration;
-                  // Update any visible duration displays in the library
-                  const trackEls = libraryElement.querySelectorAll(`.category-track[data-src="${CSS.escape(track.src)}"] .track-duration`);
-                  trackEls.forEach(el => el.textContent = realDuration);
-                }
-                tempAudio.src = ''; // release
-              });
-              tempAudio.src = track.src;
-            }
-          });
-        }
-      }
-      // Run duration detection after a short delay to not block initial render
-      setTimeout(autoDetectDurations, 1000);
-
-      // ── Loading indicator for single player ──
-      audioPlayer.addEventListener('waiting', function() {
-        currentTrackDisplay.innerHTML = '<span class="track-loading"></span>' + (playlist[currentTrackIndex]?.title || 'Loading...');
-      });
-      audioPlayer.addEventListener('playing', function() {
-        if (playlist[currentTrackIndex]) {
-          currentTrackDisplay.textContent = playlist[currentTrackIndex].title;
-        }
-      });
-
-      // All categories start collapsed — no auto-expand
-
-      // ══════════════════════════════════════════════
-      // ══════ VIDEO SYSTEM ══════
-      // ══════════════════════════════════════════════
-
-      // Video DOM elements
-      const videoPlayerWrapper = document.getElementById('video-player-wrapper');
-      const ambianceVideo = document.getElementById('ambiance-video');
-      const videoNowPlaying = document.getElementById('video-now-playing');
-      const videoPrevBtn = document.getElementById('video-prev-btn');
-      const videoPlayPauseBtn = document.getElementById('video-playpause-btn');
-      const videoNextBtn = document.getElementById('video-next-btn');
-      const videoDetachBtn = document.getElementById('video-detach-btn');
-      const videoFullscreenBtn = document.getElementById('video-fullscreen-btn');
-      const videoCloseBtn = document.getElementById('video-close-btn');
-      const videoSettings = document.getElementById('video-settings');
-      const videoIntervalMode = document.getElementById('video-interval-mode');
-      const videoIntervalTimeLabel = document.getElementById('video-interval-time-label');
-      const videoIntervalMin = document.getElementById('video-interval-min');
-      const videoIntervalSec = document.getElementById('video-interval-sec');
-      const videoLoopToggle = document.getElementById('video-loop-toggle');
-      // Playlist sub-tabs
-      const tracksSubtab = document.getElementById('tracks-subtab');
-      const videosSubtab = document.getElementById('videos-subtab');
-      const tracksSubcontent = document.getElementById('tracks-subcontent');
-      const videosSubcontent = document.getElementById('videos-subcontent');
-      // Video playlist
-      const videoPlaylistItems = document.getElementById('video-playlist-items');
-      const emptyVideoPlaylist = document.getElementById('empty-video-playlist');
-      // Video library
-      const videoLibraryHeader = document.getElementById('video-library-header');
-      const videoLibraryBody = document.getElementById('video-library-body');
-      const videoLibraryToggle = document.getElementById('video-library-toggle');
-      const videoGrid = document.getElementById('video-grid');
-      // Ambiance overlay
-      const ambianceOverlay = document.getElementById('video-ambiance-overlay');
-      const ambianceVideoDetached = document.getElementById('ambiance-video-detached');
-      const ambiancePrevBtn = document.getElementById('ambiance-prev-btn');
-      const ambiancePlayPauseBtn = document.getElementById('ambiance-playpause-btn');
-      const ambianceNextBtn = document.getElementById('ambiance-next-btn');
-      const ambianceFullscreenBtn = document.getElementById('ambiance-fullscreen-btn');
-      const ambianceCloseBtn = document.getElementById('ambiance-close-btn');
-
-      // Video state
-      let videoPlaylist = [];
-      let currentVideoIndex = -1;
-      let videoIsLooping = true;
-      let videoIntervalTimer = null;
-      let isAmbianceMode = false;
-
-      // ── Playlist Sub-tabs ──
-      tracksSubtab.addEventListener('click', function() {
-        tracksSubtab.classList.add('active');
-        videosSubtab.classList.remove('active');
-        tracksSubcontent.classList.add('active');
-        videosSubcontent.classList.remove('active');
-      });
-      videosSubtab.addEventListener('click', function() {
-        videosSubtab.classList.add('active');
-        tracksSubtab.classList.remove('active');
-        videosSubcontent.classList.add('active');
-        tracksSubcontent.classList.remove('active');
-      });
-
-      // ── Video Library Toggle ──
-      videoLibraryHeader.addEventListener('click', function() {
-        videoLibraryBody.classList.toggle('hidden');
-        videoLibraryToggle.querySelector('i').className = videoLibraryBody.classList.contains('hidden')
-          ? 'fas fa-chevron-down' : 'fas fa-chevron-up';
-      });
-
-      // ── Video Library Grid View Toggle ──
-      document.querySelectorAll('.video-view-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelectorAll('.video-view-btn').forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          videoGrid.className = 'video-grid ' + this.dataset.view;
-        });
-      });
-
-      // ── Initialize Video Library ──
-      function initializeVideoLibrary() {
-        if (typeof videoLibrary === 'undefined') return;
-        videoGrid.innerHTML = '';
-        for (const [category, videos] of Object.entries(videoLibrary)) {
-          const label = document.createElement('div');
-          label.className = 'video-category-label';
-          label.textContent = `${category} (${videos.length})`;
-          videoGrid.appendChild(label);
-
-          videos.forEach(video => {
-            const card = document.createElement('div');
-            card.className = 'video-thumb-card';
-            card.innerHTML = `
-              <video src="${video.src}" preload="metadata" muted></video>
-              <div class="video-thumb-overlay">${video.title}</div>
-              <div class="video-thumb-actions">
-                <button class="vta-play" title="Play now"><i class="fas fa-play"></i></button>
-                <button class="vta-add" title="Add to video playlist"><i class="fas fa-plus"></i></button>
-              </div>
-            `;
-            // Seek to 1s for thumbnail
-            const thumbVideo = card.querySelector('video');
-            thumbVideo.addEventListener('loadeddata', function() {
-              this.currentTime = 1;
-            });
-            // Play now
-            card.querySelector('.vta-play').addEventListener('click', function(e) {
-              e.stopPropagation();
-              addToVideoPlaylist(video);
-              const idx = videoPlaylist.length - 1;
-              loadVideo(idx);
-              playVideo();
-            });
-            // Add to playlist
-            card.querySelector('.vta-add').addEventListener('click', function(e) {
-              e.stopPropagation();
-              addToVideoPlaylist(video);
-              this.innerHTML = '<i class="fas fa-check"></i>';
-              setTimeout(() => { this.innerHTML = '<i class="fas fa-plus"></i>'; }, 800);
-            });
-            // Click card = play
-            card.addEventListener('click', function() {
-              addToVideoPlaylist(video);
-              const idx = videoPlaylist.length - 1;
-              loadVideo(idx);
-              playVideo();
-            });
-            videoGrid.appendChild(card);
-          });
-        }
-      }
-
-      // ── Video Playlist Management ──
-      function addToVideoPlaylist(video) {
-        videoPlaylist.push({ ...video });
-        updateVideoPlaylistDisplay();
-        // Show video player if hidden
-        videoPlayerWrapper.classList.remove('hidden');
-        videoSettings.classList.remove('hidden');
-        // If first video, load it
-        if (videoPlaylist.length === 1) {
-          currentVideoIndex = 0;
-          loadVideo(0);
-        }
-        // Switch to videos subtab
-        videosSubtab.click();
-      }
-
-      function removeFromVideoPlaylist(index) {
-        if (index === currentVideoIndex) {
-          if (videoPlaylist.length === 1) {
-            videoPlaylist = [];
-            currentVideoIndex = -1;
-            ambianceVideo.src = '';
-            videoPlayerWrapper.classList.add('hidden');
-            videoSettings.classList.add('hidden');
-            videoNowPlaying.textContent = 'No video';
-          } else {
-            videoPlaylist.splice(index, 1);
-            if (currentVideoIndex >= videoPlaylist.length) currentVideoIndex = 0;
-            loadVideo(currentVideoIndex);
-          }
-        } else {
-          if (index < currentVideoIndex) currentVideoIndex--;
-          videoPlaylist.splice(index, 1);
-        }
-        updateVideoPlaylistDisplay();
-      }
-
-      function updateVideoPlaylistDisplay() {
-        videoPlaylistItems.innerHTML = '';
-        if (videoPlaylist.length === 0) {
-          emptyVideoPlaylist.classList.remove('hidden');
-          return;
-        }
-        emptyVideoPlaylist.classList.add('hidden');
-        videoPlaylist.forEach((video, index) => {
-          const item = document.createElement('li');
-          item.className = `video-playlist-item${index === currentVideoIndex ? ' active' : ''}`;
-          item.innerHTML = `
-            <span class="vpi-index">${index + 1}</span>
-            <video class="vpi-thumb" src="${video.src}" preload="metadata" muted></video>
-            <span class="vpi-title">${video.title}</span>
-            <button class="vpi-remove" title="Remove"><i class="fas fa-times"></i></button>
-          `;
-          // Thumbnail seek
-          const thumb = item.querySelector('.vpi-thumb');
-          thumb.addEventListener('loadeddata', function() { this.currentTime = 1; });
-          // Click to play
-          item.addEventListener('click', function(e) {
-            if (e.target.closest('.vpi-remove')) return;
-            loadVideo(index);
-            playVideo();
-          });
-          // Remove
-          item.querySelector('.vpi-remove').addEventListener('click', function(e) {
-            e.stopPropagation();
-            removeFromVideoPlaylist(index);
-          });
-          videoPlaylistItems.appendChild(item);
-        });
-      }
-
-      // ── Video Player Controls ──
-      function loadVideo(index) {
-        if (index < 0 || index >= videoPlaylist.length) return;
-        currentVideoIndex = index;
-        const video = videoPlaylist[index];
-        ambianceVideo.src = video.src;
-        videoNowPlaying.textContent = video.title;
-        if (isAmbianceMode) {
-          ambianceVideoDetached.src = video.src;
-          ambianceVideoDetached.play().catch(() => {});
-        }
-        updateVideoPlaylistDisplay();
-      }
-
-      function playVideo() {
-        ambianceVideo.play().catch(() => {});
-        videoPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        videoPlayerWrapper.classList.remove('hidden');
-        videoSettings.classList.remove('hidden');
-      }
-
-      function pauseVideo() {
-        ambianceVideo.pause();
-        videoPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-      }
-
-      function nextVideo() {
-        if (videoPlaylist.length === 0) return;
-        currentVideoIndex = (currentVideoIndex + 1) % videoPlaylist.length;
-        loadVideo(currentVideoIndex);
-        playVideo();
-      }
-
-      function prevVideo() {
-        if (videoPlaylist.length === 0) return;
-        currentVideoIndex = (currentVideoIndex - 1 + videoPlaylist.length) % videoPlaylist.length;
-        loadVideo(currentVideoIndex);
-        playVideo();
-      }
-
-      videoPlayPauseBtn.addEventListener('click', function() {
-        if (ambianceVideo.paused) playVideo();
-        else pauseVideo();
-      });
-      videoNextBtn.addEventListener('click', nextVideo);
-      videoPrevBtn.addEventListener('click', prevVideo);
-
-      videoCloseBtn.addEventListener('click', function() {
-        pauseVideo();
-        videoPlayerWrapper.classList.add('hidden');
-        videoSettings.classList.add('hidden');
-      });
-
-      // Fullscreen
-      videoFullscreenBtn.addEventListener('click', function() {
-        if (videoPlayerWrapper.requestFullscreen) videoPlayerWrapper.requestFullscreen();
-        else if (videoPlayerWrapper.webkitRequestFullscreen) videoPlayerWrapper.webkitRequestFullscreen();
-      });
-
-      // Video ended handler
-      ambianceVideo.addEventListener('ended', function() {
-        if (videoIsLooping && videoPlaylist.length === 1) {
-          ambianceVideo.currentTime = 0;
-          ambianceVideo.play().catch(() => {});
-        } else if (videoPlaylist.length > 1) {
-          nextVideo();
-        }
-      });
-
-      // ── Video Interval Mode ──
-      videoIntervalMode.addEventListener('change', function() {
-        clearInterval(videoIntervalTimer);
-        videoIntervalTimeLabel.classList.toggle('hidden', this.value !== 'timed');
-        if (this.value === 'timed') startTimedInterval();
-      });
-
-      function startTimedInterval() {
-        clearInterval(videoIntervalTimer);
-        const min = parseInt(videoIntervalMin.value) || 0;
-        const sec = parseInt(videoIntervalSec.value) || 0;
-        const ms = (min * 60 + sec) * 1000;
-        if (ms < 5000) return; // minimum 5 seconds
-        videoIntervalTimer = setInterval(nextVideo, ms);
-      }
-
-      videoIntervalMin.addEventListener('change', function() {
-        if (videoIntervalMode.value === 'timed') startTimedInterval();
-      });
-      videoIntervalSec.addEventListener('change', function() {
-        if (videoIntervalMode.value === 'timed') startTimedInterval();
-      });
-
-      // Per-track mode: change video when audio track changes
-      audioPlayer.addEventListener('play', function() {
-        if (videoIntervalMode.value === 'per-track' && videoPlaylist.length > 1) {
-          nextVideo();
-        }
-      });
-
-      // Loop toggle
-      videoLoopToggle.addEventListener('click', function() {
-        videoIsLooping = !videoIsLooping;
-        ambianceVideo.loop = videoIsLooping && videoPlaylist.length <= 1;
-        ambianceVideoDetached.loop = ambianceVideo.loop;
-        this.classList.toggle('active', videoIsLooping);
-      });
-
-      // ── Ambiance / Detach Mode ──
-      videoDetachBtn.addEventListener('click', function() {
-        isAmbianceMode = true;
-        ambianceOverlay.classList.add('active');
-        ambianceVideoDetached.src = ambianceVideo.src;
-        ambianceVideoDetached.currentTime = ambianceVideo.currentTime;
-        ambianceVideoDetached.play().catch(() => {});
-        ambiancePlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-      });
-
-      ambianceCloseBtn.addEventListener('click', function() {
-        isAmbianceMode = false;
-        ambianceOverlay.classList.remove('active');
-        ambianceVideoDetached.pause();
-        ambianceVideoDetached.src = '';
-      });
-
-      ambiancePlayPauseBtn.addEventListener('click', function() {
-        if (ambianceVideoDetached.paused) {
-          ambianceVideoDetached.play().catch(() => {});
-          this.innerHTML = '<i class="fas fa-pause"></i>';
-        } else {
-          ambianceVideoDetached.pause();
-          this.innerHTML = '<i class="fas fa-play"></i>';
-        }
-      });
-
-      ambiancePrevBtn.addEventListener('click', function() {
-        prevVideo();
-        if (isAmbianceMode) {
-          ambianceVideoDetached.src = ambianceVideo.src;
-          ambianceVideoDetached.play().catch(() => {});
-        }
-      });
-      ambianceNextBtn.addEventListener('click', function() {
-        nextVideo();
-        if (isAmbianceMode) {
-          ambianceVideoDetached.src = ambianceVideo.src;
-          ambianceVideoDetached.play().catch(() => {});
-        }
-      });
-
-      ambianceFullscreenBtn.addEventListener('click', function() {
-        if (ambianceOverlay.requestFullscreen) ambianceOverlay.requestFullscreen();
-        else if (ambianceOverlay.webkitRequestFullscreen) ambianceOverlay.webkitRequestFullscreen();
-      });
-
-      ambianceVideoDetached.addEventListener('ended', function() {
-        if (videoIsLooping && videoPlaylist.length === 1) {
-          ambianceVideoDetached.currentTime = 0;
-          ambianceVideoDetached.play().catch(() => {});
-        } else if (videoPlaylist.length > 1) {
-          nextVideo();
-          if (isAmbianceMode) {
-            ambianceVideoDetached.src = ambianceVideo.src;
-            ambianceVideoDetached.play().catch(() => {});
-          }
-        }
-      });
-
-      // ESC to close ambiance
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && isAmbianceMode) {
-          ambianceCloseBtn.click();
-        }
-      });
-
-      // Music library toggle
-      const musicLibraryHeader = document.getElementById('music-library-header');
-      const musicLibraryBody = document.querySelector('.library-body');
-      const musicLibraryToggle = document.getElementById('music-library-toggle');
-      musicLibraryHeader.addEventListener('click', function() {
-        const isHidden = musicLibraryBody.style.display === 'none';
-        musicLibraryBody.style.display = isHidden ? '' : 'none';
-        musicLibraryToggle.querySelector('i').className = isHidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
-      });
-
-      // Initialize video library
-      initializeVideoLibrary();
+      }, 300);
     });
   </script>
 </body>
