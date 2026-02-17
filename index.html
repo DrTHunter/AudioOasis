@@ -1034,6 +1034,17 @@
     .category-track:hover .add-to-mixer-btn {
       opacity: 1;
     }
+    /* Mobile: first tap highlights track and shows buttons */
+    .category-track.mobile-active {
+      background-color: #f0f4ff;
+    }
+    .category-track.mobile-active .add-to-playlist-btn,
+    .category-track.mobile-active .add-to-mixer-btn {
+      opacity: 1;
+    }
+    body.dark-mode .category-track.mobile-active {
+      background-color: #252540;
+    }
     /* Footer */
     footer {
       text-align: center;
@@ -2211,8 +2222,28 @@
             this.style.backgroundColor = '';
           }, 1000);
         });
+        // Mobile: first tap highlights track & shows buttons, second tap on button acts
+        el.addEventListener('click', function(e) {
+          // Only on touch devices (no hover capability)
+          if (!window.matchMedia('(hover: none)').matches) return;
+          // If clicking a button inside the track, let it through
+          if (e.target.closest('.add-to-playlist-btn') || e.target.closest('.add-to-mixer-btn')) return;
+          e.stopPropagation();
+          // Clear any other active track
+          document.querySelectorAll('.category-track.mobile-active').forEach(t => {
+            if (t !== el) t.classList.remove('mobile-active');
+          });
+          el.classList.toggle('mobile-active');
+        });
         return el;
       }
+
+      // Dismiss mobile-active when tapping outside a track
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.category-track')) {
+          document.querySelectorAll('.category-track.mobile-active').forEach(t => t.classList.remove('mobile-active'));
+        }
+      });
 
       function renderVirtualTracks(categoryElement) {
         const state = categoryVScrollState.get(categoryElement);
