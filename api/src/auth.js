@@ -104,7 +104,7 @@ async function signup(request, env) {
   const token = await createToken(
     { id, email: email.toLowerCase(), username },
     env.JWT_SECRET,
-    86400 * 7 // 7 days
+    86400 * 30 // 30 days
   );
 
   return json({ token, user: { id, email: email.toLowerCase(), username } }, 201);
@@ -133,7 +133,7 @@ async function login(request, env) {
   const token = await createToken(
     { id: user.id, email: user.email, username: user.username },
     env.JWT_SECRET,
-    86400 * 7
+    86400 * 30 // 30 days
   );
 
   return json({
@@ -247,7 +247,7 @@ async function oauthCallback(provider, request, env) {
     const token = await createToken(
       { id: user.id, email: user.email, username: user.username },
       env.JWT_SECRET,
-      86400 * 7  // 7 days
+      86400 * 30  // 30 days
     );
 
     // Redirect back to frontend with token in hash (not exposed to server logs)

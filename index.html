@@ -3172,6 +3172,26 @@
       let savedPlaylists = {};
       let editingPlaylistName = null;
       let currentSaveType = 'all'; // 'all', 'music', 'video'
+
+      // ══════ Playlist State Persistence ══════
+      function savePlaylistState() {
+        try {
+          const state = {
+            playlist: playlist.map(t => ({ title: t.title, src: t.src, category: t.category || '', duration: t.duration || '' })),
+            currentTrackIndex,
+            currentTime: audioPlayer.currentTime || 0,
+          };
+          localStorage.setItem('audiooasis.playlistState', JSON.stringify(state));
+        } catch (e) { /* ignore quota errors */ }
+      }
+      function saveVideoPlaylistState() {
+        try {
+          const vState = {
+            videoPlaylist: (typeof videoPlaylist !== 'undefined' ? videoPlaylist : []).map(v => ({ title: v.title, src: v.src, thumb: v.thumb || '', category: v.category || '' })),
+          };
+          localStorage.setItem('audiooasis.videoPlaylistState', JSON.stringify(vState));
+        } catch (e) { /* ignore */ }
+      }
       
       // Note: trackLibrary is now loaded from trackList.js
       // Check if trackLibrary exists
@@ -3915,6 +3935,7 @@
           playlistItems.appendChild(item);
         });
         syncEditingPlaylist();
+        savePlaylistState();
       }
             function renderSavedPlaylists() {
         savedPlaylistsList.innerHTML = '';
@@ -4078,6 +4099,7 @@
           progressBar.value = 0;
           pauseTrack();
           updatePlaylistDisplay();
+          savePlaylistState();
         }
       }
       // Load track
@@ -4089,6 +4111,7 @@
         currentTrackIndex = index;
         audioPlayer.src = playlist[index].src;
         currentTrackDisplay.textContent = playlist[index].title;
+        savePlaylistState();
         // Update current category display (if track provides category)
         if (playlist[index].category) {
           currentCategoryDisplay.textContent = `• ${playlist[index].category}`;
@@ -4301,12 +4324,19 @@
         }
       });
       // Time updates
+      let lastTimeSave = 0;
       audioPlayer.addEventListener('timeupdate', function() {
         if (!isNaN(audioPlayer.duration)) {
           const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
           progressBar.value = isNaN(progress) ? 0 : progress;
           currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
           durationDisplay.textContent = formatTime(audioPlayer.duration);
+          // Save playback position every 5 seconds
+          const now = Date.now();
+          if (now - lastTimeSave > 5000) {
+            lastTimeSave = now;
+            savePlaylistState();
+          }
         }
       });
       // Track ended
@@ -4769,6 +4799,7 @@
           });
           videoPlaylistItems.appendChild(item);
         });
+        saveVideoPlaylistState();
       }
 
       // ── Video Player Controls (rewritten cleanly) ──
@@ -4976,6 +5007,57 @@
         const isHidden = musicLibraryBody.style.display === 'none';
         musicLibraryBody.style.display = isHidden ? '' : 'none';
         musicLibraryToggle.querySelector('i').className = isHidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+      });
+
+      // ══════ Restore Playlist State from localStorage ══════
+      (function restorePlaylistState() {
+        try {
+          const raw = localStorage.getItem('audiooasis.playlistState');
+          if (!raw) return;
+          const state = JSON.parse(raw);
+          if (state.playlist && state.playlist.length > 0) {
+            state.playlist.forEach(t => {
+              playlist.push({ title: t.title, src: t.src, category: t.category || '', duration: t.duration || '' });
+            });
+            updatePlaylistDisplay();
+            if (typeof state.currentTrackIndex === 'number' && state.currentTrackIndex >= 0 && state.currentTrackIndex < playlist.length) {
+              currentTrackIndex = state.currentTrackIndex;
+              audioPlayer.src = playlist[currentTrackIndex].src;
+              currentTrackDisplay.textContent = playlist[currentTrackIndex].title;
+              if (playlist[currentTrackIndex].category) {
+                currentCategoryDisplay.textContent = `• ${playlist[currentTrackIndex].category}`;
+              }
+              // Restore playback position (paused — user clicks play to resume)
+              if (state.currentTime > 0) {
+                audioPlayer.addEventListener('loadedmetadata', function onMeta() {
+                  audioPlayer.currentTime = state.currentTime;
+                  audioPlayer.removeEventListener('loadedmetadata', onMeta);
+                }, { once: true });
+              }
+              // Highlight active track
+              const items = playlistItems.querySelectorAll('.playlist-item');
+              items.forEach((item, i) => item.classList.toggle('active', i === currentTrackIndex));
+            }
+          }
+        } catch (e) { console.warn('Failed to restore playlist state:', e); }
+        // Restore video playlist
+        try {
+          const vRaw = localStorage.getItem('audiooasis.videoPlaylistState');
+          if (!vRaw) return;
+          const vState = JSON.parse(vRaw);
+          if (vState.videoPlaylist && vState.videoPlaylist.length > 0 && typeof videoPlaylist !== 'undefined') {
+            vState.videoPlaylist.forEach(v => {
+              videoPlaylist.push({ title: v.title, src: v.src, thumb: v.thumb || '', category: v.category || '' });
+            });
+            updateVideoPlaylistDisplay();
+          }
+        } catch (e) { console.warn('Failed to restore video playlist:', e); }
+      })();
+
+      // Save state on page unload
+      window.addEventListener('beforeunload', function() {
+        savePlaylistState();
+        saveVideoPlaylistState();
       });
 
       // Initialize video library
