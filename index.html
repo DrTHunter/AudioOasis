@@ -927,6 +927,14 @@
     .category-header:hover .category-drag-handle {
       opacity: 1;
     }
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: inherit;
+      padding: 4px;
+      font-size: 1rem;
+    }
     .category .toggle-btn {
       color: var(--gray);
       background: transparent;
@@ -941,7 +949,7 @@
       color: rgba(255,255,255,0.8);
     }
     .category.expanded .toggle-btn {
-      background: rgba(255,255,255,0.15);
+      background: transparent;
     }
     .category.expanded .add-all-btn {
       color: white;
@@ -2177,8 +2185,8 @@
         el.innerHTML = `
           <span>${track.title}</span>
           <div class="track-actions">
-            <button class="add-to-playlist-btn"><i class="fas fa-plus"></i> Playlist</button>
-            <button class="add-to-mixer-btn"><i class="fas fa-sliders-h"></i> Mixer</button>
+            <button class="add-to-playlist-btn" title="Add to playlist"><i class="fas fa-play-circle"></i></button>
+            <button class="add-to-mixer-btn" title="Add to mixer"><i class="fas fa-sliders-h"></i></button>
             <span class="track-duration">${track.duration}</span>
           </div>
         `;
@@ -2186,20 +2194,20 @@
         el.querySelector('.add-to-playlist-btn').addEventListener('click', function(e) {
           e.stopPropagation();
           addToPlaylist(track);
-          this.innerHTML = '<i class="fas fa-check"></i> Added';
+          this.innerHTML = '<i class="fas fa-check"></i>';
           this.style.backgroundColor = '#2ecc71';
           setTimeout(() => {
-            this.innerHTML = '<i class="fas fa-plus"></i> Playlist';
+            this.innerHTML = '<i class="fas fa-play-circle"></i>';
             this.style.backgroundColor = '';
           }, 1000);
         });
         el.querySelector('.add-to-mixer-btn').addEventListener('click', function(e) {
           e.stopPropagation();
           addToMixer(track);
-          this.innerHTML = '<i class="fas fa-check"></i> Added';
+          this.innerHTML = '<i class="fas fa-check"></i>';
           this.style.backgroundColor = '#2ecc71';
           setTimeout(() => {
-            this.innerHTML = '<i class="fas fa-sliders-h"></i> Mixer';
+            this.innerHTML = '<i class="fas fa-sliders-h"></i>';
             this.style.backgroundColor = '';
           }, 1000);
         });
@@ -2286,7 +2294,7 @@
                 <h3><i class="fas ${iconClass}"></i> ${category} <span class="track-count">(${tracks.length} tracks)</span></h3>
               </div>
               <div class="category-header-right">
-                <button class="add-all-btn" title="Add all tracks to playlist"><i class="fas fa-plus-circle"></i> Add All</button>
+                <button class="add-all-btn" title="Add all tracks to playlist"><i class="fas fa-plus-circle"></i> All</button>
                 <button class="toggle-btn category-toggle">
                   <i class="fas fa-chevron-down"></i>
                 </button>
@@ -2324,7 +2332,7 @@
             this.innerHTML = '<i class="fas fa-check-circle"></i> Added!';
             this.style.background = 'rgba(46,204,113,0.5)';
             setTimeout(() => {
-              this.innerHTML = '<i class="fas fa-plus-circle"></i> Add All';
+              this.innerHTML = '<i class="fas fa-plus-circle"></i> All';
               this.style.background = '';
             }, 1500);
           });
