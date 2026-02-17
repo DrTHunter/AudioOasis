@@ -18,7 +18,7 @@ def scan_tracks(base_dir):
     track_durations = {}
     for root, dirs, files in os.walk(base_dir):
         for file in files:
-            if file.lower().endswith((".wav", ".mp3", ".flac", ".ogg", ".m4a")):
+            if file.lower().endswith((".opus", ".wav", ".mp3", ".flac", ".ogg", ".m4a")):
                 full_path = os.path.join(root, file)
                 rel_path = os.path.relpath(full_path, base_dir).replace("\\", "/")
                 duration = get_duration(full_path)

@@ -6,8 +6,8 @@ with open("track_durations.json", "r", encoding="utf-8") as f:
     durations = json.load(f)
 
 # Build a lookup: map the filename from the URL to the duration
-# URLs look like: .../tracks/lofi/filename.wav?raw=true
-# Our JSON keys look like: lofi/filename.wav
+# URLs look like: .../tracks/lofi/filename.opus?raw=true
+# Our JSON keys look like: lofi/filename.opus
 url_to_duration = {}
 for rel_path, dur in durations.items():
     # Normalize: lowercase for matching
