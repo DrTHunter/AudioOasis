@@ -2633,9 +2633,9 @@
         <p class="auth-subtitle" id="auth-modal-subtitle">Sign in to save favorites & share playlists</p>
         <div class="auth-error" id="auth-error"></div>
         <div class="oauth-buttons">
-          <button class="oauth-btn google-btn" onclick="location.href=API_URL+'/auth/google'"><i class="fab fa-google"></i> Continue with Google</button>
-          <button class="oauth-btn github-btn" onclick="location.href=API_URL+'/auth/github'"><i class="fab fa-github"></i> Continue with GitHub</button>
-          <button class="oauth-btn discord-btn" onclick="location.href=API_URL+'/auth/discord'"><i class="fab fa-discord"></i> Continue with Discord</button>
+          <button class="oauth-btn google-btn" id="oauth-google-btn"><i class="fab fa-google"></i> Continue with Google</button>
+          <button class="oauth-btn github-btn" id="oauth-github-btn"><i class="fab fa-github"></i> Continue with GitHub</button>
+          <button class="oauth-btn discord-btn" id="oauth-discord-btn"><i class="fab fa-discord"></i> Continue with Discord</button>
         </div>
         <div class="auth-divider">or</div>
         <div id="auth-signup-fields" style="display:none;">
@@ -2790,6 +2790,11 @@
       const authError = document.getElementById('auth-error');
       const authToggleLink = document.getElementById('auth-toggle-link');
       let authMode = 'login'; // 'login' | 'signup'
+
+      // OAuth button handlers
+      document.getElementById('oauth-google-btn').addEventListener('click', () => { location.href = API_URL + '/auth/google'; });
+      document.getElementById('oauth-github-btn').addEventListener('click', () => { location.href = API_URL + '/auth/github'; });
+      document.getElementById('oauth-discord-btn').addEventListener('click', () => { location.href = API_URL + '/auth/discord'; });
 
       function updateAuthUI() {
         if (currentUser) {
