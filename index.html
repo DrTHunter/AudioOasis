@@ -954,11 +954,15 @@
       transition: max-height 0.35s ease;
     }
     .category.expanded .category-content {
-      max-height: 2000px;
+      max-height: 400px;
       overflow-y: auto;
     }
     .category-tracks {
       padding: 8px 15px 15px;
+      position: relative;
+    }
+    .category-tracks-spacer {
+      width: 100%;
     }
     .category-track {
       display: flex;
@@ -1657,13 +1661,26 @@
       transform: scale(1.03);
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    .video-thumb-card video {
+    .video-thumb-card video,
+    .video-thumb-card img {
       width: 100%;
       display: block;
       pointer-events: none;
     }
-    .video-grid.horizontal .video-thumb-card video { aspect-ratio: 16/9; object-fit: cover; }
-    .video-grid.vertical .video-thumb-card video { aspect-ratio: 9/16; object-fit: cover; }
+    .video-grid.horizontal .video-thumb-card video,
+    .video-grid.horizontal .video-thumb-card img { aspect-ratio: 16/9; object-fit: cover; }
+    .video-grid.vertical .video-thumb-card video,
+    .video-grid.vertical .video-thumb-card img { aspect-ratio: 9/16; object-fit: cover; }
+    .video-thumb-card .thumb-play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255,255,255,0.8);
+      font-size: 1.8rem;
+      pointer-events: none;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
     .video-thumb-overlay {
       position: absolute;
       bottom: 0;
@@ -2143,6 +2160,98 @@
         localStorage.setItem('audiooasis.categoryOrder', JSON.stringify(order));
       }
 
+      // ══════ Virtual Scrolling System ══════
+      const TRACK_HEIGHT = 48; // estimated px per track row
+      const BUFFER_TRACKS = 5; // extra tracks above/below viewport
+      // Map to store virtual scroll state per category
+      const categoryVScrollState = new Map();
+
+      function createTrackElement(track, category, index) {
+        const el = document.createElement('div');
+        el.className = 'category-track';
+        el.dataset.src = track.src;
+        el.dataset.title = track.title;
+        el.dataset.duration = track.duration;
+        el.dataset.search = track.title.toLowerCase() + ' ' + category.toLowerCase();
+        el.dataset.trackIndex = index;
+        el.innerHTML = `
+          <span>${track.title}</span>
+          <div class="track-actions">
+            <button class="add-to-playlist-btn"><i class="fas fa-plus"></i> Playlist</button>
+            <button class="add-to-mixer-btn"><i class="fas fa-sliders-h"></i> Mixer</button>
+            <span class="track-duration">${track.duration}</span>
+          </div>
+        `;
+        // Attach event listeners
+        el.querySelector('.add-to-playlist-btn').addEventListener('click', function(e) {
+          e.stopPropagation();
+          addToPlaylist(track);
+          this.innerHTML = '<i class="fas fa-check"></i> Added';
+          this.style.backgroundColor = '#2ecc71';
+          setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-plus"></i> Playlist';
+            this.style.backgroundColor = '';
+          }, 1000);
+        });
+        el.querySelector('.add-to-mixer-btn').addEventListener('click', function(e) {
+          e.stopPropagation();
+          addToMixer(track);
+          this.innerHTML = '<i class="fas fa-check"></i> Added';
+          this.style.backgroundColor = '#2ecc71';
+          setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-sliders-h"></i> Mixer';
+            this.style.backgroundColor = '';
+          }, 1000);
+        });
+        return el;
+      }
+
+      function renderVirtualTracks(categoryElement) {
+        const state = categoryVScrollState.get(categoryElement);
+        if (!state) return;
+
+        const contentEl = categoryElement.querySelector('.category-content');
+        const tracksContainer = categoryElement.querySelector('.category-tracks');
+        const spacer = tracksContainer.querySelector('.category-tracks-spacer');
+        const scrollTop = contentEl.scrollTop;
+
+        // Determine which tracks are visible (filter-aware)
+        const visibleTracks = state.filteredIndices || state.allIndices;
+        const totalHeight = visibleTracks.length * TRACK_HEIGHT;
+        spacer.style.height = totalHeight + 'px';
+
+        const startIdx = Math.max(0, Math.floor(scrollTop / TRACK_HEIGHT) - BUFFER_TRACKS);
+        const viewportHeight = contentEl.clientHeight || 400;
+        const endIdx = Math.min(visibleTracks.length, Math.ceil((scrollTop + viewportHeight) / TRACK_HEIGHT) + BUFFER_TRACKS);
+
+        // Check if we need to re-render (range changed)
+        if (state.renderedStart === startIdx && state.renderedEnd === endIdx) return;
+        state.renderedStart = startIdx;
+        state.renderedEnd = endIdx;
+
+        // Remove old rendered tracks (keep spacer)
+        const oldTracks = tracksContainer.querySelectorAll('.category-track');
+        oldTracks.forEach(el => el.remove());
+
+        // Create a document fragment for batch DOM insert
+        const fragment = document.createDocumentFragment();
+        for (let i = startIdx; i < endIdx; i++) {
+          const trackIdx = visibleTracks[i];
+          const track = state.tracks[trackIdx];
+          const el = createTrackElement(track, state.categoryName, trackIdx);
+          el.style.position = 'absolute';
+          el.style.top = (i * TRACK_HEIGHT) + 'px';
+          el.style.left = '0';
+          el.style.right = '0';
+          // If filtered out, hide it
+          if (state.hiddenIndices && state.hiddenIndices.has(trackIdx)) {
+            el.classList.add('search-hidden');
+          }
+          fragment.appendChild(el);
+        }
+        tracksContainer.appendChild(fragment);
+      }
+
       // Initialize the library
       function initializeLibrary() {
         libraryElement.innerHTML = '';
@@ -2168,16 +2277,8 @@
           categoryElement.dataset.categoryKey = category;
           categoryElement.setAttribute('draggable', 'true');
           const iconClass = genreIcons[category] || 'fa-folder';
-          const categoryItemsHTML = tracks.map(track => `
-            <div class="category-track" data-src="${track.src}" data-title="${track.title}" data-duration="${track.duration}" data-search="${track.title.toLowerCase()} ${category.toLowerCase()}">
-              <span>${track.title}</span>
-              <div class="track-actions">
-                <button class="add-to-playlist-btn"><i class="fas fa-plus"></i> Playlist</button>
-                <button class="add-to-mixer-btn"><i class="fas fa-sliders-h"></i> Mixer</button>
-                <span class="track-duration">${track.duration}</span>
-              </div>
-            </div>
-          `).join('');
+
+          // Build only header + empty virtual container (no track HTML yet)
           categoryElement.innerHTML = `
             <div class="category-header">
               <div class="category-header-left">
@@ -2193,39 +2294,28 @@
             </div>
             <div class="category-content">
               <div class="category-tracks">
-                ${categoryItemsHTML}
+                <div class="category-tracks-spacer"></div>
               </div>
             </div>
           `;
           libraryElement.appendChild(categoryElement);
 
-          // Add click events to buttons
-          categoryElement.querySelectorAll('.add-to-playlist-btn').forEach((btn, index) => {
-            btn.addEventListener('click', function(e) {
-              e.stopPropagation();
-              const track = tracks[index];
-              addToPlaylist(track);
-              btn.innerHTML = '<i class="fas fa-check"></i> Added';
-              btn.style.backgroundColor = '#2ecc71';
-              setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-plus"></i> Playlist';
-                btn.style.backgroundColor = '';
-              }, 1000);
-            });
+          // Store virtual scroll state
+          const allIndices = tracks.map((_, i) => i);
+          categoryVScrollState.set(categoryElement, {
+            categoryName: category,
+            tracks: tracks,
+            allIndices: allIndices,
+            filteredIndices: null,
+            hiddenIndices: null,
+            renderedStart: -1,
+            renderedEnd: -1
           });
-          categoryElement.querySelectorAll('.add-to-mixer-btn').forEach((btn, index) => {
-            btn.addEventListener('click', function(e) {
-              e.stopPropagation();
-              const track = tracks[index];
-              addToMixer(track);
-              btn.innerHTML = '<i class="fas fa-check"></i> Added';
-              btn.style.backgroundColor = '#2ecc71';
-              setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-sliders-h"></i> Mixer';
-                btn.style.backgroundColor = '';
-              }, 1000);
-            });
-          });
+
+          // Scroll handler for virtual rendering
+          const contentEl = categoryElement.querySelector('.category-content');
+          contentEl.addEventListener('scroll', () => renderVirtualTracks(categoryElement));
+
           // Add All button handler
           const addAllBtn = categoryElement.querySelector('.add-all-btn');
           addAllBtn.addEventListener('click', function(e) {
@@ -2238,6 +2328,7 @@
               this.style.background = '';
             }, 1500);
           });
+
           // Toggle expand/collapse
           const header = categoryElement.querySelector('.category-header');
           const toggleBtn = categoryElement.querySelector('.category-toggle');
@@ -2247,6 +2338,13 @@
             toggleBtn.querySelector('i').className = categoryElement.classList.contains('expanded')
               ? 'fas fa-chevron-up'
               : 'fas fa-chevron-down';
+            // Render virtual tracks when expanding
+            if (categoryElement.classList.contains('expanded')) {
+              // Reset render state so it re-renders
+              const state = categoryVScrollState.get(categoryElement);
+              if (state) { state.renderedStart = -1; state.renderedEnd = -1; }
+              requestAnimationFrame(() => renderVirtualTracks(categoryElement));
+            }
           });
 
           // ── Category Drag & Drop ──
@@ -2953,14 +3051,32 @@
         let visibleCategories = 0;
 
         categories.forEach(cat => {
-          const tracks = cat.querySelectorAll('.category-track');
+          const state = categoryVScrollState.get(cat);
+          if (!state) return;
+          const tracks = state.tracks;
           let categoryMatches = 0;
-          tracks.forEach(track => {
-            const searchText = track.dataset.search || '';
-            const matches = !q || searchText.includes(q);
-            track.classList.toggle('search-hidden', !matches);
-            if (matches) categoryMatches++;
-          });
+
+          if (q) {
+            // Build filtered indices
+            const filtered = [];
+            const hidden = new Set();
+            tracks.forEach((track, idx) => {
+              const searchText = (track.title.toLowerCase() + ' ' + state.categoryName.toLowerCase());
+              if (searchText.includes(q)) {
+                filtered.push(idx);
+                categoryMatches++;
+              } else {
+                hidden.add(idx);
+              }
+            });
+            state.filteredIndices = filtered;
+            state.hiddenIndices = hidden;
+          } else {
+            state.filteredIndices = null;
+            state.hiddenIndices = null;
+            categoryMatches = tracks.length;
+          }
+
           const hideCategory = q && categoryMatches === 0;
           cat.classList.toggle('search-hidden', hideCategory);
           if (!hideCategory) visibleCategories++;
@@ -2975,8 +3091,17 @@
           // Update visible track count
           const countSpan = cat.querySelector('.track-count');
           if (countSpan) {
-            const totalInCategory = tracks.length;
-            countSpan.textContent = q ? `(${categoryMatches}/${totalInCategory} tracks)` : `(${totalInCategory} tracks)`;
+            countSpan.textContent = q ? `(${categoryMatches}/${tracks.length} tracks)` : `(${tracks.length} tracks)`;
+          }
+
+          // Force re-render virtual tracks with new filter
+          state.renderedStart = -1;
+          state.renderedEnd = -1;
+          // Reset scroll to top when filtering
+          const contentEl = cat.querySelector('.category-content');
+          if (contentEl) contentEl.scrollTop = 0;
+          if (cat.classList.contains('expanded')) {
+            renderVirtualTracks(cat);
           }
         });
 
@@ -3018,29 +3143,48 @@
 
       // ── Auto-detect Track Durations ──
       // Scan for tracks with "0:00" duration and fetch real duration from audio metadata
+      // Uses a queue to limit concurrent requests and avoid bandwidth/memory spikes
       function autoDetectDurations() {
+        const tracksToDetect = [];
         for (const [category, tracks] of Object.entries(trackLibrary)) {
           tracks.forEach(track => {
             if (track.duration === '0:00') {
-              const tempAudio = new Audio();
-              tempAudio.preload = 'metadata';
-              tempAudio.addEventListener('loadedmetadata', function() {
-                if (!isNaN(tempAudio.duration) && tempAudio.duration > 0) {
-                  const realDuration = formatTime(tempAudio.duration);
-                  track.duration = realDuration;
-                  // Update any visible duration displays in the library
-                  const trackEls = libraryElement.querySelectorAll(`.category-track[data-src="${CSS.escape(track.src)}"] .track-duration`);
-                  trackEls.forEach(el => el.textContent = realDuration);
-                }
-                tempAudio.src = ''; // release
-              });
-              tempAudio.src = track.src;
+              tracksToDetect.push(track);
             }
           });
         }
+        if (tracksToDetect.length === 0) return;
+        
+        // Process max 3 at a time to avoid bandwidth spike
+        let activeCount = 0;
+        let queueIndex = 0;
+        const MAX_CONCURRENT = 3;
+        
+        function processNext() {
+          while (activeCount < MAX_CONCURRENT && queueIndex < tracksToDetect.length) {
+            const track = tracksToDetect[queueIndex++];
+            activeCount++;
+            const tempAudio = new Audio();
+            tempAudio.preload = 'metadata';
+            const cleanup = () => {
+              tempAudio.src = '';
+              activeCount--;
+              processNext();
+            };
+            tempAudio.addEventListener('loadedmetadata', function() {
+              if (!isNaN(tempAudio.duration) && tempAudio.duration > 0) {
+                track.duration = formatTime(tempAudio.duration);
+              }
+              cleanup();
+            });
+            tempAudio.addEventListener('error', cleanup);
+            tempAudio.src = track.src;
+          }
+        }
+        processNext();
       }
       // Run duration detection after a short delay to not block initial render
-      setTimeout(autoDetectDurations, 1000);
+      setTimeout(autoDetectDurations, 2000);
 
       // ── Loading indicator for single player ──
       audioPlayer.addEventListener('waiting', function() {
@@ -3134,6 +3278,15 @@
       });
 
       // ── Initialize Video Library ──
+      // Helper: get thumbnail path for a video src
+      function getVideoThumbPath(videoSrc) {
+        // videoSrc like "Video Files/Abstract - Cat with Blue Eyes.mp4"
+        // thumb at "video_thumbs/Abstract - Cat with Blue Eyes.jpg"
+        const filename = videoSrc.split('/').pop();
+        const baseName = filename.replace(/\.[^.]+$/, '');
+        return 'video_thumbs/' + baseName + '.jpg';
+      }
+
       function initializeVideoLibrary() {
         if (typeof videoLibrary === 'undefined') return;
         videoGrid.innerHTML = '';
@@ -3146,19 +3299,16 @@
           videos.forEach(video => {
             const card = document.createElement('div');
             card.className = 'video-thumb-card';
+            const thumbSrc = getVideoThumbPath(video.src);
             card.innerHTML = `
-              <video src="${video.src}" preload="metadata" muted></video>
+              <img src="${thumbSrc}" alt="${video.title}" loading="lazy">
+              <i class="fas fa-play thumb-play-icon"></i>
               <div class="video-thumb-overlay">${video.title}</div>
               <div class="video-thumb-actions">
                 <button class="vta-play" title="Play now"><i class="fas fa-play"></i></button>
                 <button class="vta-add" title="Add to video playlist"><i class="fas fa-plus"></i></button>
               </div>
             `;
-            // Seek to 1s for thumbnail
-            const thumbVideo = card.querySelector('video');
-            thumbVideo.addEventListener('loadeddata', function() {
-              this.currentTime = 1;
-            });
             // Play now
             card.querySelector('.vta-play').addEventListener('click', function(e) {
               e.stopPropagation();
@@ -3233,15 +3383,13 @@
         videoPlaylist.forEach((video, index) => {
           const item = document.createElement('li');
           item.className = `video-playlist-item${index === currentVideoIndex ? ' active' : ''}`;
+          const thumbSrc = getVideoThumbPath(video.src);
           item.innerHTML = `
             <span class="vpi-index">${index + 1}</span>
-            <video class="vpi-thumb" src="${video.src}" preload="metadata" muted></video>
+            <img class="vpi-thumb" src="${thumbSrc}" alt="${video.title}">
             <span class="vpi-title">${video.title}</span>
             <button class="vpi-remove" title="Remove"><i class="fas fa-times"></i></button>
           `;
-          // Thumbnail seek
-          const thumb = item.querySelector('.vpi-thumb');
-          thumb.addEventListener('loadeddata', function() { this.currentTime = 1; });
           // Click to play
           item.addEventListener('click', function(e) {
             if (e.target.closest('.vpi-remove')) return;
