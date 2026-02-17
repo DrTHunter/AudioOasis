@@ -303,6 +303,33 @@
     .control-btn.active:hover {
       background: rgba(46,204,113,0.12);
     }
+    .control-btn.video-toggle-btn {
+      color: var(--gray);
+      position: relative;
+    }
+    .control-btn.video-toggle-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--mixer-accent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .control-btn.video-toggle-btn.video-playing {
+      color: var(--mixer-accent);
+    }
+    .control-btn.video-toggle-btn.video-playing::after {
+      opacity: 1;
+    }
+    .control-btn.video-toggle-btn:hover {
+      color: var(--mixer-accent);
+      background: rgba(155,89,182,0.12);
+    }
 
     /* ── Volume (inline) ── */
     .volume-control {
@@ -1976,6 +2003,7 @@
             <button class="control-btn primary" id="play-btn" title="Play/Pause"><i class="fas fa-play"></i></button>
             <button class="control-btn" id="next-btn" title="Next"><i class="fas fa-step-forward"></i></button>
             <button class="control-btn" id="loop-btn" title="Loop"><i class="fas fa-redo"></i></button>
+            <button class="control-btn video-toggle-btn" id="video-toggle-btn" title="Play/Pause Video"><i class="fas fa-play"></i></button>
             <button class="control-btn" id="clear-btn" title="Clear"><i class="fas fa-trash"></i></button>
           </div>
           <div class="volume-control">
@@ -2132,6 +2160,7 @@
       const prevBtn = document.getElementById('prev-btn');
       const clearBtn = document.getElementById('clear-btn');
       const loopBtn = document.getElementById('loop-btn');
+      const videoToggleBtn = document.getElementById('video-toggle-btn');
       const shuffleBtn = document.getElementById('shuffle-btn');
       const progressBar = document.getElementById('progress-bar');
       const volumeBar = document.getElementById('volume-bar');
@@ -2997,6 +3026,9 @@
       // Load track
       function loadTrack(index) {
         if (index < 0 || index >= playlist.length) return;
+        // Remember if video was playing before track change
+        const ambianceVid = document.getElementById('ambiance-video');
+        const videoWasPlaying = ambianceVid && !ambianceVid.paused && ambianceVid.src && ambianceVid.src !== window.location.href;
         currentTrackIndex = index;
         audioPlayer.src = playlist[index].src;
         currentTrackDisplay.textContent = playlist[index].title;
@@ -3012,6 +3044,10 @@
           audioPlayer.play().catch(error => {
             console.error('Playback failed:', error);
           });
+        }
+        // Resume video if it was playing before track change
+        if (videoWasPlaying && ambianceVid.paused) {
+          ambianceVid.play().catch(() => {});
         }
       }
       // Play track
@@ -3150,6 +3186,25 @@
         isLooping = !isLooping;
         audioPlayer.loop = isLooping;
         loopBtn.classList.toggle('active', isLooping);
+      });
+      // Video play/pause toggle in player controls
+      videoToggleBtn.addEventListener('click', function() {
+        const ambianceVideo = document.getElementById('ambiance-video');
+        if (!ambianceVideo || !ambianceVideo.src || ambianceVideo.src === window.location.href) return;
+        if (ambianceVideo.paused) {
+          ambianceVideo.play().catch(() => {});
+          videoToggleBtn.innerHTML = '<i class="fas fa-pause"></i>';
+          videoToggleBtn.classList.add('video-playing');
+          // Also sync the video player's own play button
+          const vpBtn = document.getElementById('video-playpause-btn');
+          if (vpBtn) vpBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+          ambianceVideo.pause();
+          videoToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
+          videoToggleBtn.classList.remove('video-playing');
+          const vpBtn = document.getElementById('video-playpause-btn');
+          if (vpBtn) vpBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
       });
       savePlaylistBtn.addEventListener('click', function() { saveCurrentPlaylist(currentSaveType); });
       // Save dropdown toggle
@@ -3679,11 +3734,17 @@
         videoPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         videoPlayerWrapper.classList.remove('hidden');
         videoSettings.classList.remove('hidden');
+        // Sync player-tab video toggle
+        videoToggleBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        videoToggleBtn.classList.add('video-playing');
       }
 
       function pauseVideo() {
         ambianceVideo.pause();
         videoPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        // Sync player-tab video toggle
+        videoToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
+        videoToggleBtn.classList.remove('video-playing');
       }
 
       function nextVideo() {
