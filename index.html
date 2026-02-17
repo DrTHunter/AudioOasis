@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Permissions-Policy" content="autoplay=*, fullscreen=*">
   <meta name="robots" content="index, follow">
   <meta name="author" content="Trent Hunter, AudioOasis by Orion AI">
   <!-- SEO Primary Meta Tags -->
@@ -939,6 +938,169 @@
       text-align: center;
       padding: 20px;
       color: var(--gray);
+    }
+    /* Confirmation Modal */
+    .confirm-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    .confirm-modal-overlay.show {
+      display: flex;
+    }
+    .confirm-modal {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 360px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    body.dark-mode .confirm-modal {
+      background: #2a2a40;
+      color: #eee;
+    }
+    .confirm-modal h3 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+    }
+    .confirm-modal p {
+      margin: 0 0 20px;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+    .confirm-modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .confirm-modal-actions button {
+      padding: 8px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+    .confirm-modal-actions .confirm-cancel {
+      background: var(--light-gray);
+      color: var(--dark);
+    }
+    body.dark-mode .confirm-modal-actions .confirm-cancel {
+      background: #3a3a5c;
+      color: #ccc;
+    }
+    .confirm-modal-actions .confirm-delete {
+      background: #e74c3c;
+      color: white;
+    }
+    .confirm-modal-actions .confirm-delete:hover {
+      background: #c0392b;
+    }
+    /* Trash Section */
+    .trash-section {
+      margin-top: 15px;
+      border-top: 1px solid var(--light-gray);
+      padding-top: 12px;
+    }
+    body.dark-mode .trash-section {
+      border-top-color: #3a3a5c;
+    }
+    .trash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 6px 0;
+      color: var(--gray);
+      font-size: 0.85rem;
+    }
+    .trash-header:hover {
+      color: var(--dark);
+    }
+    body.dark-mode .trash-header:hover {
+      color: #ccc;
+    }
+    .trash-header i {
+      margin-right: 6px;
+    }
+    .trash-items {
+      display: none;
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .trash-items.show {
+      display: flex;
+    }
+    .trash-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #fef3f2;
+      border: 1px solid #fdecea;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    body.dark-mode .trash-item {
+      background: rgba(231,76,60,0.08);
+      border-color: rgba(231,76,60,0.2);
+    }
+    .trash-item-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .trash-item-name {
+      font-weight: 600;
+      color: var(--dark);
+    }
+    body.dark-mode .trash-item-name {
+      color: #ccc;
+    }
+    .trash-item-meta {
+      font-size: 0.75rem;
+      color: var(--gray);
+    }
+    .trash-item-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .trash-item-actions button {
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: var(--transition);
+    }
+    .trash-item-actions .restore-btn {
+      background: var(--accent);
+      color: white;
+    }
+    .trash-item-actions .restore-btn:hover {
+      background: #27ae60;
+    }
+    .trash-item-actions .perm-delete-btn {
+      background: #fdecea;
+      color: #e74c3c;
+    }
+    .trash-item-actions .perm-delete-btn:hover {
+      background: #e74c3c;
+      color: white;
+    }
+    body.dark-mode .trash-item-actions .perm-delete-btn {
+      background: rgba(231,76,60,0.15);
     }
     /* Library */
     .library-wrapper {
@@ -1945,7 +2107,7 @@
     <div class="player-container">
       <!-- Video Player (above music player) -->
       <div class="video-player-wrapper hidden" id="video-player-wrapper">
-        <video id="ambiance-video" muted loop playsinline webkit-playsinline></video>
+        <video id="ambiance-video" muted loop playsinline webkit-playsinline autoplay></video>
         <div class="video-player-controls">
           <span class="video-now-playing" id="video-now-playing">No video</span>
           <button id="video-prev-btn" title="Previous video"><i class="fas fa-step-backward"></i></button>
@@ -2087,6 +2249,25 @@
           <ul class="saved-playlists-list" id="saved-playlists-list">
             <li class="saved-playlists-empty">No saved playlists yet.</li>
           </ul>
+          <!-- Trash Section -->
+          <div class="trash-section" id="trash-section" style="display:none;">
+            <div class="trash-header" id="trash-header">
+              <span><i class="fas fa-trash"></i> Trash</span>
+              <i class="fas fa-chevron-down" id="trash-chevron"></i>
+            </div>
+            <ul class="trash-items" id="trash-items"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Confirmation Modal -->
+    <div class="confirm-modal-overlay" id="confirm-modal">
+      <div class="confirm-modal">
+        <h3>Delete Playlist?</h3>
+        <p id="confirm-modal-msg">Are you sure you want to delete this playlist? It will be moved to trash for 30 days.</p>
+        <div class="confirm-modal-actions">
+          <button class="confirm-cancel" id="confirm-cancel-btn">Cancel</button>
+          <button class="confirm-delete" id="confirm-delete-btn">Delete</button>
         </div>
       </div>
     </div>
@@ -2133,7 +2314,7 @@
   </div>
   <!-- Ambiance / Detached video overlay -->
   <div class="video-ambiance-overlay" id="video-ambiance-overlay">
-    <video id="ambiance-video-detached" muted loop playsinline webkit-playsinline></video>
+    <video id="ambiance-video-detached" muted loop playsinline webkit-playsinline autoplay></video>
     <div class="video-ambiance-controls">
       <button id="ambiance-prev-btn" title="Previous"><i class="fas fa-step-backward"></i></button>
       <button id="ambiance-playpause-btn" title="Play/Pause"><i class="fas fa-pause"></i></button>
@@ -2269,6 +2450,130 @@
       function savePlaylistsToStorage() {
         localStorage.setItem('audiooasis.savedPlaylists', JSON.stringify(savedPlaylists));
       }
+
+      // ── Trash System ──
+      let trashedPlaylists = [];
+      const TRASH_KEY = 'audiooasis.trashedPlaylists';
+      const TRASH_DAYS = 30;
+
+      (function loadTrash() {
+        try {
+          const raw = localStorage.getItem(TRASH_KEY);
+          if (raw) trashedPlaylists = JSON.parse(raw);
+        } catch (e) { trashedPlaylists = []; }
+        purgeOldTrash();
+      })();
+
+      function saveTrashToStorage() {
+        localStorage.setItem(TRASH_KEY, JSON.stringify(trashedPlaylists));
+      }
+
+      function purgeOldTrash() {
+        const now = Date.now();
+        const cutoff = TRASH_DAYS * 24 * 60 * 60 * 1000;
+        trashedPlaylists = trashedPlaylists.filter(t => now - t.deletedAt < cutoff);
+        saveTrashToStorage();
+      }
+
+      function trashPlaylist(name) {
+        const data = savedPlaylists[name];
+        if (!data) return;
+        trashedPlaylists.push({ name, data, deletedAt: Date.now() });
+        delete savedPlaylists[name];
+        if (editingPlaylistName === name) {
+          editingPlaylistName = null;
+          document.getElementById('saved-playlist-editing').classList.add('hidden');
+        }
+        savePlaylistsToStorage();
+        saveTrashToStorage();
+        renderSavedPlaylists();
+        renderTrash();
+      }
+
+      function restoreFromTrash(index) {
+        const item = trashedPlaylists[index];
+        if (!item) return;
+        // If a playlist with the same name exists, append a number
+        let restoreName = item.name;
+        let counter = 1;
+        while (savedPlaylists[restoreName]) {
+          restoreName = item.name + ' (' + counter + ')';
+          counter++;
+        }
+        savedPlaylists[restoreName] = item.data;
+        trashedPlaylists.splice(index, 1);
+        savePlaylistsToStorage();
+        saveTrashToStorage();
+        renderSavedPlaylists();
+        renderTrash();
+      }
+
+      function permanentlyDelete(index) {
+        trashedPlaylists.splice(index, 1);
+        saveTrashToStorage();
+        renderTrash();
+      }
+
+      function renderTrash() {
+        const section = document.getElementById('trash-section');
+        const list = document.getElementById('trash-items');
+        if (trashedPlaylists.length === 0) {
+          section.style.display = 'none';
+          return;
+        }
+        section.style.display = 'block';
+        list.innerHTML = '';
+        trashedPlaylists.forEach((item, idx) => {
+          const daysLeft = Math.max(0, Math.ceil((TRASH_DAYS * 86400000 - (Date.now() - item.deletedAt)) / 86400000));
+          const li = document.createElement('li');
+          li.className = 'trash-item';
+          li.innerHTML = `
+            <div class="trash-item-details">
+              <span class="trash-item-name">${item.name}</span>
+              <span class="trash-item-meta">${daysLeft} day${daysLeft !== 1 ? 's' : ''} left</span>
+            </div>
+            <div class="trash-item-actions">
+              <button class="restore-btn" title="Restore"><i class="fas fa-undo"></i></button>
+              <button class="perm-delete-btn" title="Delete permanently"><i class="fas fa-times"></i></button>
+            </div>`;
+          li.querySelector('.restore-btn').addEventListener('click', () => restoreFromTrash(idx));
+          li.querySelector('.perm-delete-btn').addEventListener('click', () => permanentlyDelete(idx));
+          list.appendChild(li);
+        });
+      }
+
+      // Confirmation modal
+      let pendingDeleteName = null;
+      function showDeleteConfirm(name) {
+        pendingDeleteName = name;
+        document.getElementById('confirm-modal-msg').textContent =
+          'Are you sure you want to delete "' + name + '"? It will be moved to trash for 30 days.';
+        document.getElementById('confirm-modal').classList.add('show');
+      }
+      document.getElementById('confirm-cancel-btn').addEventListener('click', () => {
+        document.getElementById('confirm-modal').classList.remove('show');
+        pendingDeleteName = null;
+      });
+      document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+        if (pendingDeleteName) trashPlaylist(pendingDeleteName);
+        document.getElementById('confirm-modal').classList.remove('show');
+        pendingDeleteName = null;
+      });
+      document.getElementById('confirm-modal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+          e.currentTarget.classList.remove('show');
+          pendingDeleteName = null;
+        }
+      });
+
+      // Trash section toggle
+      document.getElementById('trash-header').addEventListener('click', () => {
+        const items = document.getElementById('trash-items');
+        const chevron = document.getElementById('trash-chevron');
+        items.classList.toggle('show');
+        chevron.classList.toggle('fa-chevron-down');
+        chevron.classList.toggle('fa-chevron-up');
+      });
 
       function syncEditingPlaylist() {
         if (!editingPlaylistName) return;
@@ -2925,12 +3230,7 @@
             }
           });
           deleteBtn.addEventListener('click', function() {
-            delete savedPlaylists[name];
-            savePlaylistsToStorage();
-            renderSavedPlaylists();
-            if (editingPlaylistName === name) {
-              setEditingPlaylist(null);
-            }
+            showDeleteConfirm(name);
           });
           savedPlaylistsList.appendChild(item);
         });
@@ -3302,6 +3602,7 @@
       // Initialize the player
       initializeLibrary();
       renderSavedPlaylists();
+      renderTrash();
 
       // ── Dark Mode (default ON) ──
       const savedDarkMode = localStorage.getItem('audiooasis.darkMode');
@@ -3721,16 +4022,27 @@
         currentVideoIndex = index;
         const video = videoPlaylist[index];
         ambianceVideo.src = video.src;
+        ambianceVideo.load();
         videoNowPlaying.textContent = video.title;
         if (isAmbianceMode) {
           ambianceVideoDetached.src = video.src;
+          ambianceVideoDetached.load();
           ambianceVideoDetached.play().catch(() => {});
         }
         updateVideoPlaylistDisplay();
       }
 
       function playVideo() {
-        ambianceVideo.play().catch(() => {});
+        const tryPlay = () => {
+          ambianceVideo.play().catch(() => {
+            // If play fails, retry after canplay event
+            ambianceVideo.addEventListener('canplay', function onCanPlay() {
+              ambianceVideo.removeEventListener('canplay', onCanPlay);
+              ambianceVideo.play().catch(() => {});
+            });
+          });
+        };
+        tryPlay();
         videoPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         videoPlayerWrapper.classList.remove('hidden');
         videoSettings.classList.remove('hidden');
