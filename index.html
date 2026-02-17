@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Permissions-Policy" content="autoplay=(), fullscreen=()">
+  <meta http-equiv="Permissions-Policy" content="autoplay=*, fullscreen=*">
   <meta name="robots" content="index, follow">
   <meta name="author" content="Trent Hunter, AudioOasis by Orion AI">
   <!-- SEO Primary Meta Tags -->
@@ -1945,7 +1945,7 @@
     <div class="player-container">
       <!-- Video Player (above music player) -->
       <div class="video-player-wrapper hidden" id="video-player-wrapper">
-        <video id="ambiance-video" muted loop></video>
+        <video id="ambiance-video" muted loop playsinline webkit-playsinline></video>
         <div class="video-player-controls">
           <span class="video-now-playing" id="video-now-playing">No video</span>
           <button id="video-prev-btn" title="Previous video"><i class="fas fa-step-backward"></i></button>
@@ -2133,7 +2133,7 @@
   </div>
   <!-- Ambiance / Detached video overlay -->
   <div class="video-ambiance-overlay" id="video-ambiance-overlay">
-    <video id="ambiance-video-detached" muted loop></video>
+    <video id="ambiance-video-detached" muted loop playsinline webkit-playsinline></video>
     <div class="video-ambiance-controls">
       <button id="ambiance-prev-btn" title="Previous"><i class="fas fa-step-backward"></i></button>
       <button id="ambiance-playpause-btn" title="Play/Pause"><i class="fas fa-pause"></i></button>
