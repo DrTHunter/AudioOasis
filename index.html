@@ -302,26 +302,7 @@
     .control-btn.active:hover {
       background: rgba(46,204,113,0.12);
     }
-    .video-playpause-toggle {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      color: var(--gray);
-      background: none;
-      border: none;
-      font-size: 0.85rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-      transition: var(--transition);
-    }
-    .video-playpause-toggle.video-playing {
-      color: var(--mixer-accent);
-    }
-    .video-playpause-toggle:hover {
-      color: var(--mixer-accent);
-      background: rgba(155,89,182,0.1);
-    }
+
 
     /* ── Volume (inline) ── */
     .volume-control {
@@ -2129,10 +2110,6 @@
         <span class="video-loop-toggle active" id="video-loop-toggle" title="Loop videos">
           <i class="fas fa-redo"></i> Loop
         </span>
-        <div class="vs-divider"></div>
-        <button class="video-playpause-toggle" id="video-toggle-btn" title="Play/Pause Video">
-          <i class="fas fa-pause"></i>
-        </button>
       </div>
       <!-- Music Player -->
       <div class="music-player">
@@ -2337,7 +2314,7 @@
       const prevBtn = document.getElementById('prev-btn');
       const clearBtn = document.getElementById('clear-btn');
       const loopBtn = document.getElementById('loop-btn');
-      const videoToggleBtn = document.getElementById('video-toggle-btn');
+
       const shuffleBtn = document.getElementById('shuffle-btn');
       const progressBar = document.getElementById('progress-bar');
       const volumeBar = document.getElementById('volume-bar');
@@ -3483,15 +3460,7 @@
         audioPlayer.loop = isLooping;
         loopBtn.classList.toggle('active', isLooping);
       });
-      // Video play/pause toggle in video settings bar
-      videoToggleBtn.addEventListener('click', function() {
-        if (!ambianceVideo || !ambianceVideo.src || ambianceVideo.src === window.location.href) return;
-        if (ambianceVideo.paused) {
-          playVideo();
-        } else {
-          pauseVideo();
-        }
-      });
+
       savePlaylistBtn.addEventListener('click', function() { saveCurrentPlaylist(currentSaveType); });
       // Save dropdown toggle
       saveDropdownToggle.addEventListener('click', function(e) {
@@ -3887,7 +3856,6 @@
               addToVideoPlaylist(video);
               const idx = videoPlaylist.length - 1;
               loadVideo(idx);
-              playVideo();
             });
             // Add to playlist
             card.querySelector('.vta-add').addEventListener('click', function(e) {
@@ -3901,7 +3869,6 @@
               addToVideoPlaylist(video);
               const idx = videoPlaylist.length - 1;
               loadVideo(idx);
-              playVideo();
             });
             videoGrid.appendChild(card);
           });
@@ -3991,7 +3958,6 @@
           item.addEventListener('click', function(e) {
             if (e.target.closest('.vpi-remove')) return;
             loadVideo(index);
-            playVideo();
           });
           // Remove
           item.querySelector('.vpi-remove').addEventListener('click', function(e) {
@@ -4016,47 +3982,52 @@
           ambianceVideoDetached.play().catch(() => {});
         }
         updateVideoPlaylistDisplay();
+        // Auto-play after loading
+        playVideo();
       }
 
       function playVideo() {
+        // Ensure muted for mobile autoplay policy
+        ambianceVideo.muted = true;
         const tryPlay = () => {
-          ambianceVideo.play().catch(() => {
-            // If play fails, retry after canplay event
-            ambianceVideo.addEventListener('canplay', function onCanPlay() {
-              ambianceVideo.removeEventListener('canplay', onCanPlay);
-              ambianceVideo.play().catch(() => {});
+          const p = ambianceVideo.play();
+          if (p && p.catch) {
+            p.catch(() => {
+              // Retry after canplay event (mobile buffering)
+              ambianceVideo.addEventListener('canplay', function onCanPlay() {
+                ambianceVideo.removeEventListener('canplay', onCanPlay);
+                ambianceVideo.play().catch(() => {});
+              });
+              // Also retry after a short delay as fallback
+              setTimeout(() => {
+                if (ambianceVideo.paused && ambianceVideo.src) {
+                  ambianceVideo.play().catch(() => {});
+                }
+              }, 500);
             });
-          });
+          }
         };
         tryPlay();
         videoPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         videoPlayerWrapper.classList.remove('hidden');
         videoSettings.classList.remove('hidden');
-        // Sync video settings bar toggle
-        videoToggleBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        videoToggleBtn.classList.add('video-playing');
       }
 
       function pauseVideo() {
         ambianceVideo.pause();
         videoPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-        // Sync video settings bar toggle
-        videoToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
-        videoToggleBtn.classList.remove('video-playing');
       }
 
       function nextVideo() {
         if (videoPlaylist.length === 0) return;
         currentVideoIndex = (currentVideoIndex + 1) % videoPlaylist.length;
         loadVideo(currentVideoIndex);
-        playVideo();
       }
 
       function prevVideo() {
         if (videoPlaylist.length === 0) return;
         currentVideoIndex = (currentVideoIndex - 1 + videoPlaylist.length) % videoPlaylist.length;
         loadVideo(currentVideoIndex);
-        playVideo();
       }
 
       videoPlayPauseBtn.addEventListener('click', function() {
@@ -4088,15 +4059,11 @@
         }
       });
 
-      // Keep video toggle button in sync with actual video state
+      // Keep video play/pause button in sync with actual video state
       ambianceVideo.addEventListener('play', function() {
-        videoToggleBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        videoToggleBtn.classList.add('video-playing');
         videoPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
       });
       ambianceVideo.addEventListener('pause', function() {
-        videoToggleBtn.innerHTML = '<i class="fas fa-play"></i>';
-        videoToggleBtn.classList.remove('video-playing');
         videoPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
       });
 
