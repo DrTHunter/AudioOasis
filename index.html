@@ -2064,6 +2064,309 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #a8a8a8;
     }
+
+    /* ══════ Auth Modal ══════ */
+    .auth-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+    }
+    .auth-modal-overlay.show { display: flex; }
+    .auth-modal {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .auth-modal h2 {
+      margin: 0 0 6px 0;
+      font-size: 1.4rem;
+      color: var(--secondary);
+    }
+    .auth-modal .auth-subtitle {
+      color: var(--gray);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+    .auth-modal input[type="text"],
+    .auth-modal input[type="email"],
+    .auth-modal input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--light-gray);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .auth-modal input:focus {
+      border-color: var(--primary);
+    }
+    .auth-modal .auth-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-bottom: 12px;
+    }
+    .auth-modal .auth-btn:hover { opacity: 0.9; }
+    .auth-modal .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .auth-modal .auth-toggle {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+    .auth-modal .auth-toggle a {
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .auth-modal .auth-error {
+      background: #fee;
+      color: #c0392b;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .auth-modal .auth-error.show { display: block; }
+    body.dark-mode .auth-modal {
+      background: #1e1e2f;
+      color: #e0e0e0;
+    }
+    body.dark-mode .auth-modal h2 { color: #e0e0e0; }
+    body.dark-mode .auth-modal input {
+      background: #252540;
+      border-color: #3a3a5c;
+      color: #e0e0e0;
+    }
+
+    /* ══════ User Button (Header) ══════ */
+    .user-btn {
+      background: none;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: rgba(255,255,255,0.8);
+      font-size: 1rem;
+      transition: var(--transition);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .user-btn:hover {
+      border-color: rgba(255,255,255,0.6);
+      color: white;
+      background: rgba(255,255,255,0.1);
+    }
+    .user-btn.logged-in {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .user-btn.logged-in:hover {
+      background: rgba(46,204,113,0.15);
+    }
+    /* User dropdown */
+    .user-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      min-width: 200px;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .user-dropdown.show { display: block; }
+    .user-dropdown-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--light-gray);
+      font-size: 0.85rem;
+    }
+    .user-dropdown-header strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+    .user-dropdown-header span {
+      color: var(--gray);
+    }
+    .user-dropdown button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--dark);
+      transition: background 0.15s;
+    }
+    .user-dropdown button:hover { background: var(--light-gray); }
+    .user-dropdown button.logout-btn { color: #e74c3c; }
+    .user-dropdown button.logout-btn:hover { background: #fee; }
+    body.dark-mode .user-dropdown {
+      background: #1e1e2f;
+      border-color: #3a3a5c;
+    }
+    body.dark-mode .user-dropdown-header { border-color: #3a3a5c; }
+    body.dark-mode .user-dropdown button { color: #e0e0e0; }
+    body.dark-mode .user-dropdown button:hover { background: #252540; }
+
+    /* ══════ Heart / Favorite Button ══════ */
+    .fav-btn {
+      opacity: 0;
+      transition: var(--transition);
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      border: none;
+      background: none;
+      color: var(--gray);
+    }
+    .fav-btn:hover { color: #e74c3c; }
+    .fav-btn.hearted { color: #e74c3c; opacity: 1 !important; }
+    .category-track:hover .fav-btn,
+    .category-track.mobile-active .fav-btn { opacity: 1; }
+
+    /* ══════ Community Playlists Section ══════ */
+    .community-section {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin-top: 16px;
+    }
+    .community-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: background 0.2s;
+      border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+    .community-header:hover { background: var(--light-gray); }
+    .community-header h2 {
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .community-body { padding: 0 16px 16px; }
+    .community-body.hidden { display: none; }
+    .community-list { list-style: none; padding: 0; }
+    .community-card {
+      padding: 14px;
+      border: 1px solid var(--light-gray);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      transition: var(--transition);
+    }
+    .community-card:hover { box-shadow: var(--shadow-hover); }
+    .community-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .community-card-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .community-card-meta {
+      font-size: 0.8rem;
+      color: var(--gray);
+      display: flex;
+      gap: 12px;
+    }
+    .community-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .community-card-actions button {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .community-like-btn {
+      background: #fee;
+      color: #e74c3c;
+    }
+    .community-like-btn.liked { background: #e74c3c; color: white; }
+    .community-load-btn {
+      background: var(--primary);
+      color: white;
+    }
+    .community-load-btn:hover { opacity: 0.9; }
+    .community-empty {
+      text-align: center;
+      padding: 24px;
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+    .community-share-form {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .community-share-form input {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1.5px solid var(--light-gray);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .community-share-form input:focus { border-color: var(--primary); }
+    .community-share-form button {
+      padding: 10px 16px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    body.dark-mode .community-section { background: #1e1e2f; }
+    body.dark-mode .community-header:hover { background: #252540; }
+    body.dark-mode .community-card { border-color: #3a3a5c; }
+    body.dark-mode .community-share-form input {
+      background: #252540;
+      border-color: #3a3a5c;
+      color: #e0e0e0;
+    }
   </style>
 </head>
 <body>
@@ -2071,6 +2374,20 @@
     <div class="header-text">
       <h1><i class="fas fa-headphones"></i> AudioOasis</h1>
       <p class="tagline">Build your own background mix: lofi, ambience, meditation, and more. Click tracks to add them to your playlist or mixer.</p>
+    </div>
+    <div style="position:relative;">
+      <button class="user-btn" id="user-btn" title="Account">
+        <i class="fas fa-user"></i>
+      </button>
+      <div class="user-dropdown" id="user-dropdown">
+        <div class="user-dropdown-header" id="user-dropdown-header">
+          <strong id="user-dropdown-name">Guest</strong>
+          <span id="user-dropdown-email"></span>
+        </div>
+        <button id="user-favorites-btn"><i class="fas fa-heart"></i> My Favorites</button>
+        <button id="user-history-btn"><i class="fas fa-history"></i> Listening History</button>
+        <button class="logout-btn" id="user-logout-btn"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+      </div>
     </div>
     <button class="dark-mode-toggle" id="dark-mode-toggle" title="Toggle dark mode">
       <i class="fas fa-moon"></i>
@@ -2232,6 +2549,22 @@
           </div>
         </div>
       </div>
+      <!-- Community Playlists -->
+      <div class="community-section" id="community-section">
+        <div class="community-header" id="community-header">
+          <h2><i class="fas fa-globe"></i> Community Playlists</h2>
+          <button class="toggle-btn" id="community-toggle"><i class="fas fa-chevron-down"></i></button>
+        </div>
+        <div class="community-body hidden" id="community-body">
+          <div class="community-share-form" id="community-share-form" style="display:none;">
+            <input type="text" id="community-share-name" placeholder="Share current playlist as...">
+            <button id="community-share-btn"><i class="fas fa-share"></i> Share</button>
+          </div>
+          <ul class="community-list" id="community-list">
+            <li class="community-empty">Loading community playlists...</li>
+          </ul>
+        </div>
+      </div>
     </div>
     <!-- Confirmation Modal -->
     <div class="confirm-modal-overlay" id="confirm-modal">
@@ -2241,6 +2574,24 @@
         <div class="confirm-modal-actions">
           <button class="confirm-cancel" id="confirm-cancel-btn">Cancel</button>
           <button class="confirm-delete" id="confirm-delete-btn">Delete</button>
+        </div>
+      </div>
+    </div>
+    <!-- Auth Modal -->
+    <div class="auth-modal-overlay" id="auth-modal">
+      <div class="auth-modal">
+        <h2 id="auth-modal-title">Log In</h2>
+        <p class="auth-subtitle" id="auth-modal-subtitle">Sign in to save favorites & share playlists</p>
+        <div class="auth-error" id="auth-error"></div>
+        <div id="auth-signup-fields" style="display:none;">
+          <input type="text" id="auth-username" placeholder="Username" autocomplete="username">
+        </div>
+        <input type="email" id="auth-email" placeholder="Email" autocomplete="email">
+        <input type="password" id="auth-password" placeholder="Password" autocomplete="current-password">
+        <button class="auth-btn" id="auth-submit-btn">Log In</button>
+        <div class="auth-toggle">
+          <span id="auth-toggle-text">Don't have an account?</span>
+          <a id="auth-toggle-link">Sign Up</a>
         </div>
       </div>
     </div>
@@ -2359,6 +2710,349 @@
 
       // Set dynamic footer year
       footerYear.textContent = new Date().getFullYear();
+
+      // ══════ API Client & Auth ══════
+      const API_URL = 'https://audiooasis-api.dr-hunter.workers.dev';
+      let authToken = localStorage.getItem('audiooasis.authToken') || null;
+      let currentUser = null;
+      let userFavorites = new Set(); // Set of track src strings for fast lookup
+
+      // API helper
+      async function api(path, options = {}) {
+        const headers = { 'Content-Type': 'application/json', ...options.headers };
+        if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
+        const res = await fetch(API_URL + path, { ...options, headers });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'API error');
+        return data;
+      }
+
+      // Auth UI elements
+      const userBtn = document.getElementById('user-btn');
+      const userDropdown = document.getElementById('user-dropdown');
+      const authModal = document.getElementById('auth-modal');
+      const authSubmitBtn = document.getElementById('auth-submit-btn');
+      const authError = document.getElementById('auth-error');
+      const authToggleLink = document.getElementById('auth-toggle-link');
+      let authMode = 'login'; // 'login' | 'signup'
+
+      function updateAuthUI() {
+        if (currentUser) {
+          userBtn.classList.add('logged-in');
+          userBtn.innerHTML = '<i class="fas fa-user-check"></i>';
+          userBtn.title = currentUser.username;
+          document.getElementById('user-dropdown-name').textContent = currentUser.username;
+          document.getElementById('user-dropdown-email').textContent = currentUser.email;
+          document.getElementById('user-logout-btn').style.display = '';
+          document.getElementById('user-favorites-btn').style.display = '';
+          document.getElementById('user-history-btn').style.display = '';
+          // Show community share form
+          document.getElementById('community-share-form').style.display = '';
+        } else {
+          userBtn.classList.remove('logged-in');
+          userBtn.innerHTML = '<i class="fas fa-user"></i>';
+          userBtn.title = 'Log In';
+          document.getElementById('user-dropdown-name').textContent = 'Guest';
+          document.getElementById('user-dropdown-email').textContent = 'Log in to unlock features';
+          document.getElementById('user-logout-btn').style.display = 'none';
+          document.getElementById('user-favorites-btn').style.display = 'none';
+          document.getElementById('user-history-btn').style.display = 'none';
+          document.getElementById('community-share-form').style.display = 'none';
+        }
+      }
+
+      // User button click — show dropdown or auth modal
+      userBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (currentUser) {
+          userDropdown.classList.toggle('show');
+        } else {
+          showAuthModal('login');
+        }
+      });
+      // Close dropdown on outside click
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-dropdown') && !e.target.closest('.user-btn')) {
+          userDropdown.classList.remove('show');
+        }
+      });
+
+      // Auth modal controls
+      function showAuthModal(mode) {
+        authMode = mode;
+        authError.classList.remove('show');
+        document.getElementById('auth-email').value = '';
+        document.getElementById('auth-password').value = '';
+        document.getElementById('auth-username').value = '';
+        if (mode === 'signup') {
+          document.getElementById('auth-modal-title').textContent = 'Sign Up';
+          document.getElementById('auth-modal-subtitle').textContent = 'Create an account to save favorites & share playlists';
+          document.getElementById('auth-signup-fields').style.display = '';
+          authSubmitBtn.textContent = 'Sign Up';
+          document.getElementById('auth-toggle-text').textContent = 'Already have an account?';
+          authToggleLink.textContent = 'Log In';
+        } else {
+          document.getElementById('auth-modal-title').textContent = 'Log In';
+          document.getElementById('auth-modal-subtitle').textContent = 'Sign in to save favorites & share playlists';
+          document.getElementById('auth-signup-fields').style.display = 'none';
+          authSubmitBtn.textContent = 'Log In';
+          document.getElementById('auth-toggle-text').textContent = "Don't have an account?";
+          authToggleLink.textContent = 'Sign Up';
+        }
+        authModal.classList.add('show');
+      }
+      authToggleLink.addEventListener('click', () => showAuthModal(authMode === 'login' ? 'signup' : 'login'));
+      authModal.addEventListener('click', (e) => { if (e.target === authModal) authModal.classList.remove('show'); });
+
+      // Submit auth form
+      authSubmitBtn.addEventListener('click', async function() {
+        authError.classList.remove('show');
+        authSubmitBtn.disabled = true;
+        authSubmitBtn.textContent = authMode === 'login' ? 'Logging in...' : 'Signing up...';
+        try {
+          const email = document.getElementById('auth-email').value.trim();
+          const password = document.getElementById('auth-password').value;
+          if (authMode === 'signup') {
+            const username = document.getElementById('auth-username').value.trim();
+            const data = await api('/auth/signup', { method: 'POST', body: JSON.stringify({ email, username, password }) });
+            authToken = data.token;
+            currentUser = data.user;
+          } else {
+            const data = await api('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
+            authToken = data.token;
+            currentUser = data.user;
+          }
+          localStorage.setItem('audiooasis.authToken', authToken);
+          authModal.classList.remove('show');
+          updateAuthUI();
+          loadFavorites();
+        } catch (err) {
+          authError.textContent = err.message;
+          authError.classList.add('show');
+        } finally {
+          authSubmitBtn.disabled = false;
+          authSubmitBtn.textContent = authMode === 'login' ? 'Log In' : 'Sign Up';
+        }
+      });
+
+      // Enter key in auth fields
+      document.getElementById('auth-password').addEventListener('keydown', (e) => { if (e.key === 'Enter') authSubmitBtn.click(); });
+
+      // Logout
+      document.getElementById('user-logout-btn').addEventListener('click', function() {
+        authToken = null;
+        currentUser = null;
+        userFavorites.clear();
+        localStorage.removeItem('audiooasis.authToken');
+        userDropdown.classList.remove('show');
+        updateAuthUI();
+        updateFavoriteButtons();
+      });
+
+      // Try to restore session from token
+      async function restoreSession() {
+        if (!authToken) { updateAuthUI(); return; }
+        try {
+          const data = await api('/me');
+          currentUser = data.user;
+          updateAuthUI();
+          loadFavorites();
+        } catch {
+          // Token expired or invalid
+          authToken = null;
+          localStorage.removeItem('audiooasis.authToken');
+          updateAuthUI();
+        }
+      }
+
+      // ══════ Favorites System ══════
+      async function loadFavorites() {
+        if (!authToken) return;
+        try {
+          const data = await api('/favorites');
+          userFavorites.clear();
+          data.favorites.forEach(f => userFavorites.add(f.track_src));
+          updateFavoriteButtons();
+        } catch (e) { console.warn('Failed to load favorites:', e); }
+      }
+
+      async function toggleFavorite(track) {
+        if (!currentUser) { showAuthModal('login'); return; }
+        const src = track.src;
+        try {
+          if (userFavorites.has(src)) {
+            await api('/favorites', { method: 'DELETE', body: JSON.stringify({ track_src: src }) });
+            userFavorites.delete(src);
+          } else {
+            await api('/favorites', { method: 'POST', body: JSON.stringify({ track_src: src, track_title: track.title, track_category: track.category || '' }) });
+            userFavorites.add(src);
+          }
+          updateFavoriteButtons();
+        } catch (e) { console.error('Favorite toggle failed:', e); }
+      }
+
+      function updateFavoriteButtons() {
+        document.querySelectorAll('.fav-btn').forEach(btn => {
+          const src = btn.dataset.src;
+          if (userFavorites.has(src)) {
+            btn.classList.add('hearted');
+            btn.innerHTML = '<i class="fas fa-heart"></i>';
+          } else {
+            btn.classList.remove('hearted');
+            btn.innerHTML = '<i class="far fa-heart"></i>';
+          }
+        });
+      }
+
+      // Favorites button in dropdown — scroll to and expand "Favorites" in library
+      document.getElementById('user-favorites-btn').addEventListener('click', function() {
+        userDropdown.classList.remove('show');
+        // Filter library to show only favorites
+        if (userFavorites.size === 0) {
+          alert('You have no favorites yet! Click the heart icon on any track to add it.');
+          return;
+        }
+        librarySearchInput.value = '♥'; // special search token
+        searchClearBtn.classList.add('visible');
+        filterLibrary('♥');
+      });
+
+      // History button
+      document.getElementById('user-history-btn').addEventListener('click', async function() {
+        userDropdown.classList.remove('show');
+        if (!authToken) return;
+        try {
+          const data = await api('/history?limit=30');
+          if (data.history.length === 0) { alert('No listening history yet.'); return; }
+          // Load history tracks into playlist
+          const historyTracks = data.history.map(h => ({
+            title: h.track_title,
+            src: h.track_src,
+            category: h.track_category,
+            duration: ''
+          }));
+          // Remove duplicates keeping most recent
+          const seen = new Set();
+          const unique = historyTracks.filter(t => { if (seen.has(t.src)) return false; seen.add(t.src); return true; });
+          if (confirm('Load your ' + unique.length + ' most recent tracks into the playlist?')) {
+            unique.forEach(t => addToPlaylist(t));
+          }
+        } catch (e) { console.error('History load failed:', e); }
+      });
+
+      // ══════ Community Playlists ══════
+      const communityBody = document.getElementById('community-body');
+      const communityToggle = document.getElementById('community-toggle');
+      document.getElementById('community-header').addEventListener('click', function() {
+        communityBody.classList.toggle('hidden');
+        communityToggle.querySelector('i').className = communityBody.classList.contains('hidden') ? 'fas fa-chevron-down' : 'fas fa-chevron-up';
+        if (!communityBody.classList.contains('hidden')) loadCommunityPlaylists();
+      });
+
+      async function loadCommunityPlaylists() {
+        const list = document.getElementById('community-list');
+        list.innerHTML = '<li class="community-empty">Loading...</li>';
+        try {
+          const data = await api('/community/playlists?limit=20&sort=likes');
+          if (data.playlists.length === 0) {
+            list.innerHTML = '<li class="community-empty"><i class="fas fa-globe"></i><br>No community playlists yet. Be the first to share!</li>';
+            return;
+          }
+          list.innerHTML = '';
+          data.playlists.forEach(p => {
+            const li = document.createElement('li');
+            li.className = 'community-card';
+            const liked = p.liked_by_me ? 'liked' : '';
+            li.innerHTML = `
+              <div class="community-card-top">
+                <span class="community-card-name">${escapeHTML(p.name)}</span>
+                <span class="community-card-meta">
+                  <span><i class="fas fa-music"></i> ${p.track_count || 0}</span>
+                  <span><i class="fas fa-heart"></i> ${p.total_likes}</span>
+                  <span>by ${escapeHTML(p.creator_name)}</span>
+                </span>
+              </div>
+              <div class="community-card-actions">
+                <button class="community-like-btn ${liked}" data-id="${p.id}"><i class="fas fa-heart"></i> ${p.total_likes}</button>
+                <button class="community-load-btn" data-id="${p.id}"><i class="fas fa-download"></i> Load</button>
+              </div>
+            `;
+            li.querySelector('.community-like-btn').addEventListener('click', async function() {
+              if (!currentUser) { showAuthModal('login'); return; }
+              try {
+                const res = await api('/community/playlists/' + p.id + '/like', { method: 'POST' });
+                this.classList.toggle('liked', res.liked);
+                p.total_likes += res.liked ? 1 : -1;
+                this.innerHTML = '<i class="fas fa-heart"></i> ' + p.total_likes;
+              } catch (e) { console.error('Like failed:', e); }
+            });
+            li.querySelector('.community-load-btn').addEventListener('click', async function() {
+              try {
+                const detail = await api('/community/playlists/' + p.id);
+                const cp = detail.playlist;
+                if (cp.tracks && cp.tracks.length > 0) {
+                  cp.tracks.forEach(t => addToPlaylist({ title: t.track_title, src: t.track_src, category: t.track_category || '', duration: '' }));
+                }
+                if (cp.videos && cp.videos.length > 0) {
+                  // Add videos to video playlist if the function exists
+                  cp.videos.forEach(v => {
+                    if (typeof addVideoToPlaylist === 'function') addVideoToPlaylist({ title: v.video_title, src: v.video_src });
+                  });
+                }
+                this.innerHTML = '<i class="fas fa-check"></i> Loaded!';
+                setTimeout(() => { this.innerHTML = '<i class="fas fa-download"></i> Load'; }, 1500);
+              } catch (e) { console.error('Load failed:', e); }
+            });
+            list.appendChild(li);
+          });
+        } catch (e) {
+          list.innerHTML = '<li class="community-empty">Failed to load playlists. Try again later.</li>';
+          console.error('Community load failed:', e);
+        }
+      }
+
+      // Share current playlist to community
+      document.getElementById('community-share-btn').addEventListener('click', async function() {
+        const nameInput = document.getElementById('community-share-name');
+        const name = nameInput.value.trim();
+        if (!name) { nameInput.focus(); return; }
+        if (!currentUser) { showAuthModal('login'); return; }
+        try {
+          const tracks = playlist.map(t => ({ src: t.src, title: t.title, category: t.category || '' }));
+          // Get video playlist items if any
+          const videoItems = Array.from(document.querySelectorAll('#video-playlist-items li')).map(li => ({
+            src: li.dataset.src || '',
+            title: li.querySelector('.video-playlist-title')?.textContent || ''
+          })).filter(v => v.src);
+          await api('/community/playlists', { method: 'POST', body: JSON.stringify({ name, tracks, videos: videoItems }) });
+          nameInput.value = '';
+          this.innerHTML = '<i class="fas fa-check"></i> Shared!';
+          setTimeout(() => { this.innerHTML = '<i class="fas fa-share"></i> Share'; }, 2000);
+          loadCommunityPlaylists();
+        } catch (e) {
+          alert('Failed to share: ' + e.message);
+        }
+      });
+
+      function escapeHTML(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      // ══════ Listen History ══════
+      let lastHistoryTrack = null;
+      function recordListenHistory(track) {
+        if (!authToken || !track) return;
+        // Throttle: don't record the same track twice in a row
+        if (lastHistoryTrack === track.src) return;
+        lastHistoryTrack = track.src;
+        // Fire and forget
+        api('/history', { method: 'POST', body: JSON.stringify({ track_src: track.src, track_title: track.title, track_category: track.category || '' }) }).catch(() => {});
+      }
+
+      // Initialize auth on page load
+      restoreSession();
 
       // Genre icon mapping
       const genreIcons = {
@@ -2631,11 +3325,17 @@
         el.innerHTML = `
           <span>${track.title}</span>
           <div class="track-actions">
+            <button class="fav-btn" data-src="${track.src}" title="Favorite"><i class="${userFavorites.has(track.src) ? 'fas' : 'far'} fa-heart"></i></button>
             <button class="add-to-playlist-btn" title="Add to playlist"><i class="fas fa-play-circle"></i></button>
             <button class="add-to-mixer-btn" title="Add to mixer"><i class="fas fa-sliders-h"></i></button>
             <span class="track-duration">${track.duration}</span>
           </div>
         `;
+        // Heart/favorite button
+        el.querySelector('.fav-btn').addEventListener('click', function(e) {
+          e.stopPropagation();
+          toggleFavorite(track);
+        });
         // Attach event listeners
         el.querySelector('.add-to-playlist-btn').addEventListener('click', function(e) {
           e.stopPropagation();
@@ -2662,7 +3362,7 @@
           // Only on touch devices (no hover capability)
           if (!window.matchMedia('(hover: none)').matches) return;
           // If clicking a button inside the track, let it through
-          if (e.target.closest('.add-to-playlist-btn') || e.target.closest('.add-to-mixer-btn')) return;
+          if (e.target.closest('.add-to-playlist-btn') || e.target.closest('.add-to-mixer-btn') || e.target.closest('.fav-btn')) return;
           e.stopPropagation();
           // Clear any other active track
           document.querySelectorAll('.category-track.mobile-active').forEach(t => {
@@ -3335,6 +4035,8 @@
             isPlaying = true;
             playBtn.innerHTML = '<i class="fas fa-pause"></i>';
             playBtn.classList.add('pulse');
+            // Record listen history
+            if (playlist[currentTrackIndex]) recordListenHistory(playlist[currentTrackIndex]);
           })
           .catch(error => {
             console.error("Playback failed:", error);
@@ -3587,6 +4289,7 @@
       });
       function filterLibrary(query) {
         const q = query.toLowerCase().trim();
+        const isFavSearch = query === '♥';
         const categories = libraryElement.querySelectorAll('.category');
         let totalMatches = 0;
         let visibleCategories = 0;
@@ -3597,7 +4300,21 @@
           const tracks = state.tracks;
           let categoryMatches = 0;
 
-          if (q) {
+          if (isFavSearch) {
+            // Filter to only favorited tracks
+            const filtered = [];
+            const hidden = new Set();
+            tracks.forEach((track, idx) => {
+              if (userFavorites.has(track.src)) {
+                filtered.push(idx);
+                categoryMatches++;
+              } else {
+                hidden.add(idx);
+              }
+            });
+            state.filteredIndices = filtered;
+            state.hiddenIndices = hidden;
+          } else if (q) {
             // Build filtered indices
             const filtered = [];
             const hidden = new Set();
@@ -3618,13 +4335,13 @@
             categoryMatches = tracks.length;
           }
 
-          const hideCategory = q && categoryMatches === 0;
+          const hideCategory = (q || isFavSearch) && categoryMatches === 0;
           cat.classList.toggle('search-hidden', hideCategory);
           if (!hideCategory) visibleCategories++;
           totalMatches += categoryMatches;
 
           // Auto-expand categories with matches during search
-          if (q && categoryMatches > 0 && !cat.classList.contains('expanded')) {
+          if ((q || isFavSearch) && categoryMatches > 0 && !cat.classList.contains('expanded')) {
             cat.classList.add('expanded');
             const toggleIcon = cat.querySelector('.category-toggle i');
             if (toggleIcon) toggleIcon.className = 'fas fa-chevron-up';
@@ -3632,7 +4349,7 @@
           // Update visible track count
           const countSpan = cat.querySelector('.track-count');
           if (countSpan) {
-            countSpan.textContent = q ? `(${categoryMatches}/${tracks.length} tracks)` : `(${tracks.length} tracks)`;
+            countSpan.textContent = (q || isFavSearch) ? `(${categoryMatches}/${tracks.length} tracks)` : `(${tracks.length} tracks)`;
           }
 
           // Force re-render virtual tracks with new filter
@@ -3646,8 +4363,10 @@
           }
         });
 
-        if (q) {
-          searchStats.textContent = `Found ${totalMatches} track${totalMatches !== 1 ? 's' : ''} in ${visibleCategories} categor${visibleCategories !== 1 ? 'ies' : 'y'}`;
+        if (q || isFavSearch) {
+          const label = isFavSearch ? `Showing ${totalMatches} favorite${totalMatches !== 1 ? 's' : ''} in ${visibleCategories} categor${visibleCategories !== 1 ? 'ies' : 'y'}` :
+            `Found ${totalMatches} track${totalMatches !== 1 ? 's' : ''} in ${visibleCategories} categor${visibleCategories !== 1 ? 'ies' : 'y'}`;
+          searchStats.textContent = label;
           searchStats.classList.add('visible');
         } else {
           searchStats.classList.remove('visible');

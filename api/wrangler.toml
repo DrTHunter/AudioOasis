@@ -1,0 +1,17 @@
+name = "audiooasis-api"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+FRONTEND_URL = "https://audiooasis.app"
+# JWT_SECRET is set via `wrangler secret put JWT_SECRET` (not stored in code)
+
+[[d1_databases]]
+binding = "DB"
+database_name = "audiooasis-db"
+database_id = "03614a7d-1256-4712-a51a-5e69705aa13c"
+
+# R2 bucket for media files (will create later)
+# [[r2_buckets]]
+# binding = "MEDIA"
+# bucket_name = "audiooasis-media"
