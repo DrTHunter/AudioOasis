@@ -4151,10 +4151,6 @@
             playBtn.classList.add('pulse');
             // Record listen history
             if (playlist[currentTrackIndex]) recordListenHistory(playlist[currentTrackIndex]);
-            // Resume video background if the browser paused it when audio started
-            if (videoPlaylist.length > 0 && currentVideoIndex >= 0 && ambianceVideo.src && ambianceVideo.paused) {
-              ambianceVideo.play().catch(function() {});
-            }
           })
           .catch(error => {
             console.error("Playback failed:", error);
@@ -4848,9 +4844,6 @@
         videoNowPlaying.textContent = video.title;
         updateVideoPlaylistDisplay();
 
-        // Capture audio state — loading a new video source can interrupt audio playback
-        var audioWasPlaying = isPlaying && !audioPlayer.paused;
-
         // Set source and let the browser handle loading
         ambianceVideo.src = video.src;
 
@@ -4863,51 +4856,19 @@
         videoPlayerWrapper.classList.remove('hidden');
         videoSettings.classList.remove('hidden');
 
-        // Play video; once it starts, restore audio if the browser interrupted it
-        var playPromise = ambianceVideo.play();
-        if (playPromise !== undefined) {
-          playPromise.then(function() {
-            if (audioWasPlaying && audioPlayer.paused) {
-              audioPlayer.play().catch(function() {});
-            }
-          }).catch(function() {
-            // Browser blocked play — wait for data then try once more
-            function retry() {
-              ambianceVideo.removeEventListener('canplay', retry);
-              ambianceVideo.play().then(function() {
-                if (audioWasPlaying && audioPlayer.paused) {
-                  audioPlayer.play().catch(function() {});
-                }
-              }).catch(function() {});
-            }
-            ambianceVideo.addEventListener('canplay', retry);
-          });
-        } else if (audioWasPlaying) {
-          // Fallback for browsers that don't return a promise
-          setTimeout(function() {
-            if (audioPlayer.paused && isPlaying) audioPlayer.play().catch(function() {});
-          }, 300);
-        }
+        // Play once the browser has enough data
+        playVideo();
       }
 
       function playVideo() {
         // Simple play: the video is muted + playsinline so mobile should allow it
         var promise = ambianceVideo.play();
         if (promise !== undefined) {
-          promise.then(function() {
-            // After video starts, resume audio if the browser interrupted it
-            if (isPlaying && audioPlayer.paused) {
-              audioPlayer.play().catch(function() {});
-            }
-          }).catch(function() {
+          promise.catch(function() {
             // Browser blocked play — wait for data then try once more
             function retry() {
               ambianceVideo.removeEventListener('canplay', retry);
-              ambianceVideo.play().then(function() {
-                if (isPlaying && audioPlayer.paused) {
-                  audioPlayer.play().catch(function() {});
-                }
-              }).catch(function() {});
+              ambianceVideo.play().catch(function() {});
             }
             ambianceVideo.addEventListener('canplay', retry);
           });
