@@ -2535,6 +2535,7 @@
       <div class="playlist" id="playlist">
         <div class="playlist-header" id="playlist-header">
           <h2><i class="fas fa-list"></i> Your Playlist</h2>
+          <button class="control-btn" id="delete-all-btn" title="Delete all items" style="padding: 0 8px; margin-right: 8px; color: #e74c3c;"><i class="fas fa-trash-alt"></i></button>
           <button class="toggle-btn" id="playlist-toggle">
             <i class="fas fa-chevron-up"></i>
           </button>
@@ -2719,6 +2720,7 @@
       const nextBtn = document.getElementById('next-btn');
       const prevBtn = document.getElementById('prev-btn');
       const clearBtn = document.getElementById('clear-btn');
+      const deleteAllBtn = document.getElementById('delete-all-btn');
       const loopBtn = document.getElementById('loop-btn');
 
       const shuffleBtn = document.getElementById('shuffle-btn');
@@ -4272,6 +4274,32 @@
       nextBtn.addEventListener('click', nextTrack);
       prevBtn.addEventListener('click', prevTrack);
       clearBtn.addEventListener('click', clearPlaylist);
+      deleteAllBtn.addEventListener('click', function() {
+        if ((playlist.length === 0 && videoPlaylist.length === 0)) return;
+        if (confirm("Delete all tracks and videos from playlist?")) {
+          // Clear music playlist
+          playlist = [];
+          currentTrackIndex = -1;
+          audioPlayer.src = '';
+          currentTrackDisplay.textContent = 'No Track Selected';
+          currentCategoryDisplay.textContent = '';
+          currentTimeDisplay.textContent = '0:00';
+          durationDisplay.textContent = '0:00';
+          progressBar.value = 0;
+          pauseTrack();
+          updatePlaylistDisplay();
+          savePlaylistState();
+          // Clear video playlist
+          videoPlaylist = [];
+          currentVideoIndex = -1;
+          ambianceVideo.src = '';
+          videoPlayerWrapper.classList.add('hidden');
+          videoSettings.classList.add('hidden');
+          videoNowPlaying.textContent = 'No video';
+          updateVideoPlaylistDisplay();
+          saveVideoPlaylistState();
+        }
+      });
       shuffleBtn.addEventListener('click', shufflePlaylist);
       loopBtn.addEventListener('click', function() {
         isLooping = !isLooping;
