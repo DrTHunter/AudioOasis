@@ -4535,12 +4535,23 @@
       });
 
       // ══════ Restore Playlist State from localStorage ══════
+      // First-time visitors (no saved state yet) get this track queued up.
+      const DEFAULT_TRACK_TITLE = 'Aesthetic Echoes in Motion';
+      function queueDefaultTrack() {
+        for (const tracks of Object.values(trackLibrary)) {
+          const track = tracks.find(t => t.title === DEFAULT_TRACK_TITLE);
+          if (track) {
+            addToPlaylist({ ...track });
+            return;
+          }
+        }
+      }
       (function restorePlaylistState() {
         try {
           const raw = localStorage.getItem('audiooasis.playlistState');
-          if (!raw) return;
-          const state = JSON.parse(raw);
-          if (state.playlist && state.playlist.length > 0) {
+          const state = raw ? JSON.parse(raw) : null;
+          if (!state) queueDefaultTrack();
+          if (state && state.playlist && state.playlist.length > 0) {
             state.playlist.forEach(t => {
               playlist.push({ title: t.title, src: t.src, category: t.category || '', duration: t.duration || '' });
             });
