@@ -12,7 +12,6 @@ const videoLibrary = {
   "Anime & Characters": [
     { title: "Android", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/Video%20Files/Android.mp4?raw=true" },
     { title: "Anonymous - Freedom Phantom", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/Video%20Files/Anonymous%20-%20Freedom%20Phantom.mp4?raw=true" },
-    { title: "Anonymous - Mask", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/Video%20Files/Anonymous%20-Mask.mp4?raw=true" },
     { title: "Art - Golden Masks", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/Video%20Files/Art%20-%20Golden%20Masks.mp4?raw=true" },
     { title: "Bongo Cat", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/Video%20Files/Bongo%20Cat.mp4?raw=true" },
     { title: "Dual Katanas Miyamoto Musashi", src: "https://media.githubusercontent.com/media/DrTHunter/AudioOasis/refs/heads/main/Video%20Files/Dual%20Katanas%20Miyamoto%20Musash.mp4?raw=true" },

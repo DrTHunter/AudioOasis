@@ -4136,6 +4136,11 @@
       const ambianceCloseBtn = document.getElementById('ambiance-close-btn');
 
       // Video state
+      // Saved/restored playlists may reference videos since removed from the library
+      const knownVideoSrcs = new Set(
+        typeof videoLibrary === 'undefined' ? [] : Object.values(videoLibrary).flat().map(v => v.src)
+      );
+      const isKnownVideo = v => knownVideoSrcs.has(v.src);
       let videoPlaylist = [];
       let currentVideoIndex = -1;
       let videoIsLooping = true;
@@ -4250,7 +4255,7 @@
         videoPlaylist = [];
         currentVideoIndex = -1;
         ambianceVideo.src = '';
-        videos.forEach(v => videoPlaylist.push({...v}));
+        videos.filter(isKnownVideo).forEach(v => videoPlaylist.push({...v}));
         updateVideoPlaylistDisplay();
         if (videoPlaylist.length > 0) {
           videoPlayerWrapper.classList.remove('hidden');
@@ -4582,7 +4587,7 @@
           if (!vRaw) return;
           const vState = JSON.parse(vRaw);
           if (vState.videoPlaylist && vState.videoPlaylist.length > 0 && typeof videoPlaylist !== 'undefined') {
-            vState.videoPlaylist.forEach(v => {
+            vState.videoPlaylist.filter(isKnownVideo).forEach(v => {
               videoPlaylist.push({ title: v.title, src: v.src, thumb: v.thumb || '', category: v.category || '' });
             });
             updateVideoPlaylistDisplay();
