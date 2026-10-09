@@ -3,25 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="index, follow">
-  <meta name="author" content="Trent Hunter, AudioOasis by Orion AI">
-  <!-- SEO Primary Meta Tags -->
-  <title>AudioOasis | Free Studio-Quality Background Music for Work & Focus</title>
-  <meta name="title" content="AudioOasis | Free Studio-Quality Background Music for Work & Focus" />
-  <meta name="description" content="Stream high-quality .WAV music for deep work, focus, and flow. No ads. No distractions. Just curated background soundtracks for creators and thinkers." />
-  <link rel="canonical" href="https://drthunter.github.io/AudioOasis/" />
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://drthunter.github.io/AudioOasis/" />
-  <meta property="og:title" content="AudioOasis | Free Studio-Quality Background Music for Work & Focus" />
-  <meta property="og:description" content="Escape the noise. Discover a curated library of lofi and ambient .WAV tracks to help you focus, relax, and get things done." />
-  <meta property="og:image" content="https://drthunter.github.io/AudioOasis/UI%20Picture.png" />
-  <!-- Twitter Card Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://drthunter.github.io/AudioOasis/" />
-  <meta name="twitter:title" content="AudioOasis | Free Studio-Quality Background Music for Work & Focus" />
-  <meta name="twitter:description" content="Background music that doesn't get in the way. Explore studio-quality .WAV playlists made for deep work and calm vibes." />
-  <meta name="twitter:image" content="https://drthunter.github.io/AudioOasis/UI%20Picture.png" />
+  <title>AudioOasis: Free Lofi &amp; Ambient Background Music for Focus</title>
+  <meta name="description" content="Free background music for deep work: 280+ lofi, ambient, classical and meditation tracks, a layer mixer, ambient videos and a focus timer. No ads.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://audiooasis.app/">
+  <meta name="author" content="Trent Hunter">
+  <meta name="color-scheme" content="dark">
+  <!-- Icons & install -->
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="assets/icon-180.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <!-- Social previews -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AudioOasis">
+  <meta property="og:title" content="AudioOasis: Free background music for deep work &amp; focus">
+  <meta property="og:description" content="Free background music for deep work: 280+ lofi, ambient, classical and meditation tracks, a layer mixer, ambient videos and a focus timer. No ads.">
+  <meta property="og:url" content="https://audiooasis.app/">
+  <meta property="og:image" content="https://audiooasis.app/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="AudioOasis in the Aurora theme: a swirling nebula video above the player, and the music library with lofi, ambient and meditation categories">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AudioOasis: Free background music for deep work &amp; focus">
+  <meta name="twitter:description" content="Free background music for deep work: 280+ lofi, ambient, classical and meditation tracks, a layer mixer, ambient videos and a focus timer. No ads.">
+  <meta name="twitter:image" content="https://audiooasis.app/assets/og-image.png">
+  <meta name="twitter:image:alt" content="AudioOasis in the Aurora theme: a swirling nebula video above the player, and the music library with lofi, ambient and meditation categories">
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "AudioOasis",
+    "url": "https://audiooasis.app/",
+    "description": "Free background music for deep work: 280+ lofi, ambient, classical and meditation tracks, a layer mixer, ambient videos and a focus timer. No ads.",
+    "applicationCategory": "MultimediaApplication",
+    "applicationSubCategory": "Background music player",
+    "operatingSystem": "Any (web browser)",
+    "browserRequirements": "Requires JavaScript",
+    "image": "https://audiooasis.app/assets/og-image.png",
+    "screenshot": "https://audiooasis.app/assets/og-image.png",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "280+ studio-quality background tracks across 22 categories: lofi, ambient, classical, meditation, choir, fantasy and more",
+      "Layer mixer to blend several tracks with per-track volume",
+      "140+ looping ambient videos with a full-screen ambiance mode",
+      "Playlists, saved playlists and community playlists ranked by likes",
+      "Built-in Flowmodoro focus timer that keeps the music playing",
+      "Six colour themes",
+      "Optional free account to sync favourites and listening history"
+    ],
+    "author": { "@type": "Person", "name": "Trent Hunter", "url": "https://github.com/DrTHunter" }
+  }
+  </script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-55NPK2XL9R"></script>
   <script>
@@ -35,7 +71,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;600&display=swap">
-  <meta name="theme-color" content="#08060F">
+  <meta name="theme-color" content="#07060d">
   <script>
     // Before first paint: embedded check (inside Flowmodoro) + saved skin, so nothing flashes
     (function () {
@@ -2641,6 +2677,17 @@
       min-width: 1ch;
     }
     .fav-btn.hearted .like-count { color: var(--pink); }
+    /* Footer about blurb */
+    .footer-about {
+      max-width: 720px;
+      margin: 0 auto 10px;
+      font-size: .8rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    .footer-about a { color: var(--cyan); text-decoration: none; }
+    .footer-about a:hover { text-decoration: underline; }
+    html[data-look="glass"] .footer-about { font-family: var(--font-ui); letter-spacing: 0; }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
@@ -2963,6 +3010,7 @@
     </div>
   </div>
   <footer>
+    <p class="footer-about">AudioOasis is a free background music player for studying, coding, writing and deep work. Stream 280+ lofi, ambient, classical and meditation tracks, blend them in the mixer, add a looping ambient video, and run the <a href="https://drthunter.github.io/Flowmodoro/">Flowmodoro</a> focus timer alongside. No ads, no algorithm.</p>
     <p>AudioOasis &copy; <span id="footer-year"></span> | Free studio-quality background music for work &amp; focus</p>
   </footer>
   
