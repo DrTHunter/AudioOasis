@@ -2552,6 +2552,18 @@
       .app-switch a { padding: 6px 10px; }
       .app-switch a span { display: none; }
     }
+    /* Like counts on the heart button */
+    .fav-btn { display: inline-flex; align-items: center; gap: 5px; }
+    .fav-btn.has-likes { opacity: 1; }
+    .fav-btn.has-likes:not(.hearted) { color: var(--text-2); }
+    .like-count {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      min-width: 1ch;
+    }
+    .fav-btn.hearted .like-count { color: var(--pink); }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
@@ -2948,6 +2960,7 @@
         : null;
       let currentUser = null; // { id, email, username, avatar_url }
       let userFavorites = new Set(); // Set of track src strings for fast lookup
+      let trackLikeCounts = new Map(); // track src -> number of people who hearted it
 
       // Auth UI elements
       const userBtn = document.getElementById('user-btn');
@@ -3143,6 +3156,8 @@
         const wasFav = userFavorites.has(src);
         // optimistic
         wasFav ? userFavorites.delete(src) : userFavorites.add(src);
+        const bump = d => trackLikeCounts.set(src, Math.max(0, (trackLikeCounts.get(src) || 0) + d));
+        bump(wasFav ? -1 : 1);
         updateFavoriteButtons();
         const { error } = wasFav
           ? await sb.from('favorites').delete().eq('track_src', src)
@@ -3150,21 +3165,50 @@
         if (error) {
           console.error('Favorite toggle failed:', error);
           wasFav ? userFavorites.add(src) : userFavorites.delete(src);
+          bump(wasFav ? 1 : -1);
           updateFavoriteButtons();
         }
       }
 
+      function favButtonInner(src) {
+        const likes = trackLikeCounts.get(src) || 0;
+        return `<i class="${userFavorites.has(src) ? 'fas' : 'far'} fa-heart"></i>` +
+          (likes ? `<span class="like-count">${likes}</span>` : '');
+      }
+      function likesTitle(src) {
+        const likes = trackLikeCounts.get(src) || 0;
+        return likes ? `${likes} ${likes === 1 ? 'person likes' : 'people like'} this` : 'Favorite';
+      }
       function updateFavoriteButtons() {
         document.querySelectorAll('.fav-btn').forEach(btn => {
           const src = btn.dataset.src;
-          if (userFavorites.has(src)) {
-            btn.classList.add('hearted');
-            btn.innerHTML = '<i class="fas fa-heart"></i>';
-          } else {
-            btn.classList.remove('hearted');
-            btn.innerHTML = '<i class="far fa-heart"></i>';
-          }
+          btn.classList.toggle('hearted', userFavorites.has(src));
+          btn.classList.toggle('has-likes', (trackLikeCounts.get(src) || 0) > 0);
+          btn.title = likesTitle(src);
+          btn.innerHTML = favButtonInner(src);
         });
+      }
+
+      // ══════ Popularity: sections sort by how many people hearted each track ══════
+      function orderByLikes(tracks) {
+        return tracks.map((_, i) => i).sort((a, b) =>
+          ((trackLikeCounts.get(tracks[b].src) || 0) - (trackLikeCounts.get(tracks[a].src) || 0)) || a - b);
+      }
+      async function loadTrackLikes() {
+        if (!sb) return;
+        const { data, error } = await sb.from('track_likes').select('track_src, likes').gt('likes', 0);
+        if (error) { console.warn('Track likes unavailable:', error.message); return; }
+        trackLikeCounts = new Map(data.map(r => [r.track_src, r.likes]));
+        categoryVScrollState.forEach((state, categoryElement) => {
+          state.allIndices = orderByLikes(state.tracks);
+          state.renderedStart = -1;
+          state.renderedEnd = -1;
+        });
+        if (librarySearchInput.value) filterLibrary(librarySearchInput.value);
+        categoryVScrollState.forEach((state, categoryElement) => {
+          if (categoryElement.classList.contains('expanded')) renderVirtualTracks(categoryElement);
+        });
+        updateFavoriteButtons();
       }
 
       // Favorites button in dropdown — scroll to and expand "Favorites" in library
@@ -3620,7 +3664,7 @@
         el.innerHTML = `
           <span>${track.title}</span>
           <div class="track-actions">
-            <button class="fav-btn" data-src="${track.src}" title="Favorite"><i class="${userFavorites.has(track.src) ? 'fas' : 'far'} fa-heart"></i></button>
+            <button class="fav-btn${userFavorites.has(track.src) ? ' hearted' : ''}${trackLikeCounts.get(track.src) ? ' has-likes' : ''}" data-src="${track.src}" title="${likesTitle(track.src)}">${favButtonInner(track.src)}</button>
             <button class="add-to-playlist-btn" title="Add to playlist"><i class="fas fa-play-circle"></i></button>
             <button class="add-to-mixer-btn" title="Add to mixer"><i class="fas fa-sliders-h"></i></button>
             <span class="track-duration">${track.duration}</span>
@@ -3770,7 +3814,7 @@
           libraryElement.appendChild(categoryElement);
 
           // Store virtual scroll state
-          const allIndices = tracks.map((_, i) => i);
+          const allIndices = orderByLikes(tracks);
           categoryVScrollState.set(categoryElement, {
             categoryName: category,
             tracks: tracks,
@@ -3789,7 +3833,7 @@
           const addAllBtn = categoryElement.querySelector('.add-all-btn');
           addAllBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            tracks.forEach(track => addToPlaylist(track));
+            categoryVScrollState.get(categoryElement).allIndices.forEach(i => addToPlaylist(tracks[i]));
             this.innerHTML = '<i class="fas fa-check-circle"></i> Added!';
             this.style.background = 'rgba(0,224,0,0.25)';
             setTimeout(() => {
@@ -4589,6 +4633,7 @@
       });
       // Initialize the player
       initializeLibrary();
+      loadTrackLikes();
       renderSavedPlaylists();
       renderTrash();
 
@@ -4878,7 +4923,8 @@
             // Filter to only favorited tracks
             const filtered = [];
             const hidden = new Set();
-            tracks.forEach((track, idx) => {
+            state.allIndices.forEach(idx => {
+              const track = tracks[idx];
               if (userFavorites.has(track.src)) {
                 filtered.push(idx);
                 categoryMatches++;
@@ -4892,7 +4938,8 @@
             // Build filtered indices
             const filtered = [];
             const hidden = new Set();
-            tracks.forEach((track, idx) => {
+            state.allIndices.forEach(idx => {
+              const track = tracks[idx];
               const searchText = (track.title.toLowerCase() + ' ' + state.categoryName.toLowerCase());
               if (searchText.includes(q)) {
                 filtered.push(idx);
