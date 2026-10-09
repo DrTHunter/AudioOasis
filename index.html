@@ -2529,7 +2529,26 @@
     html.embedded header { position: static; }
 
     @media (max-width: 768px) {
-      .app-switch { order: -1; }
+      /* Phone header: title, then the button row, then the blurb (or mini player) */
+      header {
+        display: grid;
+        grid-template-columns: auto 1fr auto auto auto;
+        grid-template-areas:
+          "title title title title title"
+          "switch . skin user glow"
+          "tag tag tag tag tag";
+        align-items: center;
+        gap: 8px;
+      }
+      header .header-text { display: contents; }
+      header h1 { grid-area: title; justify-self: center; }
+      header .app-switch { grid-area: switch; }
+      header .skin-wrap { grid-area: skin; }
+      header .user-wrap { grid-area: user; }
+      header .dark-mode-toggle { grid-area: glow; margin-left: 0; }
+      header .tagline,
+      header .mini-player { grid-area: tag; justify-self: center; text-align: center; }
+      header .tagline { font-size: .74rem; line-height: 1.45; }
       .app-switch a { padding: 6px 10px; }
       .app-switch a span { display: none; }
     }
@@ -2555,7 +2574,7 @@
         <span class="mini-title" id="mini-title">No track</span>
       </div>
     </div>
-    <div style="position:relative;">
+    <div class="user-wrap" style="position:relative;">
       <button class="user-btn" id="user-btn" title="Account">
         <i class="fas fa-user"></i>
       </button>
@@ -5462,6 +5481,14 @@
       // ══════ Restore Playlist State from localStorage ══════
       // First-time visitors (no saved state yet) get this track queued up.
       const DEFAULT_TRACK_TITLE = 'Aesthetic Echoes in Motion';
+      const DEFAULT_VIDEO_TITLE = 'Space - Swirling Nebula';
+      function queueDefaultVideo() {
+        if (typeof videoLibrary === 'undefined') return;
+        const video = Object.values(videoLibrary).flat().find(v => v.title === DEFAULT_VIDEO_TITLE);
+        if (!video) return;
+        videoPlaylist.push({ ...video });
+        loadVideo(0); // shows the player, starts it (muted), and saves the state
+      }
       function queueDefaultTrack() {
         for (const tracks of Object.values(trackLibrary)) {
           const track = tracks.find(t => t.title === DEFAULT_TRACK_TITLE);
@@ -5501,10 +5528,10 @@
             }
           }
         } catch (e) { console.warn('Failed to restore playlist state:', e); }
-        // Restore video playlist
+        // Restore video playlist (first-time visitors get the default backdrop)
         try {
           const vRaw = localStorage.getItem('audiooasis.videoPlaylistState');
-          if (!vRaw) return;
+          if (!vRaw) { queueDefaultVideo(); return; }
           const vState = JSON.parse(vRaw);
           if (vState.videoPlaylist && vState.videoPlaylist.length > 0 && typeof videoPlaylist !== 'undefined') {
             vState.videoPlaylist.filter(isKnownVideo).forEach(v => {
