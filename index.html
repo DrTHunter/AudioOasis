@@ -2523,6 +2523,8 @@
     html[data-look="glass"] .mini-player button { border-radius: 50%; }
     html[data-look="glass"] .mini-player .mini-play { background: linear-gradient(120deg, var(--pink), var(--cyan)); border: none; color: #0b0a12; }
     html[data-look="glass"] .mini-title { font-family: var(--font-ui); }
+    .mini-controls { display: contents; }
+    .mini-toggle { display: none !important; }
 
     /* Embedded inside Flowmodoro: no switch (no recursion), skins and sign-in come from outside */
     html.embedded .app-switch,
@@ -2552,6 +2554,80 @@
       header .tagline { font-size: .74rem; line-height: 1.45; }
       .app-switch a { padding: 6px 10px; }
       .app-switch a span { display: none; }
+
+      /* Phone header stays short: the blurb folds away once you scroll ... */
+      header .tagline {
+        max-height: 4.5em;
+        overflow: hidden;
+        transition: max-height .3s ease, opacity .2s ease, margin .3s ease;
+      }
+      html.scrolled header .tagline { max-height: 0; opacity: 0; margin: -8px 0 0; }
+
+      /* ... and the mini player collapses into one button in the button row */
+      header { grid-template-areas:
+          "title title title title title"
+          "switch mini skin user glow"
+          "tag tag tag tag tag"; }
+      header .mini-player { grid-area: mini; justify-self: center; position: relative; }
+      .mini-player .mini-toggle {
+        display: grid !important;
+        position: relative;
+        width: 34px; height: 34px;
+        border-radius: 50%;
+        color: var(--text);
+        border: 1px solid var(--bg5);
+        background: var(--bg2);
+        font-size: .8rem;
+      }
+      body.is-playing .mini-player .mini-toggle { border-color: var(--pink); box-shadow: 0 0 14px -4px var(--pink); }
+      .mini-player.open .mini-toggle { border-color: var(--cyan); }
+      /* tiny equalizer on the button while music plays */
+      .mini-eq {
+        position: absolute;
+        right: -3px; bottom: -3px;
+        width: 14px; height: 14px;
+        border-radius: 50%;
+        background:
+          linear-gradient(var(--pink), var(--pink)) 3px 100% / 2px 45% no-repeat,
+          linear-gradient(var(--pink), var(--pink)) 6px 100% / 2px 90% no-repeat,
+          linear-gradient(var(--pink), var(--pink)) 9px 100% / 2px 60% no-repeat,
+          var(--bg1);
+        background-origin: content-box;
+        padding: 3px 0;
+        box-sizing: border-box;
+        display: none;
+      }
+      body.is-playing .mini-eq { display: block; animation: mini-eq .9s ease-in-out infinite alternate; }
+      @keyframes mini-eq {
+        50%  { background-size: 2px 90%, 2px 35%, 2px 100%, auto; }
+        100% { background-size: 2px 60%, 2px 75%, 2px 30%, auto; }
+      }
+      .mini-controls {
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 600;
+        align-items: center;
+        gap: 6px;
+        width: max-content;
+        max-width: calc(100vw - 32px);
+        padding: 8px 12px 8px 8px;
+        background: var(--bg1);
+        border: 1px solid var(--bg5);
+        box-shadow: 0 18px 40px -12px rgba(0,0,0,.8);
+      }
+      .mini-player.open .mini-controls { display: flex; animation: mini-pop .2s ease; }
+      @keyframes mini-pop { from { opacity: 0; } }
+      .mini-controls .mini-title { max-width: 52vw; }
+      html[data-look="glass"] .mini-player .mini-toggle { background: rgba(255,255,255,.06); }
+      html[data-look="glass"] .mini-controls {
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--bg0) 88%, transparent);
+        -webkit-backdrop-filter: blur(18px);
+                backdrop-filter: blur(18px);
+      }
     }
     /* Like counts on the heart button */
     .fav-btn { display: inline-flex; align-items: center; gap: 5px; }
@@ -2581,10 +2657,13 @@
       <h1><i class="fas fa-headphones"></i> <span>Audio<span class="logo-oasis">Oasis</span></span></h1>
       <p class="tagline">Build your own background mix: lofi, ambience, meditation, and more. Click tracks to add them to your playlist or mixer.</p>
       <div class="mini-player" id="mini-player" aria-label="Now playing">
-        <button id="mini-prev" title="Previous"><i class="fas fa-step-backward"></i></button>
-        <button id="mini-play" class="mini-play" title="Play/Pause"><i class="fas fa-play"></i></button>
-        <button id="mini-next" title="Next"><i class="fas fa-step-forward"></i></button>
-        <span class="mini-title" id="mini-title">No track</span>
+        <button class="mini-toggle" id="mini-toggle" title="Now playing" aria-expanded="false" aria-controls="mini-controls"><i class="fas fa-music"></i><span class="mini-eq" aria-hidden="true"></span></button>
+        <div class="mini-controls" id="mini-controls">
+          <button id="mini-prev" title="Previous"><i class="fas fa-step-backward"></i></button>
+          <button id="mini-play" class="mini-play" title="Play/Pause"><i class="fas fa-play"></i></button>
+          <button id="mini-next" title="Next"><i class="fas fa-step-forward"></i></button>
+          <span class="mini-title" id="mini-title">No track</span>
+        </div>
       </div>
     </div>
     <div class="user-wrap" style="position:relative;">
@@ -4762,6 +4841,23 @@
           miniTitle.textContent = currentTrackDisplay.textContent || 'No track';
         };
         ['play', 'pause', 'ended', 'loadstart'].forEach(ev => audioPlayer.addEventListener(ev, syncMini));
+
+        // Phones: the mini player is one button that opens the controls
+        const miniPlayer = document.getElementById('mini-player');
+        const miniToggle = document.getElementById('mini-toggle');
+        const setMiniOpen = open => {
+          miniPlayer.classList.toggle('open', open);
+          miniToggle.setAttribute('aria-expanded', String(open));
+        };
+        miniToggle.addEventListener('click', e => { e.stopPropagation(); setMiniOpen(!miniPlayer.classList.contains('open')); });
+        document.addEventListener('click', e => { if (!miniPlayer.contains(e.target)) setMiniOpen(false); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') setMiniOpen(false); });
+
+        // Header blurb folds away while scrolled (phones), returns at the top
+        const scrolledY = () => Math.max(window.scrollY, document.scrollingElement ? document.scrollingElement.scrollTop : 0);
+        const updateScrolled = () => document.documentElement.classList.toggle('scrolled', scrolledY() > 24);
+        window.addEventListener('scroll', updateScrolled, { passive: true });
+        updateScrolled();
         new MutationObserver(syncMini).observe(currentTrackDisplay, { childList: true, characterData: true, subtree: true });
         syncMini();
       })();
