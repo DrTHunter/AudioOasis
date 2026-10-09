@@ -44,6 +44,7 @@
       if (embedded) root.classList.add('embedded');
       var sk = qs.get('skin');
       if (!sk) { try { sk = localStorage.getItem('audiooasis.skin'); } catch (e) {} }
+      if (!sk) sk = 'aurora'; // first visit: open in Aurora
       if (sk && sk !== 'jynx' && /^(aurora|crimson|nebula|glacier|solar)$/.test(sk)) { root.dataset.skin = sk; root.dataset.look = 'glass'; }
     })();
   </script>
