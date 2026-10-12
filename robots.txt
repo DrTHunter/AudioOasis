@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://audiooasis.app/sitemap.xml
+Sitemap: https://www.audiooasis.app/sitemap.xml

@@ -6,7 +6,7 @@
   <title>AudioOasis: Free Lofi &amp; Ambient Background Music for Focus</title>
   <meta name="description" content="Free background music for deep work: 280+ lofi, ambient, classical and meditation tracks, a layer mixer, ambient videos and a focus timer. No ads.">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <link rel="canonical" href="https://audiooasis.app/">
+  <link rel="canonical" href="https://www.audiooasis.app/">
   <meta name="author" content="Trent Hunter">
   <meta name="color-scheme" content="dark">
   <!-- Icons & install -->
@@ -19,8 +19,8 @@
   <meta property="og:site_name" content="AudioOasis">
   <meta property="og:title" content="AudioOasis: Free background music for deep work &amp; focus">
   <meta property="og:description" content="Free background music for deep work: 280+ lofi, ambient, classical and meditation tracks, a layer mixer, ambient videos and a focus timer. No ads.">
-  <meta property="og:url" content="https://audiooasis.app/">
-  <meta property="og:image" content="https://audiooasis.app/assets/og-image.png">
+  <meta property="og:url" content="https://www.audiooasis.app/">
+  <meta property="og:image" content="https://www.audiooasis.app/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="AudioOasis in the Aurora theme: a swirling nebula video above the player, and the music library with lofi, ambient and meditation categories">
@@ -28,7 +28,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="AudioOasis: Free background music for deep work &amp; focus">
   <meta name="twitter:description" content="Free background music for deep work: 280+ lofi, ambient, classical and meditation tracks, a layer mixer, ambient videos and a focus timer. No ads.">
-  <meta name="twitter:image" content="https://audiooasis.app/assets/og-image.png">
+  <meta name="twitter:image" content="https://www.audiooasis.app/assets/og-image.png">
   <meta name="twitter:image:alt" content="AudioOasis in the Aurora theme: a swirling nebula video above the player, and the music library with lofi, ambient and meditation categories">
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -36,14 +36,14 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "AudioOasis",
-    "url": "https://audiooasis.app/",
+    "url": "https://www.audiooasis.app/",
     "description": "Free background music for deep work: 280+ lofi, ambient, classical and meditation tracks, a layer mixer, ambient videos and a focus timer. No ads.",
     "applicationCategory": "MultimediaApplication",
     "applicationSubCategory": "Background music player",
     "operatingSystem": "Any (web browser)",
     "browserRequirements": "Requires JavaScript",
-    "image": "https://audiooasis.app/assets/og-image.png",
-    "screenshot": "https://audiooasis.app/assets/og-image.png",
+    "image": "https://www.audiooasis.app/assets/og-image.png",
+    "screenshot": "https://www.audiooasis.app/assets/og-image.png",
     "isAccessibleForFree": true,
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "featureList": [
@@ -79,8 +79,15 @@
       try { embedded = embedded || window.self !== window.top; } catch (e) { embedded = true; }
       if (embedded) root.classList.add('embedded');
       var sk = qs.get('skin');
-      if (!sk) { try { sk = localStorage.getItem('audiooasis.skin'); } catch (e) {} }
-      if (!sk) sk = 'aurora'; // first visit: open in Aurora
+      if (!sk) {
+        try {
+          // Only skins someone actually picked are remembered. The old key was written on
+          // every visit, so a saved 'jynx' there is just the former default, not a choice.
+          sk = localStorage.getItem('audiooasis.skinChoice');
+          if (!sk) { var legacy = localStorage.getItem('audiooasis.skin'); if (legacy && legacy !== 'jynx') sk = legacy; }
+        } catch (e) {}
+      }
+      if (!sk) sk = 'aurora'; // default skin
       if (sk && sk !== 'jynx' && /^(aurora|crimson|nebula|glacier|solar)$/.test(sk)) { root.dataset.skin = sk; root.dataset.look = 'glass'; }
     })();
   </script>
@@ -4785,7 +4792,7 @@
         const skinMenu = document.getElementById('skin-menu');
         const themeMeta = document.querySelector('meta[name="theme-color"]');
 
-        function applySkin(skin, { broadcast = true } = {}) {
+        function applySkin(skin, { broadcast = true, persist = false } = {}) {
           if (!SKINS.includes(skin)) skin = 'jynx';
           const root = document.documentElement;
           if (skin === 'jynx') {
@@ -4797,7 +4804,7 @@
           }
           skinMenu.querySelectorAll('.skin-option').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.skin === skin)));
           if (themeMeta) themeMeta.content = getComputedStyle(root).getPropertyValue('--bg0').trim() || '#08060F';
-          try { localStorage.setItem('audiooasis.skin', skin); } catch (e) {}
+          if (persist) { try { localStorage.setItem('audiooasis.skinChoice', skin); } catch (e) {} }
           document.dispatchEvent(new CustomEvent('audiooasis:skin', { detail: { skin, broadcast } }));
         }
         window.audiooasisApplySkin = applySkin;
@@ -4810,7 +4817,7 @@
         skinMenu.addEventListener('click', e => {
           e.stopPropagation();
           const opt = e.target.closest('.skin-option');
-          if (opt) applySkin(opt.dataset.skin);
+          if (opt) applySkin(opt.dataset.skin, { persist: true });
         });
         document.addEventListener('click', () => {
           skinMenu.classList.remove('show');
@@ -4825,7 +4832,7 @@
       (function initAppSwitch() {
         const local = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
         const FLOWMODORO_URL = local ? 'http://localhost:5517/' : 'https://drthunter.github.io/Flowmodoro/';
-        const PEER_ORIGINS = ['https://drthunter.github.io', 'https://audiooasis.app', 'http://localhost:5517', 'http://localhost:8765'];
+        const PEER_ORIGINS = ['https://drthunter.github.io', 'https://www.audiooasis.app', 'https://audiooasis.app', 'http://localhost:5517', 'http://localhost:8765'];
         const SHARED_SKINS = ['aurora', 'crimson', 'nebula', 'glacier', 'solar']; // Flowmodoro has no Jynx
         const root = document.documentElement;
         const embedded = root.classList.contains('embedded');
@@ -4846,7 +4853,7 @@
           if (!PEER_ORIGINS.includes(e.origin) || e.source !== peerWindow()) return;
           const d = e.data;
           if (d && d.app === 'flowmodoro' && d.type === 'skin' && SHARED_SKINS.includes(d.skin) && d.skin !== currentSkin()) {
-            window.audiooasisApplySkin(d.skin, { broadcast: false });
+            window.audiooasisApplySkin(d.skin, { broadcast: false, persist: true });
           }
         });
         if (embedded) { sendSkin(currentSkin()); return; }

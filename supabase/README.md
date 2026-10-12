@@ -30,9 +30,10 @@ dashboard's SQL editor and run it once.
 
 **Authentication → URL Configuration**
 
-- Site URL: `https://audiooasis.app`
+- Site URL: `https://www.audiooasis.app`
 - Redirect URLs:
-  - `https://audiooasis.app/**`
+  - `https://www.audiooasis.app/**`
+  - `https://audiooasis.app/**` (bare domain redirects to www)
   - `https://drthunter.github.io/AudioOasis/**`
   - `http://localhost:8765/**` (local testing)
 
