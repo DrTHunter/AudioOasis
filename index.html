@@ -1430,6 +1430,22 @@
     .category-track:hover .fav-btn,
     .category-track.mobile-active .fav-btn { opacity: 1; }
 
+    .dislike-btn {
+      opacity: 0;
+      transition: var(--transition);
+      cursor: pointer;
+      padding: 4px 6px;
+      font-size: 0.85rem;
+      border: none;
+      background: none;
+      color: var(--muted);
+    }
+    .dislike-btn:hover { color: var(--text-2); }
+    .dislike-btn.disliked { color: var(--text-2); opacity: 1 !important; }
+    .category-track:hover .dislike-btn,
+    .category-track.mobile-active .dislike-btn { opacity: 1; }
+    .category-track:has(.dislike-btn.disliked) > span { opacity: .5; }
+
     .category-track.search-hidden,
     .category.search-hidden { display: none; }
 
@@ -3096,6 +3112,9 @@
       let currentUser = null; // { id, email, username, avatar_url }
       let userFavorites = new Set(); // Set of track src strings for fast lookup
       let trackLikeCounts = new Map(); // track src -> number of people who hearted it
+      // Thumbs-down is personal and stored on this device, so it works signed out too
+      let userDislikes = new Set();
+      try { userDislikes = new Set(JSON.parse(localStorage.getItem('audiooasis.dislikes')) || []); } catch (e) {}
 
       // Auth UI elements
       const userBtn = document.getElementById('user-btn');
@@ -3253,7 +3272,7 @@
           currentUser = null;
           userFavorites.clear();
           updateAuthUI();
-          updateFavoriteButtons();
+          resortLibrary();
           return;
         }
         const u = session.user;
@@ -3282,7 +3301,7 @@
         const { data, error } = await sb.from('favorites').select('track_src');
         if (error) { console.warn('Failed to load favorites:', error); return; }
         userFavorites = new Set(data.map(f => f.track_src));
-        updateFavoriteButtons();
+        resortLibrary();
       }
 
       async function toggleFavorite(track) {
@@ -3293,7 +3312,8 @@
         wasFav ? userFavorites.delete(src) : userFavorites.add(src);
         const bump = d => trackLikeCounts.set(src, Math.max(0, (trackLikeCounts.get(src) || 0) + d));
         bump(wasFav ? -1 : 1);
-        updateFavoriteButtons();
+        if (!wasFav && userDislikes.delete(src)) saveDislikes();
+        resortLibrary();
         const { error } = wasFav
           ? await sb.from('favorites').delete().eq('track_src', src)
           : await sb.from('favorites').insert({ track_src: src, track_title: track.title, track_category: track.category || '' });
@@ -3301,8 +3321,23 @@
           console.error('Favorite toggle failed:', error);
           wasFav ? userFavorites.add(src) : userFavorites.delete(src);
           bump(wasFav ? 1 : -1);
-          updateFavoriteButtons();
+          resortLibrary();
         }
+      }
+
+      function saveDislikes() {
+        try { localStorage.setItem('audiooasis.dislikes', JSON.stringify([...userDislikes])); } catch (e) {}
+      }
+      function toggleDislike(track) {
+        const src = track.src;
+        if (userDislikes.has(src)) {
+          userDislikes.delete(src);
+        } else {
+          userDislikes.add(src);
+          if (userFavorites.has(src)) toggleFavorite(track); // a thumbs-down replaces a heart
+        }
+        saveDislikes();
+        resortLibrary();
       }
 
       function favButtonInner(src) {
@@ -3322,11 +3357,21 @@
           btn.title = likesTitle(src);
           btn.innerHTML = favButtonInner(src);
         });
+        document.querySelectorAll('.dislike-btn').forEach(btn => {
+          const disliked = userDislikes.has(btn.dataset.src);
+          btn.classList.toggle('disliked', disliked);
+          btn.innerHTML = `<i class="${disliked ? 'fas' : 'far'} fa-thumbs-down"></i>`;
+        });
       }
 
-      // ══════ Popularity: sections sort by how many people hearted each track ══════
+      // ══════ Ordering: your hearts on top, your thumbs-downs at the bottom,
+      // everything in between by how many people hearted it ══════
+      function personalRank(src) {
+        return userFavorites.has(src) ? 0 : userDislikes.has(src) ? 2 : 1;
+      }
       function orderByLikes(tracks) {
         return tracks.map((_, i) => i).sort((a, b) =>
+          (personalRank(tracks[a].src) - personalRank(tracks[b].src)) ||
           ((trackLikeCounts.get(tracks[b].src) || 0) - (trackLikeCounts.get(tracks[a].src) || 0)) || a - b);
       }
       async function loadTrackLikes() {
@@ -3334,6 +3379,9 @@
         const { data, error } = await sb.from('track_likes').select('track_src, likes').gt('likes', 0);
         if (error) { console.warn('Track likes unavailable:', error.message); return; }
         trackLikeCounts = new Map(data.map(r => [r.track_src, r.likes]));
+        resortLibrary();
+      }
+      function resortLibrary() {
         categoryVScrollState.forEach((state, categoryElement) => {
           state.allIndices = orderByLikes(state.tracks);
           state.renderedStart = -1;
@@ -3800,6 +3848,7 @@
           <span>${track.title}</span>
           <div class="track-actions">
             <button class="fav-btn${userFavorites.has(track.src) ? ' hearted' : ''}${trackLikeCounts.get(track.src) ? ' has-likes' : ''}" data-src="${track.src}" title="${likesTitle(track.src)}">${favButtonInner(track.src)}</button>
+            <button class="dislike-btn${userDislikes.has(track.src) ? ' disliked' : ''}" data-src="${track.src}" title="Not for me — move to the bottom"><i class="${userDislikes.has(track.src) ? 'fas' : 'far'} fa-thumbs-down"></i></button>
             <button class="add-to-playlist-btn" title="Add to playlist"><i class="fas fa-play-circle"></i></button>
             <button class="add-to-mixer-btn" title="Add to mixer"><i class="fas fa-sliders-h"></i></button>
             <span class="track-duration">${track.duration}</span>
@@ -3809,6 +3858,10 @@
         el.querySelector('.fav-btn').addEventListener('click', function(e) {
           e.stopPropagation();
           toggleFavorite(track);
+        });
+        el.querySelector('.dislike-btn').addEventListener('click', function(e) {
+          e.stopPropagation();
+          toggleDislike(track);
         });
         // Attach event listeners
         el.querySelector('.add-to-playlist-btn').addEventListener('click', function(e) {
@@ -3836,7 +3889,7 @@
           // Only on touch devices (no hover capability)
           if (!window.matchMedia('(hover: none)').matches) return;
           // If clicking a button inside the track, let it through
-          if (e.target.closest('.add-to-playlist-btn') || e.target.closest('.add-to-mixer-btn') || e.target.closest('.fav-btn')) return;
+          if (e.target.closest('.add-to-playlist-btn') || e.target.closest('.add-to-mixer-btn') || e.target.closest('.fav-btn') || e.target.closest('.dislike-btn')) return;
           e.stopPropagation();
           // Clear any other active track
           document.querySelectorAll('.category-track.mobile-active').forEach(t => {
